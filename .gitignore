@@ -55,3 +55,7 @@ informe/informe_e1_smnv3.out
 informe/informe_e1_smnv3.bbl
 informe/informe_e1_smnv3.blg
 informe/informe_e1_smnv3.pdf
+# Material de trabajo local de la revision del E1 (auditorias, PDF,
+# borradores): se conserva en disco, no se versiona.
+/revision_e1/
+informe/borradores/informe_e1_smnv3.pdf
