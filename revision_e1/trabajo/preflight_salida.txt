@@ -1,0 +1,11 @@
+
+=== Estado antes de esta corrida (run.sh) ===
+[OK]    00b   config/models_seed_cmip6.csv (lista de modelos)
+[OK]    01    data/interim/models_catalog_status.csv (catalogo ESGF)
+[OK]    02    Descarga CMIP6: 160/160 combinaciones modelo x experimento
+[OK]    04/05 Grilla comun + mascara: 160/160 archivos
+[OK]    03    data/raw/ersstv5/ersstv5_region.nc (observado)
+[OK]    06    data/processed/qc_report.csv (control de calidad)
+[OK]    07    data/processed/models_inventory_final.csv (inventario final)
+==============================================
+

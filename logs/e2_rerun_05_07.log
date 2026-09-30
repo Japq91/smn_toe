@@ -1,0 +1,345 @@
+
+=== Estado antes de esta corrida (run.sh) ===
+[OK]    00b   config/models_seed_cmip6.csv (lista de modelos)
+[OK]    01    data/interim/models_catalog_status.csv (catalogo ESGF)
+[OK]    02    Descarga CMIP6: 160/160 combinaciones modelo x experimento
+[FALTA] 04/05 Grilla comun + mascara: 0/160 archivos -- sin corridas previas en esta maquina, no se puede estimar
+[OK]    03    data/raw/ersstv5/ersstv5_region.nc (observado)
+[OK]    06    data/processed/qc_report.csv (control de calidad)
+[OK]    07    data/processed/models_inventory_final.csv (inventario final)
+==============================================
+
+== Paso 05: python3 scripts/05_apply_ocean_mask.py ==
+Construyendo mascara oceano-tierra a partir de ERSSTv5 ...
+Mascara construida: 4231/5580 puntos de oceano
+  tos_ACCESS-CM2_historical.nc: 3152160 puntos con |valor| > 400, vueltos NaN
+  tos_ACCESS-CM2_ssp245.nc: 1642944 puntos con |valor| > 400, vueltos NaN
+  tos_ACCESS-CM2_ssp370.nc: 1642944 puntos con |valor| > 400, vueltos NaN
+  tos_ACCESS-CM2_ssp585.nc: 1642944 puntos con |valor| > 400, vueltos NaN
+  tos_ACCESS-ESM1-5_historical.nc: 3152160 puntos con |valor| > 400, vueltos NaN
+  tos_ACCESS-ESM1-5_ssp245.nc: 1642944 puntos con |valor| > 400, vueltos NaN
+  tos_ACCESS-ESM1-5_ssp370.nc: 1642944 puntos con |valor| > 400, vueltos NaN
+  tos_ACCESS-ESM1-5_ssp585.nc: 1642944 puntos con |valor| > 400, vueltos NaN
+  tos_AWI-CM-1-1-MR_historical.nc: 2290860 puntos con |valor| > 400, vueltos NaN
+  tos_AWI-CM-1-1-MR_ssp245.nc: 1194024 puntos con |valor| > 400, vueltos NaN
+  tos_AWI-CM-1-1-MR_ssp370.nc: 1194024 puntos con |valor| > 400, vueltos NaN
+  tos_AWI-CM-1-1-MR_ssp585.nc: 1194024 puntos con |valor| > 400, vueltos NaN
+  tos_BCC-CSM2-MR_historical.nc: 3193740 puntos con |valor| > 400, vueltos NaN
+  tos_BCC-CSM2-MR_ssp245.nc: 1664616 puntos con |valor| > 400, vueltos NaN
+  tos_BCC-CSM2-MR_ssp370.nc: 1664616 puntos con |valor| > 400, vueltos NaN
+  tos_BCC-CSM2-MR_ssp585.nc: 1664616 puntos con |valor| > 400, vueltos NaN
+  tos_CAMS-CSM1-0_historical.nc: 3148200 puntos con |valor| > 400, vueltos NaN
+  tos_CAMS-CSM1-0_ssp245.nc: 1621800 puntos con |valor| > 400, vueltos NaN
+  tos_CAMS-CSM1-0_ssp370.nc: 1621800 puntos con |valor| > 400, vueltos NaN
+  tos_CAMS-CSM1-0_ssp585.nc: 1621800 puntos con |valor| > 400, vueltos NaN
+  tos_CAS-ESM2-0_historical.nc: 3173940 puntos con |valor| > 400, vueltos NaN
+  tos_CAS-ESM2-0_ssp245.nc: 1654296 puntos con |valor| > 400, vueltos NaN
+  tos_CAS-ESM2-0_ssp370.nc: 1654296 puntos con |valor| > 400, vueltos NaN
+  tos_CAS-ESM2-0_ssp585.nc: 1654296 puntos con |valor| > 400, vueltos NaN
+  tos_CESM2-WACCM_historical.nc: 3193740 puntos con |valor| > 400, vueltos NaN
+  tos_CESM2-WACCM_ssp245.nc: 1664616 puntos con |valor| > 400, vueltos NaN
+  tos_CESM2-WACCM_ssp370.nc: 1664616 puntos con |valor| > 400, vueltos NaN
+  tos_CESM2-WACCM_ssp585.nc: 1664616 puntos con |valor| > 400, vueltos NaN
+  tos_CESM2_historical.nc: 3193740 puntos con |valor| > 400, vueltos NaN
+  tos_CESM2_ssp245.nc: 1664616 puntos con |valor| > 400, vueltos NaN
+  tos_CESM2_ssp370.nc: 1664616 puntos con |valor| > 400, vueltos NaN
+  tos_CESM2_ssp585.nc: 1664616 puntos con |valor| > 400, vueltos NaN
+  tos_CMCC-CM2-SR5_historical.nc: 3223440 puntos con |valor| > 400, vueltos NaN
+  tos_CMCC-CM2-SR5_ssp245.nc: 1680096 puntos con |valor| > 400, vueltos NaN
+  tos_CMCC-CM2-SR5_ssp370.nc: 1680096 puntos con |valor| > 400, vueltos NaN
+  tos_CMCC-CM2-SR5_ssp585.nc: 1680096 puntos con |valor| > 400, vueltos NaN
+  tos_CMCC-ESM2_historical.nc: 3223440 puntos con |valor| > 400, vueltos NaN
+  tos_CMCC-ESM2_ssp245.nc: 1680096 puntos con |valor| > 400, vueltos NaN
+  tos_CMCC-ESM2_ssp370.nc: 1680096 puntos con |valor| > 400, vueltos NaN
+  tos_CMCC-ESM2_ssp585.nc: 1680096 puntos con |valor| > 400, vueltos NaN
+  tos_CNRM-CM6-1-HR_historical.nc: 3015540 puntos con |valor| > 400, vueltos NaN
+  tos_CNRM-CM6-1-HR_ssp245.nc: 1571736 puntos con |valor| > 400, vueltos NaN
+  tos_CNRM-CM6-1-HR_ssp370.nc: 1571736 puntos con |valor| > 400, vueltos NaN
+  tos_CNRM-CM6-1-HR_ssp585.nc: 1571736 puntos con |valor| > 400, vueltos NaN
+  tos_CNRM-CM6-1_historical.nc: 3223440 puntos con |valor| > 400, vueltos NaN
+  tos_CNRM-CM6-1_ssp245.nc: 1680096 puntos con |valor| > 400, vueltos NaN
+  tos_CNRM-CM6-1_ssp370.nc: 1680096 puntos con |valor| > 400, vueltos NaN
+  tos_CNRM-CM6-1_ssp585.nc: 1680096 puntos con |valor| > 400, vueltos NaN
+  tos_CNRM-ESM2-1_historical.nc: 3223440 puntos con |valor| > 400, vueltos NaN
+  tos_CNRM-ESM2-1_ssp245.nc: 1680096 puntos con |valor| > 400, vueltos NaN
+  tos_CNRM-ESM2-1_ssp370.nc: 1680096 puntos con |valor| > 400, vueltos NaN
+  tos_CNRM-ESM2-1_ssp585.nc: 1680096 puntos con |valor| > 400, vueltos NaN
+  tos_CanESM5-1_historical.nc: 3175920 puntos con |valor| > 400, vueltos NaN
+  tos_CanESM5-1_ssp245.nc: 1655328 puntos con |valor| > 400, vueltos NaN
+  tos_CanESM5-1_ssp370.nc: 1655328 puntos con |valor| > 400, vueltos NaN
+  tos_CanESM5-1_ssp585.nc: 1655328 puntos con |valor| > 400, vueltos NaN
+  tos_CanESM5-CanOE_historical.nc: 3175920 puntos con |valor| > 400, vueltos NaN
+  tos_CanESM5-CanOE_ssp245.nc: 1655328 puntos con |valor| > 400, vueltos NaN
+  tos_CanESM5-CanOE_ssp370.nc: 1655328 puntos con |valor| > 400, vueltos NaN
+  tos_CanESM5-CanOE_ssp585.nc: 1655328 puntos con |valor| > 400, vueltos NaN
+  tos_CanESM5_historical.nc: 3175920 puntos con |valor| > 400, vueltos NaN
+  tos_CanESM5_ssp245.nc: 1655328 puntos con |valor| > 400, vueltos NaN
+  tos_CanESM5_ssp370.nc: 1655328 puntos con |valor| > 400, vueltos NaN
+  tos_CanESM5_ssp585.nc: 1655328 puntos con |valor| > 400, vueltos NaN
+  tos_EC-Earth3-Veg-LR_historical.nc: 3223440 puntos con |valor| > 400, vueltos NaN
+  tos_EC-Earth3-Veg-LR_ssp245.nc: 1680096 puntos con |valor| > 400, vueltos NaN
+  tos_EC-Earth3-Veg-LR_ssp370.nc: 1680096 puntos con |valor| > 400, vueltos NaN
+  tos_EC-Earth3-Veg-LR_ssp585.nc: 1680096 puntos con |valor| > 400, vueltos NaN
+  tos_EC-Earth3-Veg_historical.nc: 3223440 puntos con |valor| > 400, vueltos NaN
+  tos_EC-Earth3-Veg_ssp245.nc: 1680096 puntos con |valor| > 400, vueltos NaN
+  tos_EC-Earth3-Veg_ssp370.nc: 1680096 puntos con |valor| > 400, vueltos NaN
+  tos_EC-Earth3-Veg_ssp585.nc: 1680096 puntos con |valor| > 400, vueltos NaN
+  tos_EC-Earth3_historical.nc: 3223440 puntos con |valor| > 400, vueltos NaN
+  tos_EC-Earth3_ssp245.nc: 1680096 puntos con |valor| > 400, vueltos NaN
+  tos_EC-Earth3_ssp370.nc: 1680096 puntos con |valor| > 400, vueltos NaN
+  tos_EC-Earth3_ssp585.nc: 1680096 puntos con |valor| > 400, vueltos NaN
+  tos_FGOALS-f3-L_historical.nc: 3013560 puntos con |valor| > 400, vueltos NaN
+  tos_FGOALS-f3-L_ssp245.nc: 1647072 puntos con |valor| > 400, vueltos NaN
+  tos_FGOALS-f3-L_ssp370.nc: 1647072 puntos con |valor| > 400, vueltos NaN
+  tos_FGOALS-f3-L_ssp585.nc: 1647072 puntos con |valor| > 400, vueltos NaN
+  tos_FGOALS-g3_historical.nc: 3160080 puntos con |valor| > 400, vueltos NaN
+  tos_FGOALS-g3_ssp245.nc: 1647072 puntos con |valor| > 400, vueltos NaN
+  tos_FGOALS-g3_ssp370.nc: 1647072 puntos con |valor| > 400, vueltos NaN
+  tos_FGOALS-g3_ssp585.nc: 1647072 puntos con |valor| > 400, vueltos NaN
+  tos_GFDL-ESM4_historical.nc: 2908620 puntos con |valor| > 400, vueltos NaN
+  tos_GFDL-ESM4_ssp245.nc: 1516008 puntos con |valor| > 400, vueltos NaN
+  tos_GFDL-ESM4_ssp370.nc: 1516008 puntos con |valor| > 400, vueltos NaN
+  tos_GFDL-ESM4_ssp585.nc: 1516008 puntos con |valor| > 400, vueltos NaN
+  tos_GISS-E2-1-G_historical.nc: 3092760 puntos con |valor| > 400, vueltos NaN
+  tos_GISS-E2-1-G_ssp245.nc: 1611984 puntos con |valor| > 400, vueltos NaN
+  tos_GISS-E2-1-G_ssp370.nc: 1611984 puntos con |valor| > 400, vueltos NaN
+  tos_GISS-E2-1-G_ssp585.nc: 1611984 puntos con |valor| > 400, vueltos NaN
+  tos_GISS-E2-1-H_historical.nc: 2789820 puntos con |valor| > 400, vueltos NaN
+  tos_GISS-E2-1-H_ssp245.nc: 1454088 puntos con |valor| > 400, vueltos NaN
+  tos_GISS-E2-1-H_ssp370.nc: 1454088 puntos con |valor| > 400, vueltos NaN
+  tos_GISS-E2-1-H_ssp585.nc: 1454088 puntos con |valor| > 400, vueltos NaN
+  tos_GISS-E2-2-G_historical.nc: 3092760 puntos con |valor| > 400, vueltos NaN
+  tos_GISS-E2-2-G_ssp245.nc: 1611984 puntos con |valor| > 400, vueltos NaN
+  tos_GISS-E2-2-G_ssp370.nc: 1611984 puntos con |valor| > 400, vueltos NaN
+  tos_GISS-E2-2-G_ssp585.nc: 1611984 puntos con |valor| > 400, vueltos NaN
+  tos_IITM-ESM_historical.nc: 2238360 puntos con |valor| > 400, vueltos NaN
+  tos_IITM-ESM_ssp245.nc: 1654440 puntos con |valor| > 400, vueltos NaN
+  tos_IITM-ESM_ssp370.nc: 1634976 puntos con |valor| > 400, vueltos NaN
+  tos_IITM-ESM_ssp585.nc: 1654440 puntos con |valor| > 400, vueltos NaN
+  tos_INM-CM4-8_historical.nc: 3175920 puntos con |valor| > 400, vueltos NaN
+  tos_INM-CM4-8_ssp245.nc: 1655328 puntos con |valor| > 400, vueltos NaN
+  tos_INM-CM4-8_ssp370.nc: 1655328 puntos con |valor| > 400, vueltos NaN
+  tos_INM-CM4-8_ssp585.nc: 1655328 puntos con |valor| > 400, vueltos NaN
+  tos_INM-CM5-0_historical.nc: 3197700 puntos con |valor| > 400, vueltos NaN
+  tos_INM-CM5-0_ssp245.nc: 1666680 puntos con |valor| > 400, vueltos NaN
+  tos_INM-CM5-0_ssp370.nc: 1666680 puntos con |valor| > 400, vueltos NaN
+  tos_INM-CM5-0_ssp585.nc: 1666680 puntos con |valor| > 400, vueltos NaN
+  tos_IPSL-CM6A-LR_historical.nc: 3223440 puntos con |valor| > 400, vueltos NaN
+  tos_IPSL-CM6A-LR_ssp245.nc: 1680096 puntos con |valor| > 400, vueltos NaN
+  tos_IPSL-CM6A-LR_ssp370.nc: 1680096 puntos con |valor| > 400, vueltos NaN
+  tos_IPSL-CM6A-LR_ssp585.nc: 1680096 puntos con |valor| > 400, vueltos NaN
+  tos_KACE-1-0-G_historical.nc: 3211560 puntos con |valor| > 400, vueltos NaN
+  tos_KACE-1-0-G_ssp245.nc: 1673904 puntos con |valor| > 400, vueltos NaN
+  tos_KACE-1-0-G_ssp370.nc: 1673904 puntos con |valor| > 400, vueltos NaN
+  tos_KACE-1-0-G_ssp585.nc: 1673904 puntos con |valor| > 400, vueltos NaN
+  tos_MCM-UA-1-0_historical.nc: 3476880 puntos con |valor| > 400, vueltos NaN
+  tos_MCM-UA-1-0_ssp245.nc: 1812192 puntos con |valor| > 400, vueltos NaN
+  tos_MCM-UA-1-0_ssp370.nc: 1812192 puntos con |valor| > 400, vueltos NaN
+  tos_MCM-UA-1-0_ssp585.nc: 1812192 puntos con |valor| > 400, vueltos NaN
+  tos_MIROC-ES2L_historical.nc: 3181860 puntos con |valor| > 400, vueltos NaN
+  tos_MIROC-ES2L_ssp245.nc: 1658424 puntos con |valor| > 400, vueltos NaN
+  tos_MIROC-ES2L_ssp370.nc: 1658424 puntos con |valor| > 400, vueltos NaN
+  tos_MIROC-ES2L_ssp585.nc: 1658424 puntos con |valor| > 400, vueltos NaN
+  tos_MIROC6_historical.nc: 3330360 puntos con |valor| > 400, vueltos NaN
+  tos_MIROC6_ssp245.nc: 1735824 puntos con |valor| > 400, vueltos NaN
+  tos_MIROC6_ssp370.nc: 1735824 puntos con |valor| > 400, vueltos NaN
+  tos_MIROC6_ssp585.nc: 1735824 puntos con |valor| > 400, vueltos NaN
+  tos_MPI-ESM1-2-HR_historical.nc: 3088800 puntos con |valor| > 400, vueltos NaN
+  tos_MPI-ESM1-2-HR_ssp245.nc: 1609920 puntos con |valor| > 400, vueltos NaN
+  tos_MPI-ESM1-2-HR_ssp370.nc: 1609920 puntos con |valor| > 400, vueltos NaN
+  tos_MPI-ESM1-2-HR_ssp585.nc: 1609920 puntos con |valor| > 400, vueltos NaN
+  tos_MPI-ESM1-2-LR_historical.nc: 3292740 puntos con |valor| > 400, vueltos NaN
+  tos_MPI-ESM1-2-LR_ssp245.nc: 1716216 puntos con |valor| > 400, vueltos NaN
+  tos_MPI-ESM1-2-LR_ssp370.nc: 1716216 puntos con |valor| > 400, vueltos NaN
+  tos_MPI-ESM1-2-LR_ssp585.nc: 1716216 puntos con |valor| > 400, vueltos NaN
+  tos_MRI-ESM2-0_historical.nc: 2851200 puntos con |valor| > 400, vueltos NaN
+  tos_MRI-ESM2-0_ssp245.nc: 1486080 puntos con |valor| > 400, vueltos NaN
+  tos_MRI-ESM2-0_ssp370.nc: 1486080 puntos con |valor| > 400, vueltos NaN
+  tos_MRI-ESM2-0_ssp585.nc: 1486080 puntos con |valor| > 400, vueltos NaN
+  tos_NorESM2-LM_historical.nc: 3146220 puntos con |valor| > 400, vueltos NaN
+  tos_NorESM2-LM_ssp245.nc: 1639848 puntos con |valor| > 400, vueltos NaN
+  tos_NorESM2-LM_ssp370.nc: 1639848 puntos con |valor| > 400, vueltos NaN
+  tos_NorESM2-LM_ssp585.nc: 1639848 puntos con |valor| > 400, vueltos NaN
+  tos_NorESM2-MM_historical.nc: 3146220 puntos con |valor| > 400, vueltos NaN
+  tos_NorESM2-MM_ssp245.nc: 1639848 puntos con |valor| > 400, vueltos NaN
+  tos_NorESM2-MM_ssp370.nc: 1639848 puntos con |valor| > 400, vueltos NaN
+  tos_NorESM2-MM_ssp585.nc: 1639848 puntos con |valor| > 400, vueltos NaN
+  tos_TaiESM1_historical.nc: 3168000 puntos con |valor| > 400, vueltos NaN
+  tos_TaiESM1_ssp245.nc: 1651200 puntos con |valor| > 400, vueltos NaN
+  tos_TaiESM1_ssp370.nc: 1651200 puntos con |valor| > 400, vueltos NaN
+  tos_TaiESM1_ssp585.nc: 1651200 puntos con |valor| > 400, vueltos NaN
+  tos_UKESM1-0-LL_historical.nc: 3171960 puntos con |valor| > 400, vueltos NaN
+  tos_UKESM1-0-LL_ssp245.nc: 1653264 puntos con |valor| > 400, vueltos NaN
+  tos_UKESM1-0-LL_ssp370.nc: 1653264 puntos con |valor| > 400, vueltos NaN
+  tos_UKESM1-0-LL_ssp585.nc: 1653264 puntos con |valor| > 400, vueltos NaN
+== Paso 06: python3 scripts/06_qc_checks.py data/processed/masked data/processed/qc_report.csv ==
+QC escrito en data/processed/qc_report.csv (160 archivos, 11 con fallas)
+== Paso 07: python3 scripts/07_build_inventory_report.py data/processed/qc_report.csv data/processed/masked data/processed/models_inventory_final.csv ==
+Inventario final escrito en data/processed/models_inventory_final.csv (31/40 modelos seleccionados)
+Pipeline completo.
+== Registro de modelos ==
+/home/jonathan/personal/e1_smn/informe/model_registry.csv: 102 modelos (41 con institucion/grilla, los que llegaron a ser seed -- ver config/models_seed_cmip6.csv)
+== Graficos: plot_qc_summary.py ==
+
+1 caso(s) PENDIENTE (link vivo encontrado, falta descargar y/o procesar):
+   - MIROC-ES2H / historical
+
+64 caso(s) SIN_LINK (existe segun 00b, pero 01 no encontro ningun link vivo):
+   - AWI-ESM-1-1-LR / historical
+   - BCC-ESM1 / historical
+   - BCC-ESM1 / ssp370
+   - CESM2-FV2 / historical
+   - CESM2-FV2 / ssp370
+   - CESM2-FV2 / ssp585
+   - CESM2-WACCM-FV2 / historical
+   - CIESM / historical
+   - CIESM / ssp245
+   - CIESM / ssp585
+   - CMCC-CM2-HR4 / historical
+   - E3SM-1-0 / historical
+   - E3SM-1-0 / ssp370
+   - E3SM-1-0 / ssp585
+   - E3SM-1-1 / historical
+   - E3SM-1-1 / ssp585
+   - E3SM-1-1-ECA / historical
+   - E3SM-1-1-ECA / ssp585
+   - E3SM-2-0 / historical
+   - E3SM-2-0 / ssp370
+   - E3SM-2-0-NARRM / historical
+   - E3SM-2-1 / historical
+   - EC-Earth3-AerChem / historical
+   - EC-Earth3-AerChem / ssp370
+   - EC-Earth3-CC / historical
+   - EC-Earth3-CC / ssp245
+   - EC-Earth3-CC / ssp585
+   - EC-Earth3-HR / historical
+   - EC-Earth3-HR / ssp245
+   - FIO-ESM-2-0 / historical
+   - FIO-ESM-2-0 / ssp245
+   - FIO-ESM-2-0 / ssp585
+   - GFDL-CM4 / historical
+   - GFDL-CM4 / ssp245
+   - GFDL-CM4 / ssp585
+   - GISS-E2-1-G-CC / historical
+   - GISS-E2-1-G-CC / ssp245
+   - GISS-E2-1-G-CC / ssp585
+   - GISS-E2-2-H / historical
+   - GISS-E3-G / historical
+   - HadGEM3-GC31-LL / historical
+   - HadGEM3-GC31-LL / ssp245
+   - HadGEM3-GC31-LL / ssp585
+   - HadGEM3-GC31-MM / historical
+   - HadGEM3-GC31-MM / ssp585
+   - ICON-ESM-LR / historical
+   - IPSL-CM5A2-INCA / historical
+   - IPSL-CM5A2-INCA / ssp370
+   - IPSL-CM6A-LR-INCA / historical
+   - KIOST-ESM / historical
+   - KIOST-ESM / ssp245
+   - KIOST-ESM / ssp585
+   - MIROC-ES2H / ssp245
+   - MIROC-ES2H / ssp370
+   - MIROC-ES2H / ssp585
+   - MPI-ESM-1-2-HAM / historical
+   - MPI-ESM-1-2-HAM / ssp370
+   - NESM3 / historical
+   - NESM3 / ssp245
+   - NESM3 / ssp585
+   - NorCPM1 / historical
+   - SAM0-UNICON / historical
+   - UKESM1-1-LL / historical
+   - UKESM1-1-LL / ssp370
+
+Listo: 160 filas de QC procesadas, figura en /home/jonathan/personal/e1_smn/figures/sst_QD_vf.png
+== Graficos: plot_boxplot_comparison.py ==
+Graficando boxplots comparativos ...
+  Nino 3.4: 32 fuente(s), 116 anios comunes -> /home/jonathan/personal/e1_smn/figures/boxplot_Nino3.4.png
+  Nino 1+2: 32 fuente(s), 116 anios comunes -> /home/jonathan/personal/e1_smn/figures/boxplot_Nino1+2.png
+Listo.
+== Graficos: plot_region_nino_orthographic.py ==
+Centro de proyeccion (Niño 3.4): lon=-145.0, lat=0.0
+Figura guardada en /home/jonathan/personal/e1_smn/figures/region_nino_proj.png
+== Graficos: plot_maps.py ==
+Graficando mapas: 31 modelo(s) + ERSSTv5 ...
+  ACCESS-ESM1-5
+  AWI-CM-1-1-MR
+  BCC-CSM2-MR
+  CAMS-CSM1-0
+  CESM2
+  CESM2-WACCM
+  CMCC-ESM2
+  CNRM-CM6-1
+  CNRM-CM6-1-HR
+  CNRM-ESM2-1
+  CanESM5
+  CanESM5-1
+  CanESM5-CanOE
+  EC-Earth3-Veg-LR
+  FGOALS-f3-L
+  FGOALS-g3
+  GFDL-ESM4
+  GISS-E2-2-G
+  IITM-ESM
+  INM-CM4-8
+  INM-CM5-0
+  IPSL-CM6A-LR
+  MCM-UA-1-0
+  MIROC-ES2L
+  MIROC6
+  MPI-ESM1-2-HR
+  MPI-ESM1-2-LR
+  MRI-ESM2-0
+  NorESM2-LM
+  NorESM2-MM
+  TaiESM1
+  ERSSTv5
+Listo, 32 figura(s) en /home/jonathan/personal/e1_smn/figures
+== Graficos: plot_box_series.py ==
+ACCESS-ESM1-5
+AWI-CM-1-1-MR
+BCC-CSM2-MR
+CAMS-CSM1-0
+CESM2
+CESM2-WACCM
+CMCC-ESM2
+CNRM-CM6-1
+CNRM-CM6-1-HR
+CNRM-ESM2-1
+CanESM5
+CanESM5-1
+CanESM5-CanOE
+EC-Earth3-Veg-LR
+FGOALS-f3-L
+FGOALS-g3
+GFDL-ESM4
+GISS-E2-2-G
+IITM-ESM
+INM-CM4-8
+INM-CM5-0
+IPSL-CM6A-LR
+MCM-UA-1-0
+MIROC-ES2L
+MIROC6
+MPI-ESM1-2-HR
+MPI-ESM1-2-LR
+MRI-ESM2-0
+NorESM2-LM
+NorESM2-MM
+TaiESM1
+Listo, 31 modelo(s) graficado(s) (2 figuras cada uno) en /home/jonathan/personal/e1_smn/figures
+Reporte de estado escrito en logs/run_report_20260922_163046.txt
+
+Paquete armado en /home/jonathan/personal/e1_smn/informe/entregable_update.tar.gz (15 archivo(s)).
+Faltan 6 archivo(s) (no incluidos en el paquete):
+  [FALTA] figures/M001_sst_2d_ACCESS-CM2.png
+           -> generarlo con: python3 scripts/plot_maps.py (ya se corre solo al final de run.sh) -- necesita que ACCESS-CM2 este descargado y procesado (pasos 02-05)
+  [FALTA] figures/M057_sst_2d_GISS-E2-1-G.png
+           -> generarlo con: python3 scripts/plot_maps.py (ya se corre solo al final de run.sh) -- necesita que GISS-E2-1-G este descargado y procesado (pasos 02-05)
+  [FALTA] figures/M001_serie_ACCESS-CM2_sst_Nino3.4.png
+           -> generarlo con: python3 scripts/plot_box_series.py (ya se corre solo al final de run.sh)
+  [FALTA] figures/M001_serie_ACCESS-CM2_sst_Nino1+2.png
+           -> generarlo con: python3 scripts/plot_box_series.py (ya se corre solo al final de run.sh)
+  [FALTA] figures/M057_serie_GISS-E2-1-G_sst_Nino3.4.png
+           -> generarlo con: python3 scripts/plot_box_series.py (ya se corre solo al final de run.sh)
+  [FALTA] figures/M057_serie_GISS-E2-1-G_sst_Nino1+2.png
+           -> generarlo con: python3 scripts/plot_box_series.py (ya se corre solo al final de run.sh)

@@ -1,0 +1,2 @@
+Nino 3.4: mediana obs=26.78C  sesgo mediano=-0.24C  rango=[-1.95,+1.12]  calidos(>+0.5)=4  frios(<-0.5)=16  |b|<=0.5=20
+Nino 1+2: mediana obs=22.54C  sesgo mediano=+2.21C  rango=[+0.18,+4.53]  calidos(>+0.5)=38  frios(<-0.5)=0  |b|<=0.5=2

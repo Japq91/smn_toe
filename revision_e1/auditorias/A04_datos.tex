@@ -1,0 +1,67 @@
+\newcommand{\auditoriaid}{A04 -- Datos}
+\input{../trabajo/preambulo_auditoria.tex}
+\graphicspath{{../}}
+\begin{document}
+
+\begin{center}
+{\Large\bfseries Auditoría A04: Datos (fuentes, modelos, selección, dominios y periodos)}\\[0.4em]
+{\normalsize Informe del Entregable~1, Sección~4 (\texttt{informe\_e1\_smnv3.tex}, commit \texttt{330fd2e})}\\[0.2em]
+{\small Revisión: \fechaentrega}
+\end{center}
+
+\section{Objeto}
+
+Se audita la Sección~4 completa: fuentes de datos, Figura de contribución institucional, Cuadro de los 40 modelos, ``Selección inicial de modelos'' y ``Dominios oceanográficos y periodos''. Los números se recalcularon desde los CSV del repositorio. Las figuras se contrastaron con la configuración del estado E1 (\texttt{git show 8ee6184:config/domains.yaml}) y con los archivos que efectivamente enlaza \archivo{informe/figuras/}.
+
+\actualizacion{El informe describe la ventana de descarga vigente (0°--360°, 30°S--30°N), ampliada para el índice RONI y el índice $W$ del ToD, en lugar de la ventana original del E1. El mapa de regiones y los mapas 2D se regeneraron para toda esa ventana; el mapa de regiones pasó a una proyección cilíndrica centrada en Niño~3.4 entre 60°S y 60°N, para que la franja verde se vea rodeando el globo. Las figuras regeneradas con la ventana del E1 que se describen en la sección~4 de esta auditoría quedan solo como registro.}
+
+\section{Verificaciones realizadas}
+
+\begin{itemize}[leftmargin=1.2em]
+\item \textbf{Cuadro de modelos.} Las 40 filas se cruzaron con \archivo{models_inventory_final.csv} (mismo conjunto) y con \archivo{informe/model_registry.csv}: coinciden código, institución, realización y resolución de cada fila. Distribución: 30 modelos con \texttt{r1i1p1f1}; 24 instituciones; 15 países; resoluciones nominales de 25\,km (2), 50\,km (1), 100\,km (24), 111\,km (4) y 250\,km (9).
+\item \textbf{Modelos de \citet{bruno2023}.} Se extrajeron los 53 nombres de su Tabla~1 (ver A02-4). Los 53 están en el universo de 102; 32 están entre los 40 seleccionados; de los 21 restantes, 16 no publican \texttt{ssp245} o \texttt{ssp585} en ESGF y 5 solo carecen de \texttt{ssp370}.
+\item \textbf{Efecto de exigir \texttt{ssp370}.} Sobre \archivo{model_availability_priority.csv}: 49 modelos publican \texttt{historical}+\texttt{ssp245}+\texttt{ssp585}; 8 no publican \texttt{ssp370} (CIESM, EC-Earth3-CC, FIO-ESM-2-0, GFDL-CM4, GISS-E2-1-G-CC, HadGEM3-GC31-LL, KIOST-ESM, NESM3). El requisito del escenario intermedio reduce el conjunto de 49 a 41.
+\item \textbf{Figuras.} \archivo{informe/figuras/} contiene \emph{enlaces simbólicos} a \archivo{figures/}, carpeta no versionada que se regenera en cada corrida. Tras la corrida del 22-09 con la ventana ampliada para el E2 (\texttt{79a9786}), el mapa de regiones y los mapas 2D del PDF muestran 0°--360°, 30°S--30°N, y no la ventana que describe el texto. Se regeneraron con el código del E1 (sección~4).
+\item \textbf{ERSSTv5.} URL de descarga en el Paso~03 del E1: \archivo{https://downloads.psl.noaa.gov/Datasets/noaa.ersst.v5/sst.mnmean.nc}; recorte con \texttt{sellonlatbox} y \texttt{selvar,sst}. Coincide con el texto.
+\end{itemize}
+
+\section{Hallazgos}
+
+\begin{hallazgos}
+A04-1 & \sevA & Figura de contribución & Imagen externa, no generada por el \emph{pipeline} (lo dice el README), sobre un mapa base comercial y sin fuente citada. Muestra banderas de países que no tienen modelos entre los 40 seleccionados (Brasil, Sudáfrica, Arabia Saudita, Chipre, Nueva Zelanda, entre otros), mientras el pie afirma que es la contribución ``al conjunto CMIP6 finalmente consolidado''. & Se reemplaza por una figura reproducible (\archivo{revision_e1/trabajo/fig_contribucion.py}): modelos seleccionados por país, con sus instituciones. \\
+A04-2 & \sevA & 4.3, Selección & ``de los 52 \texttt{source\_id} distintos citados en \citet{bruno2023}, 34 coinciden \ldots, 16 más \ldots\ en \archivo{models_missing_from_esgf.csv} \ldots\ y 37 de los 52 terminaron \ldots\ en el inventario final''. Incoherente en sí mismo (37 en el inventario, pero solo 34 en el \emph{seed} del que sale el inventario) y contra los datos: 53 modelos, 32 seleccionados. \archivo{models_missing_from_esgf.csv} tiene 17 filas, y 3 de ellas ya están en el \emph{seed} (archivo desactualizado). & Cifras recalculadas: 53 / 102 / 32 / 21. \\
+A04-3 & \sevA & 4.3, Selección & ``102 modelos (46 del barrido inicial más 56 citados en la literatura, verificados con \texttt{00c})'' (ver A01-1). & Universo = 102 modelos con \texttt{tos}/\texttt{Omon} en ESGF. \\
+A04-4 & \sevA & 4.3 y 4.4 & No se informa que exigir \texttt{ssp370}, escenario no requerido por el TdR, reduce el conjunto de 49 a 41 modelos. Es una decisión metodológica con costo real para SSP2-4.5/5-8.5 y el lector debe conocerla. & Párrafo neutro con la cifra y la vía para reincorporar esos 8 modelos (ver A08). \\
+A04-5 & \sevA & Fig.~\ref{fig:region_nino} y Fig.~\ref{fig:mapas2d} & El PDF compilado muestra la ventana del E2 (30°S--30°N, global) por los enlaces simbólicos, aunque el texto describe 100°E--70°O, 20°S--20°N. & Figuras regeneradas; en el informe revisado son archivos reales. \textit{Actualización 29-09: se usa la ventana vigente y el texto se ajustó a ella.} \\
+A04-6 & \sevM & Pie del cuadro & ``Resolución \ldots\ la más gruesa entre las que publican los cuatro experimentos (Sección \texttt{sec:desviacion}), no la resolución final \ldots\ (ésa es siempre la de ERSSTv5)''. Correcto, pero con paréntesis anidados y guiones que dificultan la lectura. & Pie reescrito en oraciones cortas. \\
+A04-7 & \sevM & 4.2 & El informe dice que el código se asignó ``alfabéticamente''. Verificado: el orden es el de \texttt{sorted()} de Python, que separa mayúsculas y minúsculas (CNRM antes que CanESM). Correcto como orden estable, no como orden alfabético estricto. & Se mantiene ``alfabéticamente'' (convención del registro); se anota aquí la sutileza. \\
+A04-8 & \sevM & 4.2 & No explica por qué 10 modelos no usan \texttt{r1i1p1f1}. & Una frase: variante común a los cuatro experimentos cuando \texttt{r1i1p1f1} no los cubre. \\
+A04-9 & \sevB & 4.1 & ``La Figura \ldots\ ilustra la contribución institucional internacional'': redundante, y su pie remitía a la Sección~3.3 por un argumento de sesgo estructural. & El argumento se deja en el pie de la figura nueva, sin remisión. \\
+A04-10 & \sevB & 4.4 & Tres líneas en blanco consecutivas en el \texttt{.tex} y un párrafo huérfano (``La Figura~\ldots\ ubica ambas cajas'') entre la figura y los periodos. & Se elimina. \\
+A04-11 & \sevB & Título 4.3 & ``Selección inicial de modelos'' describe la selección final completa, no una inicial. & ``Selección de modelos''. \\
+A04-12 & -- & 4.4 & Verificado sin cambios: cajas Niño~3.4 (190°--240°, 5°S--5°N) y Niño~1+2 (270°--280°, 10°S--0°); ventana del E1 100°--290°, 20°S--20°N; periodos 1981--2014, 2036--2065, 2071--2100; descarga 1850--2100. & Se conservan. \\
+\end{hallazgos}
+
+\section{Figuras regeneradas con el código del E1}
+
+Se extrajo \texttt{scripts/} y \texttt{config/} del commit \texttt{8ee6184} a \archivo{revision_e1/trabajo/e1_snapshot/}, con enlaces a \archivo{data/} e \archivo{informe/} del repositorio. El mapa de regiones se regeneró con el script original, que lee la ventana del E1. Los mapas 2D se regeneraron recortando el dato procesado a 100°--290°, 20°S--20°N antes de graficar. Recortar es equivalente a la corrida del E1, porque la grilla de destino (ERSSTv5) y la máscara de cada punto son las mismas: la ventana solo cambia la extensión. Las demás figuras del informe (matriz de estado, series y \emph{boxplots}) dependen de las cajas, no de la ventana, y se copiaron como archivos reales.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\textwidth]{figuras/region_nino_proj.png}
+\caption{Mapa de regiones regenerado con la ventana del E1 (comparar con la ventana global del PDF actual).}
+\end{figure}
+
+\section{Extensión}
+
+Original: 1599 palabras (incluido el cuadro). Propuesto: \input{../trabajo/conteo_A04.tex}palabras.
+
+\section{Texto propuesto}
+
+\begin{propuesto}
+\input{../informe/secciones/04_datos.tex}
+\end{propuesto}
+
+\bibliographystyle{plainnat}
+\bibliography{../informe/references_rev}
+\end{document}

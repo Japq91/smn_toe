@@ -1,0 +1,460 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[spanish,es-noshorthands]{babel}
+\usepackage{microtype}
+\usepackage[a4paper,margin=2.3cm]{geometry}
+\usepackage{booktabs,array,longtable}
+\usepackage{graphicx,caption}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{xurl}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,fit,calc}
+
+\hypersetup{colorlinks=true,linkcolor=blue!50!black,urlcolor=blue!60!black,
+  pdftitle={Anexo del Entregable 1 -- Guía de uso del pipeline smn\_toe},
+  pdfauthor={Jonathan Aaron Paredes Quispe}}
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\setlength{\emergencystretch}{3em}
+\urlstyle{tt}
+\newcommand{\archivo}[1]{\begingroup\hypersetup{urlcolor=black}\url{#1}\endgroup}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\input{../trabajo/macros_informe.tex}
+\graphicspath{{../}}
+\setlength{\parskip}{0.45em}
+\setlength{\parindent}{0pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Anexo del Entregable N.\textsuperscript{o}~1 -- Guía de uso del \emph{pipeline}}
+\fancyhead[R]{\small \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\setlength{\headheight}{14pt}
+
+% Colores (tinta neutra + un azul de acento)
+\definecolor{acento}{HTML}{2A78D6}
+\definecolor{tinta}{HTML}{0B0B0B}
+\definecolor{tinta2}{HTML}{52514E}
+\definecolor{fondocaja}{HTML}{F3F6FB}
+\definecolor{terminal}{HTML}{1E1E1E}
+\definecolor{verde}{HTML}{1BAF7A}
+\definecolor{ambar}{HTML}{EDA100}
+
+% Bloques de comandos: fondo claro, se pueden copiar
+\lstdefinestyle{comando}{basicstyle=\ttfamily\small,backgroundcolor=\color{fondocaja},
+  frame=single,rulecolor=\color{acento!40},framesep=6pt,xleftmargin=6pt,xrightmargin=6pt,
+  breaklines=true,columns=fullflexible,keepspaces=true,showstringspaces=false,
+  literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {ñ}{{\~n}}1}
+\lstset{style=comando}
+
+% Caja de aviso
+\newcommand{\aviso}[2]{\par\noindent\begin{tikzpicture}
+\node[draw=#1!70,fill=#1!8,rounded corners=3pt,inner sep=7pt,text width=\dimexpr\linewidth-16pt\relax,align=left]{#2};
+\end{tikzpicture}\par}
+
+\begin{document}
+
+\begin{titlepage}
+\centering
+\noindent\rule{\textwidth}{0.6pt}
+\vspace{1.4cm}
+
+{\Large\bfseries ANEXO DEL ENTREGABLE N.\textsuperscript{o}~1\par}
+\vspace{0.6cm}
+{\large Guía de uso del \emph{pipeline} de datos \texttt{smn\_toe}\par}
+\vspace{1.2cm}
+\rule{0.7\textwidth}{0.6pt}
+\vspace{1.2cm}
+
+{\normalsize\bfseries Concepto:\par}
+\vspace{0.3cm}
+{\normalsize Servicio de asistencia en temas de investigación para evaluar\\
+la influencia del cambio climático en los eventos de El Niño\\
+y sus impactos en el Perú\par}
+\vspace{1.2cm}
+{\small Prestado para: Servicio Nacional de Meteorología e Hidrología del Perú -- SENAMHI\par}
+\vspace{1.2cm}
+\begin{minipage}{0.8\textwidth}\small\centering
+Este anexo acompaña al informe del Entregable~1. Explica cómo instalar y ejecutar el \emph{pipeline}, qué produce, cuánto tarda y cómo se usarán sus resultados en los entregables siguientes. Está escrito para quien usa Linux de forma básica: cada comando se puede copiar tal cual. El repositorio es de libre acceso.
+\end{minipage}
+\vfill
+{\small\bfseries Responsable:\par}
+{\small Ing. Jonathan Aaron Paredes Quispe\par}
+\vspace{0.4cm}
+{\small\bfseries FECHA: \fechaentrega\par}
+\vspace{0.6cm}
+\noindent\rule{\textwidth}{0.6pt}
+\end{titlepage}
+
+\tableofcontents
+\clearpage
+
+% ============================================================
+\section{Qué hace el \emph{pipeline}}
+% ============================================================
+
+El \emph{pipeline} reúne en un único formato comparable la temperatura superficial del mar (TSM) de los modelos climáticos CMIP6 y la observación ERSSTv5. Descarga los datos de internet, los lleva a una misma grilla, calendario, unidad (°C) y máscara de océano, y verifica que estén completos. Todo se hace con un solo comando, \texttt{./run.sh}. La Figura~\ref{fig:que} resume el recorrido.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  font=\small,
+  fuente/.style={draw=tinta2,fill=white,rounded corners=3pt,text width=2.7cm,align=center,minimum height=1.0cm},
+  etapa/.style={draw=acento,fill=acento!10,rounded corners=3pt,text width=3.1cm,align=center,minimum height=1.25cm},
+  producto/.style={draw=verde!80!black,fill=verde!10,rounded corners=3pt,text width=3.2cm,align=center,minimum height=1.0cm},
+  flecha/.style={-{Latex[length=2.5mm]},thick,tinta2}]
+\node[fuente] (esgf) at (0,1.5) {ESGF\\\scriptsize modelos CMIP6};
+\node[fuente] (cds) at (0,0) {Copernicus CDS\\\scriptsize respaldo};
+\node[fuente] (noaa) at (0,-1.5) {NOAA PSL\\\scriptsize ERSSTv5 observado};
+\node[etapa] (e1) at (4.1,1.9) {\textbf{1. Buscar}\\\scriptsize pasos 00, 00b, 01\\ qué modelos existen};
+\node[etapa] (e2) at (4.1,0.3) {\textbf{2. Descargar}\\\scriptsize pasos 02, 03};
+\node[etapa] (e3) at (4.1,-1.3) {\textbf{3. Homogeneizar}\\\scriptsize pasos 04, 05\\ grilla, °C, máscara};
+\node[etapa] (e4) at (4.1,-2.9) {\textbf{4. Verificar}\\\scriptsize pasos 06, 07\\ control de calidad};
+\node[producto] (p1) at (8.7,1.1) {\textbf{40 modelos}\\\scriptsize $\times$ 4 experimentos listos\\ \texttt{data/processed/}};
+\node[producto] (p2) at (8.7,-0.4) {\textbf{Inventario y QC}\\\scriptsize tablas CSV};
+\node[producto] (p3) at (8.7,-1.9) {\textbf{Figuras y reporte}\\\scriptsize \texttt{figures/}, \texttt{logs/}};
+\draw[flecha] (esgf.east) -- (e1.west);
+\draw[flecha] (esgf.east) -- (e2.west);
+\draw[flecha] (cds.east) -- (e2.west);
+\draw[flecha] (noaa.east) -- (e2.west);
+\draw[flecha] (e1) -- (e2);
+\draw[flecha] (e2) -- (e3);
+\draw[flecha] (e3) -- (e4);
+\draw[flecha] (e4.east) -- (p1.west);
+\draw[flecha] (e4.east) -- (p2.west);
+\draw[flecha] (e4.east) -- (p3.west);
+\node[draw=acento,dashed,rounded corners=4pt,inner sep=5pt,fit=(e1)(e4),label={[font=\scriptsize\ttfamily,text=acento]above:./run.sh}] {};
+\end{tikzpicture}
+\caption{Recorrido de los datos: tres fuentes en internet, cuatro etapas automáticas dentro de \texttt{run.sh} y tres tipos de producto.}
+\label{fig:que}
+\end{figure}
+
+Los productos alimentan directamente el Entregable~2. Los números de paso (00 a 07) son los que usa el informe y los que acepta \texttt{run.sh} para ejecutar solo una parte (Sección~\ref{sec:ejecutar}).
+
+% ============================================================
+\section{Qué se necesita}
+% ============================================================
+
+\begin{center}\small
+\begin{tabular}{@{}L{3.6cm}L{\dimexpr\textwidth-3.6cm-2\tabcolsep\relax}@{}}
+\toprule
+Requisito & Detalle \\
+\midrule
+Sistema operativo & Linux (probado en Ubuntu y en un clúster HPC). \\
+Espacio en disco & Unos \textbf{90\,GB libres}: 73\,GB de datos crudos, cerca de 9\,GB de datos procesados e intermedios y margen. Se comprueba con \texttt{df -h .} \\
+Conexión a internet & Estable. La descarga completa toma del orden de 13 horas. \\
+Conda (Miniconda) & Gestor de programas; instala Python, CDO y el resto de las dependencias (Sección~\ref{sec:instalar}). \\
+Repositorio & \archivo{https://github.com/Japq91/smn_toe}, de libre acceso. \\
+Cuenta de Copernicus & \textbf{Opcional}. Solo se usa para los modelos que ESGF no resuelve; sin ella, ese paso se omite y el resto sigue. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ============================================================
+\section{Instalación (una sola vez)}
+\label{sec:instalar}
+% ============================================================
+
+Abra una terminal (en Ubuntu: \texttt{Ctrl+Alt+T}) y siga estos pasos en orden.
+
+\textbf{Paso 1. Instalar Miniconda} (omitir si el comando \texttt{conda} ya existe; se comprueba con \verb|conda --version|):
+\begin{lstlisting}
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh
+\end{lstlisting}
+Acepte la licencia y las opciones por defecto. Al terminar, \textbf{cierre la terminal y abra una nueva}.
+
+\textbf{Paso 2. Descargar el repositorio} y entrar a su carpeta:
+\begin{lstlisting}
+git clone https://github.com/Japq91/smn_toe.git
+cd smn_toe
+\end{lstlisting}
+
+\textbf{Paso 3. Crear el entorno de programas} (tarda unos minutos y se hace una sola vez):
+\begin{lstlisting}
+conda env create -f environment.yml
+\end{lstlisting}
+Esto crea el entorno \texttt{smn\_toe} con Python~3.11, CDO~2.1.1, \texttt{netCDF4}, \texttt{xarray}, \texttt{matplotlib}, \texttt{cartopy} y \texttt{cdsapi}. No hace falta activarlo a mano: \texttt{run.sh} lo activa solo.
+
+\textbf{Paso 4 (opcional). Credenciales de Copernicus.} Cree una cuenta en \archivo{https://cds.climate.copernicus.eu}, acepte la licencia del conjunto \texttt{projections-cmip6} y guarde su clave personal en el archivo \texttt{\textasciitilde/.cdsapirc}:
+\begin{lstlisting}
+url: https://cds.climate.copernicus.eu/api
+key: SU-CLAVE-PERSONAL
+\end{lstlisting}
+
+% ============================================================
+\section{Ejecutar}
+\label{sec:ejecutar}
+% ============================================================
+
+\subsection{La forma general}
+
+\begin{lstlisting}
+./run.sh [PASO_DESDE] [PASO_HASTA] [MAX_MODELOS]
+\end{lstlisting}
+
+Los tres valores son opcionales. Sin ninguno, se ejecuta todo: pasos \texttt{00 00b 01 02 03 04 05 06 07}, en ese orden. \texttt{PASO\_DESDE} y \texttt{PASO\_HASTA} limitan el rango de pasos. \texttt{MAX\_MODELOS} procesa solo los primeros $N$ modelos, lo que sirve para una prueba rápida.
+
+\begin{center}\small
+\begin{tabular}{@{}L{4.4cm}L{\dimexpr\textwidth-4.4cm-2\tabcolsep\relax}@{}}
+\toprule
+Comando & Para qué sirve \\
+\midrule
+\texttt{./run.sh 00 04 2} & \textbf{Prueba rápida}: todo hasta el regrillado, con solo 2 modelos. Úsela la primera vez para comprobar la instalación. \\
+\texttt{./run.sh} & \textbf{Corrida completa}. La primera vez tarda del orden de 16 horas (Sección~\ref{sec:tiempos}). \\
+\texttt{./run.sh 06 07} & Repetir solo el control de calidad y el inventario (minutos). \\
+\texttt{./run.sh 07 07} & Regenerar inventario, figuras, reporte y paquete sin tocar los datos. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\aviso{acento}{\textbf{Si la corrida se corta} (corte de luz, de red, o se cierra la terminal), basta con volver a ejecutar el mismo comando. Cada paso detecta lo que ya está hecho y continúa desde ahí, sin repetir descargas.}
+
+\subsection{Elegir el comando}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[font=\small,
+  preg/.style={draw=tinta2,fill=white,rounded corners=3pt,text width=3.9cm,align=center,minimum height=0.9cm},
+  cmd/.style={draw=acento,fill=acento!10,rounded corners=3pt,text width=3.3cm,align=center,minimum height=0.9cm,font=\small\ttfamily},
+  flecha/.style={-{Latex[length=2.3mm]},thick,tinta2},
+  lbl/.style={font=\scriptsize,text=tinta2}]
+\node[preg] (q1) at (0,0) {¿Es la primera vez en esta máquina?};
+\node[cmd] (c1) at (5.2,0) {./run.sh 00 04 2};
+\node[preg] (q2) at (0,-1.8) {¿Quiere todos los datos?};
+\node[cmd] (c2) at (5.2,-1.8) {./run.sh};
+\node[preg] (q3) at (0,-3.6) {¿Solo cambió el control de calidad?};
+\node[cmd] (c3) at (5.2,-3.6) {./run.sh 06 07};
+\node[preg] (q4) at (0,-5.4) {¿Solo quiere figuras y reportes al día?};
+\node[cmd] (c4) at (5.2,-5.4) {./run.sh 07 07};
+\draw[flecha] (q1) -- node[lbl,above]{sí} (c1);
+\draw[flecha] (q1) -- node[lbl,right]{no} (q2);
+\draw[flecha] (q2) -- node[lbl,above]{sí} (c2);
+\draw[flecha] (q2) -- node[lbl,right]{no} (q3);
+\draw[flecha] (q3) -- node[lbl,above]{sí} (c3);
+\draw[flecha] (q3) -- node[lbl,right]{no} (q4);
+\draw[flecha] (q4) -- node[lbl,above]{sí} (c4);
+\draw[flecha,dashed] (c1.south) -- node[lbl,right]{si la prueba salió bien} (c2.north);
+\end{tikzpicture}
+\caption{Qué comando usar según la situación.}
+\end{figure}
+
+\subsection{Dejarlo corriendo en segundo plano}
+
+Como la corrida completa dura muchas horas, conviene lanzarla de modo que siga aunque se cierre la terminal:
+\begin{lstlisting}
+nohup ./run.sh > logs/corrida.txt 2>&1 &
+\end{lstlisting}
+Para ver el avance en cualquier momento (se sale con \texttt{Ctrl+C}, sin detener la corrida):
+\begin{lstlisting}
+tail -f logs/pipeline.log
+\end{lstlisting}
+
+\subsection{Qué aparece en pantalla}
+
+Antes de empezar, \texttt{run.sh} muestra un \textbf{reporte previo} con lo que ya existe (\texttt{[OK]}) y lo que falta (\texttt{[FALTA]}), junto con una estimación de tiempo basada en corridas anteriores en la misma máquina. La Figura~\ref{fig:terminal} muestra la salida real en la máquina de desarrollo, con los 40 modelos ya procesados.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\node[fill=terminal,rounded corners=4pt,inner sep=9pt,text width=0.93\textwidth,align=left,font=\ttfamily\scriptsize,text=white] (t) {%
+\textcolor{gray!60}{\$} ./run.sh\\[2pt]
+=== Estado antes de esta corrida (run.sh) ===\\
+\textcolor{verde}{[OK]}\ \ \ \ 00b\ \ \ config/models\_seed\_cmip6.csv (lista de modelos)\\
+\textcolor{verde}{[OK]}\ \ \ \ 01\ \ \ \ data/interim/models\_catalog\_status.csv (catalogo ESGF)\\
+\textcolor{verde}{[OK]}\ \ \ \ 02\ \ \ \ Descarga CMIP6: 160/160 combinaciones modelo x experimento\\
+\textcolor{verde}{[OK]}\ \ \ \ 04/05 Grilla comun + mascara: 160/160 archivos\\
+\textcolor{verde}{[OK]}\ \ \ \ 03\ \ \ \ data/raw/ersstv5/ersstv5\_region.nc (observado)\\
+\textcolor{verde}{[OK]}\ \ \ \ 06\ \ \ \ data/processed/qc\_report.csv (control de calidad)\\
+\textcolor{verde}{[OK]}\ \ \ \ 07\ \ \ \ data/processed/models\_inventory\_final.csv (inventario final)\\
+==============================================\\[2pt]
+\textcolor{gray!60}{\# en una máquina nueva, cada línea diría por ejemplo:}\\
+\textcolor{ambar}{[FALTA]} 00b\ \ \ config/models\_seed\_cmip6.csv (lista de modelos) -{}- sin corridas previas en esta maquina, no se puede estimar
+};
+\end{tikzpicture}
+\caption{Reporte previo de \texttt{run.sh} (salida real; la última línea ilustra el caso de una máquina nueva).}
+\label{fig:terminal}
+\end{figure}
+
+Durante la corrida pueden aparecer dos preguntas, ambas con límite de 15 segundos. No hace falta responderlas: si nadie contesta, el \emph{pipeline} continúa solo.
+
+\begin{center}\small
+\begin{tabular}{@{}L{6.8cm}L{\dimexpr\textwidth-6.8cm-2\tabcolsep\relax}@{}}
+\toprule
+Pregunta & Si no se responde \\
+\midrule
+¿Buscar en nodos alternativos de ESGF y en Copernicus? [S/n] & Sí busca. Solo aparece si faltan modelos. \\
+¿Regenerar las figuras que ya existen? & No regenera; conserva las figuras existentes. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\aviso{ambar}{\textbf{Figuras desactualizadas.} Si cambia el conjunto de modelos, las figuras que ya existen \emph{no} se actualizan solas. Responda ``s'' a la segunda pregunta o borre la figura concreta en \texttt{figures/} antes de ejecutar \texttt{./run.sh 07 07}.}
+
+% ============================================================
+\section{Cuánto tarda}
+\label{sec:tiempos}
+% ============================================================
+
+La Figura~\ref{fig:tiempos} muestra lo que tardó cada paso en la máquina de desarrollo cuando tuvo que hacer todo el trabajo. La descarga domina: una primera corrida completa toma en total del orden de \textbf{16 horas}. Las corridas siguientes tardan segundos o minutos, porque cada paso omite lo que ya está hecho. El Paso~03 (ERSSTv5) no aparece porque no hay una medición de su primera descarga; es un único archivo de unos 160\,MB.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{figuras/anexo_tiempos.png}
+\caption{Duración máxima registrada por paso (\texttt{logs/step\_timings.csv}). Los tiempos dependen de la conexión y del estado de los servidores de ESGF.}
+\label{fig:tiempos}
+\end{figure}
+
+% ============================================================
+\section{Dónde quedan los resultados}
+% ============================================================
+
+\noindent\begin{minipage}{\linewidth}
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+smn_toe/
+|-- data/
+|   |-- raw/                      <- datos descargados, sin tocar (73 GB)
+|   |-- interim/                  <- catálogo de descargas e intermedios
+|   `-- processed/
+|       |-- masked/               <- ARCHIVOS FINALES: tos_<modelo>_<experimento>.nc
+|       |                            y ersstv5_region.nc (160 + 1 archivos)
+|       |-- qc_report.csv         <- control de calidad, una fila por archivo
+|       `-- models_inventory_final.csv  <- lista final: selected=True / False
+|-- figures/                      <- figuras generadas automáticamente
+|-- logs/
+|   |-- pipeline.log              <- todo lo que se mostró en pantalla
+|   `-- run_report_<fecha>.txt    <- resumen de estado de cada corrida
+`-- informe/
+    |-- model_registry.csv        <- código M001-M102, institución, país, resolución
+    `-- entregable_update.tar.gz  <- paquete con todo lo necesario para el informe
+\end{lstlisting}
+\end{minipage}
+
+\subsection{Cómo revisar los resultados}
+
+\textbf{¿Cuántos modelos quedaron seleccionados?} (debe responder 40):
+\begin{lstlisting}
+grep -c ",True$" data/processed/models_inventory_final.csv
+\end{lstlisting}
+
+\textbf{¿Hubo algún archivo rechazado en el control de calidad?} (debe responder 0):
+\begin{lstlisting}
+grep -c ",FAIL," data/processed/qc_report.csv
+\end{lstlisting}
+
+\textbf{Ver una tabla CSV ordenada en columnas:}
+\begin{lstlisting}
+column -s, -t < data/processed/models_inventory_final.csv | less
+\end{lstlisting}
+(se sale de \texttt{less} con la tecla \texttt{q}).
+
+\textbf{Ver qué contiene un archivo de datos:}
+\begin{lstlisting}
+conda activate smn_toe
+cdo sinfo data/processed/masked/tos_ACCESS-CM2_historical.nc
+\end{lstlisting}
+
+El archivo \texttt{qc\_report.csv} tiene una fila por archivo: modelo, experimento, TSM mínima y máxima (°C), número de meses, si pasa el rango físico (\texttt{ok\_range}), si pasa la cobertura temporal (\texttt{ok\_length}) y el estado final (\texttt{PASS} o \texttt{FAIL}). El reporte \texttt{logs/run\_report\_<fecha>.txt} clasifica los modelos de la lista de descarga en: descargados completos, con descarga parcial, procesados, descargados pero sin procesar y pendientes en fuentes alternativas.
+
+\input{../trabajo/anexo_pasos.tex}
+
+\clearpage
+% ============================================================
+\section{Problemas frecuentes}
+% ============================================================
+
+\begin{longtable}{@{}L{5.2cm}L{\dimexpr\textwidth-5.2cm-2\tabcolsep\relax}@{}}
+\toprule
+Mensaje o síntoma & Qué hacer \\
+\midrule\endhead
+\texttt{conda: command not found} & Miniconda no está instalado, o la terminal se abrió antes de instalarlo. Cierre y abra la terminal; si persiste, repita el Paso~1 de la instalación. \\
+\texttt{FALTA cdo} u otra herramienta al inicio & El entorno no se creó. Ejecute \texttt{conda env create -f environment.yml}. \\
+\texttt{Permission denied} al ejecutar \texttt{./run.sh} & Ejecute \texttt{chmod +x run.sh} una vez. \\
+``Descarga ya en curso en otro proceso'' & Ya hay una descarga corriendo, por ejemplo en segundo plano. Es normal: espere a que termine y vuelva a ejecutar. \\
+``se omite'' en Copernicus / falta \texttt{.cdsapirc} & No hay credenciales de Copernicus. Es opcional; el resto del \emph{pipeline} sigue. \\
+La descarga se detuvo o se cortó la red & Vuelva a ejecutar el mismo comando; continúa donde quedó. \\
+Un modelo ``agotó 3 intentos'' & No se volverá a buscar automáticamente. Para reintentar desde cero, borre \texttt{data/interim/models\_catalog\_status.csv} y \texttt{data/interim/esgf\_file\_urls.json} y ejecute de nuevo. \\
+Disco lleno (\texttt{No space left on device}) & Libere espacio; con \texttt{du -sh data/*} se ve qué ocupa más. No borre \texttt{data/processed/}. \\
+Las figuras no reflejan los últimos cambios & Ver el aviso de la Sección~\ref{sec:ejecutar}. \\
+\bottomrule
+\end{longtable}
+
+% ============================================================
+\section{Qué se espera hacer con estos datos}
+% ============================================================
+
+El Entregable~1 deja listo el dato. Los tres entregables siguientes lo usan en este orden (Figura~\ref{fig:ruta}): el Entregable~2 evalúa qué modelos representan mejor el ENOS, el Entregable~3 proyecta los cambios futuros y el Entregable~4 estima la incertidumbre y el tiempo de emergencia.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[font=\small,
+  hito/.style={circle,draw=acento,fill=acento,minimum size=8pt,inner sep=0pt},
+  hecho/.style={circle,draw=verde!80!black,fill=verde,minimum size=8pt,inner sep=0pt},
+  caja/.style={draw=tinta2!60,fill=white,rounded corners=3pt,text width=3.25cm,align=left,inner sep=5pt,font=\scriptsize}]
+\draw[very thick,tinta2!50] (0,0) -- (14.6,0);
+\foreach \x/\d/\e/\s in {0.9/25/E1/hecho, 4.9/50/E2/hito, 8.9/80/E3/hito, 12.9/110/E4/hito}{
+  \node[\s] at (\x,0) {};
+  \node[font=\small\bfseries,above=5pt] at (\x,0) {\e};
+  \node[font=\scriptsize,text=tinta2,below=5pt] at (\x,0) {día \d};
+}
+\node[caja,anchor=north] at (0.9,-0.8) {\textbf{Datos listos} (este entregable)\\[2pt]40 modelos $\times$ 4 experimentos; ERSSTv5; control de calidad; revisión de métodos de TOE.};
+\node[caja,anchor=north] at (4.9,-0.8) {\textbf{Evaluar modelos}\\[2pt]climatología, ciclo anual, sesgos, diagrama de Taylor; ONI, RONI, ICEN; selección de los mejores modelos.};
+\node[caja,anchor=north] at (8.9,-0.8) {\textbf{Proyectar}\\[2pt]cambios de la TSM media y de la variabilidad en 2036--2065 y 2071--2100; eventos extremos con ONI e ICEN.};
+\node[caja,anchor=north] at (12.9,-0.8) {\textbf{Incertidumbre y TOE}\\[2pt]variabilidad interna, modelo y escenario; señal-ruido; TOE con M1 y ToD; estudio final.};
+\end{tikzpicture}
+\caption{Hoja de ruta del servicio. Los días se cuentan desde la notificación de la orden de servicio, según los términos de referencia.}
+\label{fig:ruta}
+\end{figure}
+
+Para el Entregable~2 se usan directamente los archivos de \texttt{data/processed/masked/} y la lista de \texttt{models\_inventory\_final.csv}: no hace falta volver a descargar nada.
+
+\clearpage
+% ============================================================
+\section{Estructura del repositorio}
+% ============================================================
+
+Para quien necesite ubicar un script concreto:
+
+\begin{lstlisting}[basicstyle=\ttfamily\scriptsize]
+smn_toe/
+|-- run.sh                         # punto de entrada único
+|-- environment.yml                # entorno conda (python, cdo, netcdf4, ...)
+|-- README.md                      # documentación técnica detallada
+|-- config/
+|   |-- domains.yaml               # cajas Niño 3.4 / Niño 1+2 y ventana de descarga
+|   |-- periods.yaml               # periodos y escenarios
+|   |-- models_missing_from_esgf.csv       # candidatos de fuente alternativa (00c)
+|   |-- models_no_encontrado_44.csv        # modelos sin algún experimento en ninguna fuente
+|   |-- models_copernicus_available.csv    # modelos ofrecidos por Copernicus (02c)
+|   |-- models_copernicus_ssp245_whitelist.csv  # referencia histórica, sin uso
+|   `-- CMIP6_institution_id.json          # vocabulario oficial CMIP6: institución -> país
+|-- scripts/
+|   |-- 00_setup_env.sh            # verifica herramientas y crea carpetas
+|   |-- 00b_build_model_list.py    # universo de modelos (ESGF, nodo ORNL)
+|   |-- 00c_check_paper_models.py  # diagnóstico manual, no lo ejecuta run.sh
+|   |-- 01_query_esgf_catalog.py   # catálogo de archivos (ESGF, nodo LLNL)
+|   |-- 02_download_all_sources.sh # descarga en cascada 02a -> 02b -> 02c
+|   |-- 02_download_cmip6_chunks.sh, 02b_search_alt_esgf_nodes.py,
+|   |   02c_download_copernicus_cds.py, run_download_if_idle.sh
+|   |-- 03_download_ersstv5.sh
+|   |-- 04_process_to_common_grid.sh
+|   |-- 05_apply_ocean_mask.py
+|   |-- 06_qc_checks.py
+|   |-- 07_build_inventory_report.py
+|   |-- build_model_registry.py    # códigos M001-M102
+|   |-- generate_status_report.py  # logs/run_report_<fecha>.txt
+|   |-- preflight_report.py        # reporte previo con estimación de tiempo
+|   |-- pipeline_config.py, pipeline_timing.py   # configuración y tiempos
+|   |-- bundle_deliverable_update.py             # paquete .tar.gz
+|   `-- plot_*.py                  # las cinco figuras automáticas
+`-- data/, figures/, logs/, informe/   # salidas (Sección 6)
+\end{lstlisting}
+
+\end{document}

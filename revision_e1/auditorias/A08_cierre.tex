@@ -1,0 +1,57 @@
+\newcommand{\auditoriaid}{A08 -- Próximos pasos, conclusiones y recomendaciones}
+\input{../trabajo/preambulo_auditoria.tex}
+\begin{document}
+
+\begin{center}
+{\Large\bfseries Auditoría A08: Próximos pasos, conclusiones y recomendaciones}\\[0.4em]
+{\normalsize Informe del Entregable~1, Secciones 8--10 (\texttt{informe\_e1\_smnv3.tex}, commit \texttt{330fd2e})}\\[0.2em]
+{\small Revisión: \fechaentrega}
+\end{center}
+
+\section{Objeto}
+
+Se auditan las secciones de cierre. Las conclusiones deben apoyarse solo en lo que el informe demuestra, y la hoja de ruta debe coincidir con lo que efectivamente se está haciendo en el Entregable~2. Para lo segundo se contrastó la tabla ``Próximos pasos'' con \archivo{informe/borradores/marco_teorico_e2.txt} y con \archivo{scripts_e2/} (pasos p01--p09). Las conclusiones se revisaron contra los hallazgos de A01--A07.
+
+\section{Contraste de la hoja de ruta con el Entregable~2 en curso}
+
+\begin{center}\small
+\begin{tabular}{@{}L{5.2cm}L{\dimexpr\textwidth-5.2cm-2\tabcolsep\relax}@{}}
+\toprule
+Informe E1 (fila E2) & Metodología real del E2 \\
+\midrule
+``corrección de sesgo (Linear Scaling)'' & \textbf{Descartada.} El E2 muestra que la LS se cancela algebraicamente en toda anomalía; los índices se calculan con la climatología propia de cada fuente y el sesgo se reporta como diagnóstico aparte. \\
+``diagrama de Taylor sobre los eventos cálidos extremos'' & Taylor sobre la serie completa (p05) y sobre el compuesto del evento típico (p08), más el puntaje de habilidad de Taylor (2001) para la selección final (p09). \\
+ONI/RONI (Niño~3.4), ICEN (Niño~1+2) & Coincide (p01, p07). \\
+(no mencionado) & Correlación (p06), variabilidad interanual (p04), clasificación de eventos con umbral dual (p07). \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Hallazgos}
+
+\begin{hallazgos}
+A08-1 & \sevA & Cuadro 8, fila E2 & Anuncia ``corrección de sesgo (Linear Scaling)'', que el E2 descartó con fundamento. Si el informe E1 se entrega así, contradice al E2. & Fila reescrita según la metodología real del E2. \\
+A08-2 & \sevM & Cuadro 8, título & ``Gráficas y comparaciones exigidas por el TdR'': el cuadro incluye elecciones del equipo (Taylor, RONI, análisis compuesto, gradiente zonal) que el TdR no exige. & ``Análisis previstos para los Entregables~2 a~4''. \\
+A08-3 & \sevM & Fila E3 & ``gradiente zonal del Pacífico'' no está en la actividad (c) del TdR. & Se reemplaza por lo que pide la actividad (c): estado medio, variabilidad y eventos extremos con ONI e ICEN. \\
+A08-4 & \sevA & Conclusión (iv) & ``un \texttt{git clone} \ldots\ más \texttt{./run.sh} reconstruye el mismo estado documentado'': desde \texttt{main} ya no es cierto (A01-6, A04-5, A05-3). & \textit{Actualización 29-09}: sin mencionar commits; se indica que el repositorio es de libre acceso y que \texttt{./run.sh} reconstruye el conjunto de datos documentado. \\
+A08-5 & \sevM & Conclusión (i) & Repite por cuarta vez la oración ``40 de 102 \ldots\ 160 combinaciones'' (comentario \texttt{\% REVISAR} del Resumen). & Frase corta con remisión a Resultados. \\
+A08-6 & \sevM & Conclusión (ii) & Sintaxis rota (``profundiza: la bibliografía revisada permite justificar, con evidencia explícita lo requerido por el TdR, la adopción \ldots''); llama ``prescrito'' a M1, que el propio informe presenta como adoptado; ``cuatro líneas independientes convergen'' está sobredimensionado (A03-11). & Redacción nueva; ``hipótesis de trabajo'' apoyada además en el dato propio de ERSSTv5. \\
+A08-7 & \sevM & Concl. & Falta la conclusión cuantitativa que sí producen los datos del E1: el sesgo cálido de Niño~1+2 en 38 de 40 modelos (A07). & Nueva conclusión (iii), presentada como preliminar. \\
+A08-8 & \sevM & Recom. & No hay recomendación sobre dos decisiones con costo documentado: exigir \texttt{ssp370} (49 → 41, A04-4) y preservar la dispersión estructural (Lois). & Dos recomendaciones nuevas. \\
+A08-9 & \sevB & Título & ``Proximos pasos'' sin tilde. & ``Próximos pasos''. \\
+A08-10 & \sevB & Cierre de Próximos pasos & ``El Entregable~1 queda completo y verificable sin depender de ningún paso posterior'' repite la conclusión. & Se conserva solo la frase sobre \texttt{data/processed/}. \\
+\end{hallazgos}
+
+\section{Extensión}
+
+Original: 629 palabras (216 + 273 + 140). Propuesto: \input{../trabajo/conteo_A08.tex}palabras. El aumento corresponde a la conclusión (iii) y a las dos recomendaciones nuevas.
+
+\section{Texto propuesto}
+
+\begin{propuesto}
+\input{../informe/secciones/08_cierre.tex}
+\end{propuesto}
+
+\bibliographystyle{plainnat}
+\bibliography{../informe/references_rev}
+\end{document}

@@ -1,0 +1,48 @@
+FALLO CDS: MIROC-ES2H historical (miroc_es2h): 400 Client Error: Bad Request for url: https://cds.climate.copernicus.eu/api/retrieve/v1/jobs/bed017e7-6e12-4274-af76-ccaf88f30e58/results
+The job has failed
+The job failed with: RoocsValueError
+FALLO CDS: MIROC-ES2H ssp245 (miroc_es2h): 400 Client Error: Bad Request for url: https://cds.climate.copernicus.eu/api/retrieve/v1/jobs/6bbf4741-954e-4541-9147-f3f43dae4364/results
+The job has failed
+The job failed with: RoocsValueError
+FALLO CDS: MIROC-ES2H ssp370 (miroc_es2h): 400 Client Error: Bad Request for url: https://cds.climate.copernicus.eu/api/retrieve/v1/jobs/adddbc94-e611-4fb4-84c7-e4d7382485d4/results
+The job has failed
+The job failed with: RoocsValueError
+FALLO CDS: MIROC-ES2H ssp585 (miroc_es2h): 400 Client Error: Bad Request for url: https://cds.climate.copernicus.eu/api/retrieve/v1/jobs/dd2088a7-9777-4592-9762-5a23fddde750/results
+The job has failed
+The job failed with: RoocsValueError
+FALLO CDS: MIROC-ES2H historical (miroc_es2h): 400 Client Error: Bad Request for url: https://cds.climate.copernicus.eu/api/retrieve/v1/jobs/e029c59e-a16f-433e-90a3-e16ca1a04bf2/results
+The job has failed
+The job failed with: RoocsValueError
+FALLO CDS: MIROC-ES2H ssp245 (miroc_es2h): 400 Client Error: Bad Request for url: https://cds.climate.copernicus.eu/api/retrieve/v1/jobs/d673c9da-8d68-4800-82d3-acdde2d6b6ec/results
+The job has failed
+The job failed with: RoocsValueError
+FALLO CDS: MIROC-ES2H ssp370 (miroc_es2h): 400 Client Error: Bad Request for url: https://cds.climate.copernicus.eu/api/retrieve/v1/jobs/5e417be6-0b1d-4ea3-9f88-3180e42aa794/results
+The job has failed
+The job failed with: RoocsValueError
+FALLO CDS: MIROC-ES2H ssp585 (miroc_es2h): 400 Client Error: Bad Request for url: https://cds.climate.copernicus.eu/api/retrieve/v1/jobs/f01a1008-7c70-41c4-ab2d-c03076d452b5/results
+The job has failed
+The job failed with: RoocsValueError
+FALLO CDS: MIROC-ES2H historical (miroc_es2h): 400 Client Error: Bad Request for url: https://cds.climate.copernicus.eu/api/retrieve/v1/jobs/15e6aaeb-3a19-4d85-af50-e6c3a0aff67d/results
+The job has failed
+The job failed with: RoocsValueError
+FALLO CDS: MIROC-ES2H ssp245 (miroc_es2h): 400 Client Error: Bad Request for url: https://cds.climate.copernicus.eu/api/retrieve/v1/jobs/f1ed7b3c-61fe-406b-96fb-687acc9e9517/results
+The job has failed
+The job failed with: RoocsValueError
+FALLO CDS: MIROC-ES2H ssp370 (miroc_es2h): 400 Client Error: Bad Request for url: https://cds.climate.copernicus.eu/api/retrieve/v1/jobs/f99277f9-bab9-492c-b521-c3abb4fb98a3/results
+The job has failed
+The job failed with: RoocsValueError
+FALLO CDS: MIROC-ES2H ssp585 (miroc_es2h): 400 Client Error: Bad Request for url: https://cds.climate.copernicus.eu/api/retrieve/v1/jobs/9dda3807-1253-4582-8f23-fa04bd872046/results
+The job has failed
+The job failed with: RoocsValueError
+FALLO CDS: MIROC-ES2H historical (miroc_es2h): 400 Client Error: Bad Request for url: https://cds.climate.copernicus.eu/api/retrieve/v1/jobs/1b57fe6b-dee8-4d7e-a07c-b704397a0404/results
+The job has failed
+The job failed with: RoocsValueError
+FALLO CDS: MIROC-ES2H ssp245 (miroc_es2h): 400 Client Error: Bad Request for url: https://cds.climate.copernicus.eu/api/retrieve/v1/jobs/2b99b54e-0c29-4cf1-818f-3ad1725d755e/results
+The job has failed
+The job failed with: RoocsValueError
+FALLO CDS: MIROC-ES2H ssp370 (miroc_es2h): 400 Client Error: Bad Request for url: https://cds.climate.copernicus.eu/api/retrieve/v1/jobs/0bb3ed4e-3fa9-4c67-a5e8-1a1e86466581/results
+The job has failed
+The job failed with: RoocsValueError
+FALLO CDS: MIROC-ES2H ssp585 (miroc_es2h): 400 Client Error: Bad Request for url: https://cds.climate.copernicus.eu/api/retrieve/v1/jobs/2f663824-044a-4001-86ca-8b185246aa7e/results
+The job has failed
+The job failed with: RoocsValueError

@@ -1,0 +1,27 @@
+Reporte de estado -- run.sh
+Inicio: 2026-09-21 00:00:37
+Fin:    2026-09-21 00:00:45
+
+Descarga ya en curso en otro proceso al momento de esta corrida (no se lanzo otra): SI
+
+Modelos completamente descargados (4/4 experimentos): 4
+  EC-Earth3-Veg
+  GISS-E2-1-G
+  GISS-E2-1-H
+  MCM-UA-1-0
+
+Modelos con descarga parcial (1-3 de 4 experimentos): 0
+
+Modelos descargados y ya procesados (data/processed/masked): 4
+  EC-Earth3-Veg
+  GISS-E2-1-G
+  GISS-E2-1-H
+  MCM-UA-1-0
+
+Modelos descargados pero AUN sin procesar (se procesan en el proximo 04-07): 0
+
+Modelos no encontrados en ESGF (candidatos a 02b/02c en la proxima corrida): 1
+  MIROC-ES2H
+
+Modelos con descarga parcial via Copernicus CDS: 0
+

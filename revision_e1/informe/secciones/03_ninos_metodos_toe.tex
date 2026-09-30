@@ -1,0 +1,72 @@
+\subsection{Implicancias de la bibliografía para Niño~3.4 y Niño~1+2}
+\label{sec:similitudes}
+
+Siete referencias del Cuadro~\ref{tab:referencias} merecen una lectura específica frente al enfoque de este proyecto.
+
+\citet{gopika2024} no solo aportan el método ToD, adoptado como segunda estimación del TOE: analizan 69 simulaciones CMIP5/6 y cuatro productos observacionales en todo el trópico (30°S--30°N) y encuentran que el Pacífico ecuatorial oriental (EEP, por sus siglas en inglés) es la excepción principal. Allí el calentamiento es detectable en más del 90\,\% de los modelos, pero solo en uno de los cuatro productos observacionales, porque los modelos simulan un calentamiento más intenso que el observado. La caja EEP de esta literatura (2{,}5°S--2{,}5°N, 180°--90°O en \citealp{zhong2023}) se superpone a Niño~3.4 y no incluye Niño~1+2. Los mismos autores detectan, en observaciones y en cerca del 80\,\% de los modelos, un calentamiento del Pacífico sudeste más débil que el promedio tropical. Ambos resultados indican que, antes de proyectar, hay que evaluar el sesgo de los modelos en el Pacífico tropical oriental, tarea del Entregable~2.
+
+\citet{zhong2023} establecen una distinción que este proyecto adopta como principio de diseño. Con tres grandes ensambles y CMIP6, muestran que en el EEP la variabilidad interna explica menos de la mitad de la incertidumbre del TOE de la TSM media anual (21\,\% en CESM1-LE), de modo que dominan las diferencias entre modelos. En cambio, explica cerca del 80\,\% de la incertidumbre del TOE de la TSM asociada al ENOS (77\,\% para la precipitación) en CESM1-LE, el único ensamble con suficientes miembros con señal emergente. El estado medio y la variabilidad del ENOS no comparten, por tanto, el mismo régimen de incertidumbre, y deben analizarse por separado en los Entregables~3 y~4.
+
+\citet{larson2025} y \citet{poul2025} documentan, por dos vías distintas, que la dinámica oceánica costera retrasa el TOE de la TSM. En dos ensambles de CESM2 para el periodo histórico (1900--2014), \citet{larson2025} muestran que la variabilidad interna de la circulación forzada por el viento aumenta el ruido y retrasa el TOE en casi todo el océano, más de una década en promedio sobre las latitudes bajas. Además, a lo largo de la frontera oriental del Pacífico, la ausencia de señal emergente coincide con regiones de surgencia forzada por viento. En el Mar del Norte y el Báltico, \citet{poul2025} atribuyen los TOE más tardíos a una surgencia más intensa, que reduce la señal de calentamiento. Frente a Niño~1+2, dominado por la surgencia costera del sistema de la Corriente de Humboldt, ambos resultados apuntan a una emergencia más tardía o más incierta.
+
+\citet{keller2014} reportan, con 17 modelos del sistema terrestre, un TOE de la TSM de 45 a 90 años, mucho mayor que el de las variables biogeoquímicas, e identifican la zona de surgencia de Perú y Chile como una de las regiones con TOE localmente elevado ($>$30 años) para pCO$_2$ y pH. Esta tercera línea, de naturaleza biogeoquímica, es independiente de las anteriores y apunta en el mismo sentido.
+
+\citet{chadwick2019} desarrollan un TOE local para tres cuencas chilenas (Limarí, Maipo y Maule) y concluyen que el TOE de la precipitación es más tardío cuanto mayor es el coeficiente de variación local, con diferencias de más de 40 años según el percentil de tendencia de los modelos. Por analogía, la mayor variabilidad interanual observada en Niño~1+2 anticipa una emergencia más tardía que en Niño~3.4: con ERSSTv5 (1981--2014), la desviación estándar de las anomalías mensuales es de 1{,}08\,°C en Niño~1+2 frente a 0{,}86\,°C en Niño~3.4, y la de las medias anuales, de 0{,}86\,°C frente a 0{,}61\,°C.
+
+\citet{lois2026} aportan un criterio de selección de modelos distinto de la validación física y estadística de \citet{bruno2023}: en lugar de filtrar por desempeño promedio, eligen un subconjunto de modelos CMIP6 que abarca respuestas de circulación y sensibilidades climáticas cualitativamente distintas. Aplicado a este proyecto, el principio sugiere verificar en los próximos entregables que la selección final de modelos no reduzca artificialmente la dispersión de la respuesta de la TSM en ambas cajas, para no subestimar la incertidumbre de modelo ni el rango del TOE en Niño~1+2.
+
+En conjunto, estas líneas de evidencia sustentan una hipótesis de trabajo contrastable en el Entregable~4: \textbf{Niño~1+2 emergerá más tarde, o con mayor incertidumbre, que Niño~3.4}.
+
+\subsection{Elección de los dos métodos de \emph{Time of Emergence}}
+\label{sec:toe_metodos}
+
+El TdR prevé para el Entregable~4 el cálculo de la razón señal-ruido y del TOE ``empleando metodologías revisadas''. El equipo técnico adopta como método M1 la formulación de \citet{szabo2016} y la complementa con un segundo método independiente, el \emph{Time of Detection} (ToD) de \citet{gopika2024}. Las ecuaciones se fijan desde este entregable para que el método quede definido antes de calcularlo; el cálculo corresponde al Entregable~4.
+
+\subsubsection{Método M1 (Szabó y Szépszó)}
+
+La señal se estima ajustando un polinomio de cuarto orden a la serie anual o estacional de TSM de cada modelo $m$ y escenario $s$:
+\begin{equation}
+\label{eq:szabo_signal}
+X_{m,s}(t) = \Delta T_{m,s}(t) + \bar{T} + \varepsilon_{m,s}(t),
+\end{equation}
+donde $\bar{T}$ es el promedio del ajuste en el periodo de referencia (1971--2000 en \citealp{szabo2016}; 1981--2014 en este proyecto, Sección~\ref{sec:dominios_periodos}), $\Delta T_{m,s}(t)$ es la señal de cambio y $\varepsilon_{m,s}(t)$ es el residuo. A diferencia de \citet{hawkins2009}, la variabilidad interna no es constante: es la varianza de los residuos de todos los modelos y escenarios en los 30 años previos, recalculada cada año y suavizada con una media móvil de 10 años:
+\begin{equation}
+\label{eq:szabo_V}
+V(t) = \mathrm{var}_{m,s,\tau}\big(\varepsilon_{m,s}(\tau)\ \big|\ \tau \in [t-29,\,t]\big).
+\end{equation}
+La incertidumbre de modelo es la varianza entre modelos promediada sobre los escenarios, $M(t)=\frac{1}{N_s}\sum_s \mathrm{var}_m\,\Delta T_{m,s}(t)$; la de escenario es la varianza entre escenarios de la media multimodelo, $S(t)=\mathrm{var}_s\big(\frac{1}{N_m}\sum_m \Delta T_{m,s}(t)\big)$; y, como en \citet{hawkins2009}, la incertidumbre total es su suma:
+\begin{equation}
+\label{eq:szabo_T}
+T(t) = V(t) + M(t) + S(t).
+\end{equation}
+Con la señal media $G(t)=\frac{1}{N_m N_s}\sum_{m,s}\Delta T_{m,s}(t)$, la razón señal-ruido usa la incertidumbre total, $\mathrm{STN}(t) = G(t)/\sqrt{T(t)}$, mientras que el TOE usa solo la variabilidad interna como ruido:
+\begin{equation}
+\label{eq:szabo_toe}
+\mathrm{TOE} = \min\,\Big\{t : \frac{G(t)}{\sqrt{V(t)}} \geq \kappa\Big\}.
+\end{equation}
+Se adoptan dos umbrales: $\kappa=1$, el de \citet{szabo2016}, y $\kappa=2$, el umbral más exigente de \citet{hawkins2012}. Separar el ruido de la STN (total) del ruido del TOE (solo interno) es el rasgo distintivo del método. \citet{bruno2023} ya lo aplicó con CMIP6 sobre Sudamérica, con un periodo de referencia similar, lo que reduce el riesgo de implementación.
+
+\subsubsection{Método M2 (ToD, Gopika)}
+
+Como segundo método se adopta el \emph{Time of Detection} de \citet{gopika2024}. En lugar de un umbral fijo de señal-ruido, se evalúa la significancia del coeficiente de una regresión sobre una ventana que crece desde un año inicial $t_0$ hasta $T$:
+\begin{equation}
+\label{eq:tod}
+Y_T(t) = a_T\,W_T(t) + b_T + \varepsilon_T(t), \qquad n_{\text{eff}} = \frac{T-t_0+1}{\sum_{\tau=1}^{n/2} r^2(\tau)},
+\end{equation}
+donde $Y$ es la TSM de la caja, $W$ es el índice de calentamiento tropical (TSM media 30°S--30°N), $r(\tau)$ es la autocorrelación con desfase $\tau$ y $n_{\text{eff}}$ son los grados de libertad efectivos de la prueba $t$ unilateral sobre $a_T$. El ToD es el último año a partir del cual el coeficiente se vuelve significativo al 95\,\% y se mantiene significativo hasta el final de la serie. No depende de un umbral $\kappa$ sino del nivel de significancia; según los autores, el 95\,\% equivale aproximadamente a una razón señal-ruido de 1{,}6. El índice $W$ requiere la TSM de toda la franja tropical, que queda cubierta por la ventana de descarga del \emph{pipeline} (0°--360°, 30°S--30°N; Sección~\ref{sec:dominios_periodos}).
+
+\begin{table}[htbp]
+\caption{Métodos de TOE adoptados.}
+\label{tab:metodos_toe}
+\small
+\begin{tabular}{@{}L{2.3cm}L{5.6cm}L{\dimexpr\textwidth-2.3cm-5.6cm-4\tabcolsep\relax}@{}}
+\toprule
+\textbf{Método} & \textbf{Ruido de referencia} & \textbf{Criterio de TOE} \\
+\midrule
+M1 (Szabó) & Variabilidad interna $V(t)$, ventana móvil de 30 años & $G(t)/\sqrt{V(t)} \geq \kappa$, con $\kappa=1$ o $2$ \\
+M2 (ToD, Gopika) & Residuo de la regresión, con grados de libertad efectivos & Significancia del coeficiente al 95\,\%, sostenida hasta el final \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+La elección de estos dos métodos responde a tres criterios: (i) M1 cumple directamente lo previsto para el Entregable~4, pues calcula la partición de incertidumbre, la razón señal-ruido y el TOE; (ii) el ToD fue aplicado por \citet{gopika2024} a la TSM tropical, incluido el Pacífico ecuatorial oriental, a diferencia de otros métodos revisados que se aplicaron a ríos australianos \citep{john2023}, a las praderas canadienses \citep{barrow2019} o a Corea del Sur \citep{ryu2024}; y (iii) ambos métodos son conceptualmente independientes (uno se basa en la razón señal-ruido con partición de incertidumbre; el otro, en la significancia estadística de una tendencia), lo que permite reportar un rango de fechas de emergencia en vez de un único número.

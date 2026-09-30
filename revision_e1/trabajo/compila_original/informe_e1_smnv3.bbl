@@ -1,0 +1,128 @@
+\begin{thebibliography}{15}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[{\'A}lvarez~S{\'a}nchez(2024)]{alvarez2024}
+Erick~Alexis {\'A}lvarez~S{\'a}nchez.
+\newblock Proyecciones clim{\'a}ticas de temperatura superficial del mar y
+  nivel del mar en las costas de sudam{\'e}rica y oc{\'e}ano pac{\'i}fico
+  tropical usando modelos del {CMIP5}.
+\newblock Master's thesis, Universidad Nacional Agraria La Molina, Lima,
+  Per{\'u}, 2024.
+
+\bibitem[Bruno~Ram{\'i}rez(2023)]{bruno2023}
+Jhonatan~Edwin Bruno~Ram{\'i}rez.
+\newblock An{\'a}lisis de fuentes de incertidumbre en los modelos
+  clim{\'a}ticos {CMIP6} para las proyecciones clim{\'a}ticas de temperatura y
+  precipitaci{\'o}n en sudam{\'e}rica.
+\newblock Master's thesis, Universidad Nacional Agraria La Molina, Lima,
+  Per{\'u}, 2023.
+
+\bibitem[Chadwick et~al.(2019)Chadwick, Giron{\'a}s, Vicu{\~n}a, and
+  Meza]{chadwick2019}
+Crist{\'i}an Chadwick, Jorge Giron{\'a}s, Sebasti{\'a}n Vicu{\~n}a, and
+  Francisco Meza.
+\newblock Estimating the local time of emergence of climatic variables using an
+  unbiased mapping of {GCM}s: An application in semiarid and {M}editerranean
+  {C}hile.
+\newblock \emph{Journal of Hydrometeorology}, 20\penalty0 (8):\penalty0
+  1635--1646, 2019.
+\newblock \doi{10.1175/JHM-D-19-0006.1}.
+
+\bibitem[Giorgi and Bi(2009)]{giorgi2009}
+Filippo Giorgi and Xuejie Bi.
+\newblock Time of emergence ({TOE}) of {GHG}-forced precipitation change
+  hot-spots.
+\newblock \emph{Geophysical Research Letters}, 36:\penalty0 L06709, 2009.
+\newblock \doi{10.1029/2009GL037593}.
+
+\bibitem[Gopika et~al.(2024)Gopika, Lengaigne, Suresh, Izumo, Watra, Neetu, and
+  Vialard]{gopika2024}
+Suresh Gopika, Matthieu Lengaigne, Iyyappan Suresh, Takeshi Izumo, Sadhvik
+  Watra, S.~Neetu, and J{\'e}r{\^o}me Vialard.
+\newblock Assessing {CMIP} models' ability to detect observed surface warming
+  signals related to climate change.
+\newblock \emph{Journal of Climate}, 37:\penalty0 6011--6027, 2024.
+\newblock \doi{10.1175/JCLI-D-24-0102.1}.
+
+\bibitem[Hawkins and Sutton(2009)]{hawkins2009}
+Ed~Hawkins and Rowan Sutton.
+\newblock The potential to narrow uncertainty in regional climate predictions.
+\newblock \emph{Bulletin of the American Meteorological Society}, 90:\penalty0
+  1095--1107, 2009.
+\newblock \doi{10.1175/2009BAMS2607.1}.
+
+\bibitem[Hawkins and Sutton(2011)]{hawkins2011precip}
+Ed~Hawkins and Rowan Sutton.
+\newblock The potential to narrow uncertainty in projections of regional
+  precipitation change.
+\newblock \emph{Climate Dynamics}, 37:\penalty0 407--418, 2011.
+\newblock \doi{10.1007/s00382-010-0810-6}.
+
+\bibitem[Hawkins and Sutton(2012)]{hawkins2012}
+Ed~Hawkins and Rowan Sutton.
+\newblock Time of emergence of climate signals.
+\newblock \emph{Geophysical Research Letters}, 39\penalty0 (1):\penalty0
+  L01702, 2012.
+\newblock \doi{10.1029/2011GL050087}.
+
+\bibitem[Keller et~al.(2014)Keller, Joos, and Raible]{keller2014}
+K.~M. Keller, F.~Joos, and C.~C. Raible.
+\newblock Time of emergence of trends in ocean biogeochemistry.
+\newblock \emph{Biogeosciences}, 11:\penalty0 3647--3659, 2014.
+\newblock \doi{10.5194/bg-11-3647-2014}.
+
+\bibitem[Larson and McMonigal(2025)]{larson2025}
+Sarah~M. Larson and Kay McMonigal.
+\newblock Internal wind driven ocean circulation variability delays the time of
+  emergence of externally forced sea surface temperature trends.
+\newblock \emph{Geophysical Research Letters}, 52:\penalty0 e2024GL111878,
+  2025.
+\newblock \doi{10.1029/2024GL111878}.
+
+\bibitem[Lois et~al.(2026)Lois, Mindlin, Balza, P{\"u}tz, Mahler, and
+  Raya-Rey]{lois2026}
+Nicol{\'a}s~A. Lois, Julia Mindlin, Ulises Balza, Klemens P{\"u}tz, Bettina
+  Mahler, and Andrea Raya-Rey.
+\newblock Integrating climate storylines and time of emergence on vulnerability
+  assessments: the case of crested penguins.
+\newblock \emph{Frontiers in Marine Science}, 13:\penalty0 1794894, 2026.
+\newblock \doi{10.3389/fmars.2026.1794894}.
+
+\bibitem[Mashayekh~Poul et~al.(2025)Mashayekh~Poul, Gr{\"o}ger, Karsten, Mayer,
+  Pohlmann, and Meier]{poul2025}
+H.~Mashayekh~Poul, M.~Gr{\"o}ger, S.~Karsten, B.~Mayer, T.~Pohlmann, and
+  H.~E.~M. Meier.
+\newblock Natural variability masks climate change sea surface temperature
+  signals: a comparison between the {B}altic {S}ea, {N}orth {S}ea and {N}orth
+  {A}tlantic {O}cean.
+\newblock \emph{Climate Dynamics}, 63:\penalty0 102, 2025.
+\newblock \doi{10.1007/s00382-024-07538-y}.
+
+\bibitem[Szab{\'o} and Sz{\'e}psz{\'o}(2016)]{szabo2016}
+P{\'e}ter Szab{\'o} and Gabriella Sz{\'e}psz{\'o}.
+\newblock Quantifying sources of uncertainty in temperature and precipitation
+  projections over different parts of {E}urope.
+\newblock In \emph{Mathematical Problems in Meteorological Modelling},
+  volume~24 of \emph{Mathematics in Industry}, pages 239--258. Springer
+  International Publishing, 2016.
+\newblock \doi{10.1007/978-3-319-40157-7_12}.
+
+\bibitem[Takahashi and Mart{\'i}nez(2019)]{takahashi2019}
+Ken Takahashi and Alejandra~G. Mart{\'i}nez.
+\newblock The very strong coastal {E}l {N}i\~no in 1925 in the far-eastern
+  {P}acific.
+\newblock \emph{Climate Dynamics}, 52:\penalty0 7389--7415, 2019.
+\newblock \doi{10.1007/s00382-017-3702-1}.
+
+\bibitem[Zhong et~al.(2023)Zhong, Ying, and Collins]{zhong2023}
+Shuping Zhong, Jun Ying, and Matthew Collins.
+\newblock Sources of uncertainty in the time of emergence of tropical pacific
+  climate change signal: Role of internal variability.
+\newblock \emph{Journal of Climate}, 36:\penalty0 2535--2547, 2023.
+\newblock \doi{10.1175/JCLI-D-22-0554.1}.
+
+\end{thebibliography}

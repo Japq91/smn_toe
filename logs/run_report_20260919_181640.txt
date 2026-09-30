@@ -1,0 +1,22 @@
+Reporte de estado -- run.sh
+Inicio: 2026-09-19 18:16:40
+Fin:    2026-09-19 20:37:46
+
+Descarga ya en curso en otro proceso al momento de esta corrida (no se lanzo otra): NO
+
+Modelos completamente descargados (4/4 experimentos): 1
+  EC-Earth3-Veg
+
+Modelos con descarga parcial (1-3 de 4 experimentos): 0
+
+Modelos descargados y ya procesados (data/processed/masked): 1
+  EC-Earth3-Veg
+
+Modelos descargados pero AUN sin procesar (se procesan en el proximo 04-07): 0
+
+Modelos no encontrados en ESGF (candidatos a 02b/02c en la proxima corrida): 2
+  KACE-1-0-G
+  MIROC-ES2H
+
+Modelos con descarga parcial via Copernicus CDS: 0
+

@@ -1,0 +1,2 @@
+Nino3.4: puntos=130 media=26.99C  sd_anom_mensual=0.86C  sd_media_anual=0.61C  max_anom=2.48C
+Nino1+2: puntos=35 media=23.32C  sd_anom_mensual=1.08C  sd_media_anual=0.86C  max_anom=4.26C

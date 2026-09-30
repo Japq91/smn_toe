@@ -1,0 +1,21 @@
+10.1029/2011GL050087 | 2012 | Geophysical Research Letters | v 39 p 2011GL050087 | Hawkins, Sutton | Time of emergence of climate signals
+10.1175/JCLI-D-22-0554.1 | 2023 | Journal of Climate | v 36 p 2535-2549 | Zhong, Ying, Collins | Sources of Uncertainty in the Time of Emergence of Tropical Pacific Climate Chan
+10.1016/j.jhydrol.2023.129371 | 2023 | Journal of Hydrology | v 619 p 129371 | John, Nathan, Horne | The time of emergence of climate-induced hydrologic change in Australian rivers
+10.1002/joc.6079 | 2019 | International Journal of Climatology | v 39 p 4358-4371 | Barrow, Sauchyn | Uncertainty in climate projections and time of emergence of climate signals in t
+10.1175/JHM-D-19-0006.1 | 2019 | Journal of Hydrometeorology | v 20 p 1635-1647 | Chadwick, Gironás, Vicuña | Estimating the Local Time of Emergence of Climatic Variables Using an Unbiased M
+10.1175/JCLI-D-24-0102.1 | 2024 | Journal of Climate | v 37 p 6011-6027 | Gopika, Lengaigne, Suresh | Assessing CMIP Models’ Ability to Detect Observed Surface Warming Signals Relate
+10.1007/s00382-020-05398-w | 2021 | Climate Dynamics | v 57 p 1629-1644 | Im, Thanh, Qiu | Emergence of robust anthropogenic increase of heat stress-related variables proj
+10.5194/bg-11-3647-2014 | 2014 | Biogeosciences | v 11 p 3647-3659 | Keller, Joos, Raible | Time of emergence of trends in ocean biogeochemistry
+10.1029/2024GL111878 | 2025 | Geophysical Research Letters | v 52 p e2024GL111878 | Larson, McMonigal | Internal Wind Driven Ocean Circulation Variability Delays the Time of Emergence 
+10.3389/fmars.2026.1794894 | 2026 | Frontiers in Marine Science | v 13 p 1794894 | Lois, Mindlin, Balza | Integrating climate storylines and time of emergence on vulnerability assessment
+10.1007/s00382-024-07538-y | 2025 | Climate Dynamics | v 63 p 102 | Poul, Gröger, Karsten | Natural variability masks climate change sea surface temperature signals: a comp
+10.1007/s10584-024-03766-7 | 2024 | Climatic Change | v 177 p 109 | Ryu, Wang, Yoon | A time of emergence (TOE) analysis on the impact and uncertainty of global warmi
+10.1016/j.jhydrol.2025.133029 | 2025 | Journal of Hydrology | v 656 p 133029 | Ryu, Wang, Jeong | Time of emergence (TOE) of potential aridification in the western United States
+10.1007/s00382-018-4073-y | 2018 | Climate Dynamics | v 51 p 3179-3193 | Nguyen, Min, Paik | Time of emergence in regional precipitation changes: an updated assessment using
+10.1029/2009GL037593 | 2009 | Geophysical Research Letters | v 36 p 2009GL037593 | Giorgi, Bi | Time of emergence (TOE) of GHG‐forced precipitation change hot‐spots
+10.1175/2009BAMS2607.1 | 2009 | Bulletin of the American Meteorological  | v 90 p 1095-1108 | Hawkins, Sutton | The Potential to Narrow Uncertainty in Regional Climate Predictions
+10.1007/s00382-010-0810-6 | 2011 | Climate Dynamics | v 37 p 407-418 | Hawkins, Sutton | The potential to narrow uncertainty in projections of regional precipitation cha
+10.1007/978-3-319-40157-7_12 | 2016 | Mathematics in Industry | v None p 239-261 | Szabó, Szépszó | Quantifying Sources of Uncertainty in Temperature and Precipitation Projections 
+10.1007/s00382-017-3702-1 | 2019 | Climate Dynamics | v 52 p 7389-7415 | Takahashi, Martínez | The very strong coastal El Niño in 1925 in the far-eastern Pacific
+10.1029/2022JD037563 | 2023 | Journal of Geophysical Research: Atmosph | v 128 p e2022JD037563 | Erickson, Patricola | Future Projections of the El Niño—Southern Oscillation and Tropical Pacific Mean
+10.1029/2021EF002645 | 2022 | Earth's Future | v 10 p e2021EF002645 | Deng, Perkins‐Kirkpatrick, Alexander | Projected Changes and Time of Emergence of Temperature Extremes Over Australia i

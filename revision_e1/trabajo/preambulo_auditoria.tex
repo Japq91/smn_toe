@@ -1,0 +1,73 @@
+% Preambulo comun de las auditorias del informe E1 (revision_e1/)
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-noshorthands]{babel}
+\usepackage{lmodern}
+\usepackage{microtype}
+% Sin patrones de guionado en espanol en esta instalacion (ver A10): se
+% desactiva el guionado automatico para evitar cortes con reglas del ingles.
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\usepackage[a4paper,margin=2.2cm]{geometry}
+\usepackage{booktabs,array,longtable}
+\usepackage{graphicx,caption,subcaption}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\usepackage{natbib}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\urlstyle{tt}
+\newcommand{\archivo}[1]{\url{#1}}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\definecolor{alta}{RGB}{180,30,30}
+\definecolor{media}{RGB}{200,120,0}
+\definecolor{baja}{RGB}{60,110,160}
+\definecolor{cajafondo}{RGB}{245,247,250}
+\newcommand{\sevA}{\textcolor{alta}{\textbf{Alta}}}
+\newcommand{\sevM}{\textcolor{media}{\textbf{Media}}}
+\newcommand{\sevB}{\textcolor{baja}{\textbf{Baja}}}
+\setlength{\parskip}{0.35em}
+\setlength{\emergencystretch}{3em}
+\setlength{\parindent}{0pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Auditoría del Informe del Entregable~1 -- \auditoriaid}
+\fancyhead[R]{\small \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+% Entorno de hallazgos: ID | Severidad | Ubicacion | Hallazgo y evidencia | Correccion
+\newenvironment{hallazgos}{%
+\small
+\begin{longtable}{@{}L{1.15cm}L{1.25cm}L{1.9cm}L{6.0cm}L{\dimexpr\textwidth-10.3cm-10.6\tabcolsep\relax}@{}}
+\toprule
+\textbf{ID} & \textbf{Sev.} & \textbf{Ubicación} & \textbf{Hallazgo y evidencia} & \textbf{Corrección aplicada} \\
+\midrule\endfirsthead
+\toprule
+\textbf{ID} & \textbf{Sev.} & \textbf{Ubicación} & \textbf{Hallazgo y evidencia} & \textbf{Corrección aplicada} \\
+\midrule\endhead
+\bottomrule\endfoot
+}{\end{longtable}}
+% Macros compartidas con el informe revisado (las secciones propuestas las usan)
+\input{../trabajo/macros_informe.tex}
+% En las auditorias el texto propuesto se muestra fuera del informe: las
+% referencias cruzadas se imprimen con el nombre de la seccion destino.
+\input{../trabajo/etiquetas.tex}
+\makeatletter
+\AtBeginDocument{\renewcommand{\ref}[1]{\@ifundefined{etq@#1}{\textit{[#1]}}{\textit{\csname etq@#1\endcsname}}}}
+\makeatother
+% Texto propuesto: secciones degradadas un nivel y en caja
+\newenvironment{propuesto}{%
+  \par\medskip\noindent\textcolor{baja}{\rule{\textwidth}{0.8pt}}\par
+  \noindent{\small\textbf{Inicio del texto propuesto para el informe revisado}}\par\medskip
+  \begingroup
+  \let\section\subsection\let\subsection\subsubsection\let\subsubsection\paragraph
+}{%
+  \endgroup
+  \par\noindent{\small\textbf{Fin del texto propuesto}}\par
+  \noindent\textcolor{baja}{\rule{\textwidth}{0.8pt}}\par\medskip}
+% Recuadro de actualizacion posterior (decisiones del autor)
+\newcommand{\actualizacion}[1]{\par\medskip\noindent\fcolorbox{media}{media!8}{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}{\small\textbf{Actualización del 29-09-2026 (decisiones del autor).} #1}}\par\medskip}

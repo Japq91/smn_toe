@@ -1,0 +1,86 @@
+\newcommand{\auditoriaid}{A01 -- Portada, Resumen y Alcance}
+\input{../trabajo/preambulo_auditoria.tex}
+\begin{document}
+
+\begin{center}
+{\Large\bfseries Auditoría A01: Portada, Resumen y Alcance}\\[0.4em]
+{\normalsize Informe del Entregable~1 (\texttt{informe/informe\_e1\_smnv3.tex}, commit \texttt{330fd2e})}\\[0.2em]
+{\small Revisión: \fechaentrega}
+\end{center}
+
+\section{Objeto}
+
+Esta auditoría revisa la portada, el Resumen (Sección~1) y el Alcance (Sección~2) del informe del Entregable~1. Cada afirmación se contrastó contra tres fuentes: el texto de los términos de referencia (TdR, revisión \texttt{rev\_02092026}), los archivos de datos producidos por el \emph{pipeline} y el código en el estado que documenta el entregable (commit \texttt{8ee6184}, último anterior a los cambios introducidos para el Entregable~2). El resultado es una lista de hallazgos con su corrección y el texto ya corregido que pasa al informe revisado.
+
+\actualizacion{El informe no cita commits. El Resumen ya no remite a secciones de pasos individuales: las seis correcciones se detallan en el anexo.}
+
+\section{Fuentes contrastadas}
+
+\begin{itemize}[leftmargin=1.2em]
+\item TdR: numerales 5, 6 (actividades a--e), 8 y 10 (plazos de entregables).
+\item \archivo{informe/model_availability_priority.csv}: 102 filas, todas con \texttt{tiene\_tos=1}; es el universo completo de \texttt{source\_id} que publican \texttt{tos}/\texttt{Omon} en el índice de ESGF.
+\item \archivo{config/models_seed_cmip6.csv}: 41 modelos con los cuatro experimentos publicados.
+\item \archivo{data/processed/models_inventory_final.csv} y \archivo{qc_report.csv}: 40 modelos \texttt{selected=True}; 160 filas, todas \texttt{PASS}.
+\item \archivo{config/models_no_encontrado_44.csv}: 44 modelos.
+\item Código de los pasos 00b, 01, 04, 05, 06 y 07 en el commit \texttt{8ee6184}; historial de \texttt{git} (commits \texttt{dc0bf9d}, \texttt{c07f4c5}, \texttt{79a9786}, \texttt{23cf218}).
+\end{itemize}
+
+\section{Verificación de cifras}
+
+\begin{table}[h]
+\centering\small
+\begin{tabular}{@{}lrl@{}}
+\toprule
+Conjunto & N & Fuente \\
+\midrule
+Universo con \texttt{tos}/\texttt{Omon} en ESGF & 102 & \archivo{model_availability_priority.csv} \\
+Publican los cuatro experimentos (\emph{seed}) & 41 & \archivo{models_seed_cmip6.csv} \\
+Completos y aprobados en QC & 40 & \archivo{models_inventory_final.csv} \\
+Combinaciones modelo-experimento PASS & 160 & \archivo{qc_report.csv} \\
+Sin algún experimento en ninguna fuente & 44 & \archivo{models_no_encontrado_44.csv} \\
+Disponibilidad o descarga incompleta & 18 & 17 fuera del \emph{seed} + 1 del \emph{seed} sin completar \\
+\midrule
+Control: $40 + 44 + 18$ & 102 & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Las cifras 40/102 y 160 del informe son correctas. La descomposición del universo que da el Resumen (``46 de un barrido inicial del vocabulario CMIP6 completo más 56 citados en la literatura del proyecto'') no lo es: el paso~00b enumera directamente todos los \texttt{source\_id} con \texttt{tos}/\texttt{Omon} publicados en ESGF, y el propio código documenta que ese universo es de 102 modelos. El desglose 46\,+\,56 proviene de las versiones~1 y~2 del informe, cuando el punto de partida era una lista curada; sobrevivió a la reescritura de la versión~3.
+
+\section{Hallazgos}
+
+\begin{hallazgos}
+A01-1 & \sevA & Resumen, 2.º párrafo & ``Del universo de 102 modelos candidatos (46 de un barrido inicial \ldots\ más 56 citados en la literatura)''. Falso en el estado actual: los 102 son el universo ESGF completo con \texttt{tos}/\texttt{Omon} (ver tabla). El desglose repite el diseño de v1/v2. & Se describe el universo como los 102 modelos que publican \texttt{tos}/\texttt{Omon} en ESGF, con los niveles 41 (\emph{seed}) y 40 (seleccionados). \\
+A01-2 & \sevM & Resumen, 2.º párrafo & ``el resto quedó excluido por descarga incompleta o no disponible'' sin cifras, mientras que Resultados sí da 44 y deja el resto indeterminado (``un subconjunto adicional''). & Se dan las dos cifras, 44 y 18, que cierran el total. \\
+A01-3 & \sevM & Resumen, 2.º párrafo & Enumera cinco problemas corregidos (FGOALS-f3-L y ``cuatro bugs de robustez'') en una sola oración de más de 170 palabras. Omite la corrección de unidades por valor (GISS-E2-1-G, Kelvin declarado como \texttt{degC}), que sí está en el código (\texttt{fix\_units} del paso~04) y en la Sección del paso~04. & Párrafo propio con los seis problemas, una línea cada uno y una referencia a su sección. \\
+A01-4 & \sevA & Resumen, 3.er párrafo & ``desarrolla el marco teórico exigido por los TdR: la partición de \ldots\ Hawkins, Szabó, Bruno, Álvarez, Takahashi''. El TdR (numerales 5 y 6) no nombra autores; exige la revisión de metodologías de TOE y, para el Entregable~4, la partición de incertidumbre, la relación señal-ruido y el TOE. & ``El informe desarrolla la revisión científica: \ldots''. La elección de autores queda como decisión técnica del equipo. \\
+A01-5 & \sevM & Alcance, 1.er párrafo & El sujeto ``Los Términos de referencia'' concuerda con ``define'' en singular; ``Las tareas (i) son'' designa una sola tarea. & ``definen''; ``La tarea~(i) es''. \\
+A01-6 & \sevM & Alcance & El informe afirma reproducibilidad total, pero después del E1 el repositorio cambió la ventana de descarga (\texttt{79a9786}: de 100°E--70°O/20°S--20°N a global/30°S--30°N) y el techo del QC (\texttt{23cf218}: 39 → 45\,°C). Desde \texttt{main} no se reconstruye el estado del informe. & Se agregó una frase con el commit del E1. \textit{Actualización 29-09: por decisión del autor el informe no menciona commits; la frase se retiró y los datos descritos son los de la ventana actual.} \\
+A01-7 & \sevM & Alcance & No se aclara que el QC de este entregable verifica integridad y homogeneidad, no desempeño; la aclaración aparecía recién en Recomendaciones. & Se adelanta una frase al Alcance. \\
+A01-8 & \sevB & Portada & La fecha usa \verb|\today| y cambia cada vez que se compila. ``TDR'' en la portada frente a ``TdR'' en el cuerpo. & Fecha fija en la macro \verb|\fechaentrega| (a confirmar por el autor); se usa ``TdR''. \\
+A01-9 & \sevB & Resumen & Comentario \texttt{\% REVISAR} sobre la cifra 40/102/160, repetida con casi la misma redacción en Resumen, Datos, Resultados y Conclusiones. & La cifra completa queda en Resumen y Resultados; Datos y Conclusiones remiten con una frase corta. \\
+A01-10 & \sevB & Resumen & El uso de \texttt{run.sh} se detalla en el cuerpo del informe; por instrucción del autor pasa a un anexo separado. & El Resumen lo anuncia en una frase. \\
+A01-11 & -- & Alcance & Verificado sin cambios: la cita textual de la actividad~(a) coincide palabra por palabra con el TdR; el plazo de 25 días calendario y el nombre oficial del servicio son correctos. & Se conserva. \\
+\end{hallazgos}
+
+\section{Decisiones de redacción}
+
+\begin{itemize}[leftmargin=1.2em]
+\item Las menciones al TdR se mantienen breves y en tono descriptivo (``en cumplimiento de la actividad~(a)''), sin contrastar lo exigido con lo realizado. \texttt{ssp370} se presenta como escenario intermedio adicional.
+\item No se individualiza ningún modelo excluido; los excluidos se describen en conjunto (44 y 18).
+\item Los modelos nombrados (FGOALS-f3-L, GISS-E2-1-G) son casos únicos de un mecanismo de corrección, no ejemplos entre muchos excluidos.
+\end{itemize}
+
+\section{Extensión}
+
+Original: Resumen 455 palabras y Alcance 220 (675 en total). Propuesto: \input{../trabajo/conteo_A01.tex}palabras. La reducción viene de eliminar la oración de 170 palabras sobre los bugs, que se reemplaza por una enumeración compacta; las secciones de destino conservan el detalle.
+
+\section{Texto propuesto}
+
+\begin{propuesto}
+\input{../informe/secciones/01_resumen_alcance.tex}
+\end{propuesto}
+
+\bibliographystyle{plainnat}
+\bibliography{../informe/references_rev}
+\end{document}

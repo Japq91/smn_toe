@@ -1,0 +1,88 @@
+\newcommand{\auditoriaid}{A03 -- Niño 3.4 frente a Niño 1+2 y métodos TOE}
+\input{../trabajo/preambulo_auditoria.tex}
+\begin{document}
+
+\begin{center}
+{\Large\bfseries Auditoría A03: Niño~3.4 frente a Niño~1+2 y métodos de TOE}\\[0.4em]
+{\normalsize Informe del Entregable~1, Secciones 3.3 y 3.4 (\texttt{informe\_e1\_smnv3.tex}, commit \texttt{330fd2e})}\\[0.2em]
+{\small Revisión: \fechaentrega}
+\end{center}
+
+\section{Objeto}
+
+Se auditan la Sección~3.3 (``Similitudes y diferencias entre Niño~3.4 y Niño~1+2'') y la Sección~3.4 (elección de los métodos de TOE, con las ecuaciones de M1 y ToD). Es la parte del informe con más afirmaciones cuantitativas atribuidas a terceros y la que fija el método del Entregable~4, por lo que cada número y cada ecuación se contrastó con el texto completo de su fuente. Además, se verificó con datos propios (ERSSTv5) la premisa física de la hipótesis de asimetría Niño~1+2/Niño~3.4.
+
+\section{Verificación de ecuaciones de M1 contra \citet{szabo2016}}
+
+\begin{center}\small
+\begin{tabular}{@{}L{2.2cm}L{5.4cm}L{\dimexpr\textwidth-7.6cm-4\tabcolsep\relax}@{}}
+\toprule
+Elemento & Capítulo de Szabó (Ecs.~12.1--12.9) & Informe original \\
+\midrule
+Señal & Polinomio de 4.º orden; $X=\Delta T+\bar T+\varepsilon$ (12.1) & Correcto. \\
+$\bar T$ & Promedio del ajuste en 1971--2000 & Da 1981--2014 sin aclarar que es la adaptación del proyecto. \\
+$V(t)$ & $\mathrm{var}_{m,s,t}$ de $\varepsilon$ en los 30 años previos, recalculada cada año; media móvil de 10 años & Omite el suavizado; la ventana $[t-30,t]$ tiene 31 años. \\
+$M(t)$, $S(t)$ & (12.4) media sobre escenarios de $\mathrm{var}_m$; (12.5) $\mathrm{var}_s$ de la media multimodelo & Solo en prosa y de forma imprecisa. \\
+$T(t)$ & $V+M+S$ (12.6), igual que HS2009 Ec.~7 & Presentado como rasgo propio de Szabó frente a la ``raíz de la suma de cuadrados''. \\
+$G(t)$ & Media sobre $m,s$ de $\Delta T$ (12.7) & Usada en STN y TOE sin definirse. \\
+STN & $G/\sqrt{T}$ (12.8), sin test de significancia & Correcto. \\
+TOE & $G/\sqrt{V}\geq\kappa$, ``usualmente $+1$ o $-1$'' (12.9) & $\kappa\in\{1,2\}$ ``siguiendo la misma referencia'': el 2 no es de Szabó. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+La ecuación del ToD coincide con \citet{gopika2024} (Ecs.~3--4; grados de libertad efectivos según Bayley y Hammersley, 1946; prueba $t$ unilateral), pero el informe no define $W$ (índice de calentamiento tropical, TSM media 30°S--30°N) ni la regla ``último año desde el que la significancia se mantiene''.
+
+\section{Verificación con datos propios}
+
+La hipótesis final de la Sección~3.3 se apoya, vía \citet{chadwick2019}, en que mayor variabilidad implica un TOE más tardío. Se calculó la variabilidad observada de ambas cajas con ERSSTv5 (\archivo{data/processed/masked/ersstv5_region.nc}, 1981--2014; media ponderada por $\cos\phi$, anomalías respecto del ciclo anual, sin tendencia lineal):
+
+\begin{center}\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Caja & Puntos de grilla & TSM media (°C) & DE anomalía mensual (°C) & DE media anual (°C) \\
+\midrule
+Niño~3.4 & 130 & 26{,}99 & 0{,}86 & 0{,}61 \\
+Niño~1+2 & 35 & 23{,}32 & 1{,}08 & 0{,}86 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Niño~1+2 tiene un ruido interanual entre 25 y 40\,\% mayor. La premisa se confirma y se incorpora al texto como evidencia propia.
+
+\section{Hallazgos}
+
+\begin{hallazgos}
+A03-1 & \sevA & 3.3, Gopika & ``coincide geográficamente con Niño~1+2/3.4''. La caja EEP de esta literatura (Y22 y \citealp{zhong2023}: 2{,}5°S--2{,}5°N, 180°--90°O) se superpone a Niño~3.4 y no incluye Niño~1+2 (90°--80°O, 10°S--0°). & Se describe la superposición real. \\
+A03-2 & \sevM & 3.3, Gopika & ``91\,\% de los modelos''. El artículo dice ``$\sim$90\,\%'' en el resumen y ``over 90\,\%'' en el texto. Omite además el resultado más cercano a Niño~1+2: calentamiento atenuado del Pacífico sudeste, robusto en observaciones y en $\sim$80\,\% de los modelos. & ``más del 90\,\%''; se agrega el resultado del Pacífico sudeste. \\
+A03-3 & \sevM & 3.3, Gopika & ``esto sustenta por qué el TdR exige \ldots\ determinar los sesgos de la TSM en el Pacífico tropical central y oriental''. El TdR, actividad (b), pide sesgos sin especificar región. & ``hay que evaluar el sesgo \ldots\ tarea del Entregable~2''. \\
+A03-4 & \sevM & 3.3, Zhong & ``77--80\,\% en CESM1-LE'' mezcla dos cifras: $\sim$80\,\% para la TSM del ENOS y $\sim$77\,\% para la precipitación. No da el 21\,\% del estado medio en el EEP, que es el contraste relevante. & Cifras separadas; se agrega el 21\,\%. \\
+A03-5 & \sevM & 3.3, Zhong & ``exactamente la separación que el TdR exige entre \ldots\ estado medio (E3) y partición de incertidumbre (E4)''. La actividad (c) del TdR incluye estado medio \emph{y} variabilidad; la correspondencia es forzada. & Se dice que deben analizarse por separado en E3 y E4. \\
+A03-6 & \sevA & 3.3, Larson y Poul & ``documentan \ldots\ el mismo mecanismo físico: la circulación forzada por el viento \ldots\ amplifica el ruido''. Poul et al. atribuyen el retraso a una surgencia intensificada que \emph{reduce la señal} (y reduce o no cambia la variabilidad), no a más ruido. & ``por dos vías distintas'': más ruido (Larson), menos señal (Poul). \\
+A03-7 & \sevA & 3.3, Larson & ``en ocasiones impidiendo que la señal emerja del todo dentro del siglo XXI''. El análisis de Larson y McMonigal usa ensambles \emph{históricos} de CESM2 (1900--2014); la falta de emergencia es dentro de ese periodo. & ``para el periodo histórico (1900--2014)''. \\
+A03-8 & \sevM & 3.3, Larson & ``la firma física de la Corriente de Humboldt frente a Niño~1+2'' se presenta como dicho por el artículo; el artículo habla de surgencia en la frontera oriental del Pacífico, sin nombrar Humboldt. & La mención de Humboldt se presenta como lectura del equipo. \\
+A03-9 & \sevB & 3.3, Keller & ``atribuido a la alta variabilidad natural asociada a ENOS'': la frase del artículo sobre variabilidad del ENOS se refiere a Friedrich et al. (2012) y al Pacífico ecuatorial oriental, no a la zona de Perú y Chile. & Se omite la atribución y se da el dato verificable (TOE de TSM de 45--90 años; $>$30 años para pCO$_2$ y pH frente a Perú y Chile). \\
+A03-10 & \sevM & 3.3, Lois & ``no colapse artificialmente la dispersión de Índice~C e Índice~E''. El commit \texttt{38dd573} anunció que se quitaban las menciones de los Índices C y E, pero esta quedó; el Entregable~2 usa ONI/RONI e ICEN. & ``dispersión de la respuesta de la TSM en ambas cajas''. \\
+A03-11 & \sevM & 3.3, cierre & ``cuatro líneas de evidencia independientes \ldots\ convergen''. Zhong trata regímenes de incertidumbre, no el orden de emergencia; Chadwick trata precipitación en Chile. Además, el párrafo repite las cuatro citas (comentario \texttt{\% REVISAR}). & Cierre de una frase como ``hipótesis de trabajo''; la analogía de Chadwick se respalda con ERSSTv5. \\
+A03-12 & \sevB & 3.3, título & ``Similitudes y diferencias entre Niño~3.4 y Niño~1+2'' no describe el contenido, que es una lectura de la bibliografía. & ``Implicancias de la bibliografía para Niño~3.4 y Niño~1+2''. \\
+A03-13 & \sevA & 3.4, Ec. TOE & ``$\kappa\in\{1,2\}$ \ldots\ siguiendo la misma referencia de \citet{szabo2016}''. Szabó usa $\pm1$; el umbral 2 proviene de \citet{hawkins2012}. & Se atribuye cada umbral a su fuente. \\
+A03-14 & \sevA & 3.4, Ec. $T(t)$ & ``suma aditiva \ldots\ (no la raíz de la suma de cuadrados usada por otros métodos)''. Es la misma magnitud (ver A02-3), heredada de HS2009. & Se elimina el contraste. \\
+A03-15 & \sevM & 3.4, M1 & $G(t)$ no se define; $M$ y $S$ no tienen ecuación; falta el suavizado de 10 años de $V$; la ventana $[t-30,t]$ tiene 31 años; ``mismo periodo de referencia'' que Bruno (1981--2010 frente a 1981--2014). & Se definen $G$, $M$ y $S$; ventana $[t-29,t]$; suavizado; ``periodo similar''. \\
+A03-16 & \sevM & 3.4, ToD & No se definen $W$ ni la regla del ``último año''. $W$ es la TSM media 30°S--30°N, un dominio mayor que la ventana de descarga del E1 (20°S--20°N); la ampliación ya se hizo en el E2 (\texttt{79a9786}, por RONI). & Se definen $W$ y la regla. \textit{Actualización 29-09: la ventana de descarga vigente (0°--360°, 30°S--30°N) ya cubre $W$, y así se indica.} \\
+A03-17 & \sevM & 3.4, criterios & ``(ii) ToD ya fue validado \ldots\ exactamente sobre la caja EEP que coincide con Niño~3.4/1+2'' (ver A03-1); los métodos descartados no se citan. & Redacción corregida y citas \citet{john2023}, \citet{barrow2019}, \citet{ryu2024}. \\
+A03-18 & \sevB & 3.4 & Comentario \texttt{\% REVISAR} sobre si conservar las ecuaciones en el E1. Nombres inconsistentes: ``M2 complementario ToD'' frente a ``ToD (Gopika)''. & Se conservan y se explica por qué (fijar el método antes de calcularlo); nombre único ``M2 (ToD)''. \\
+\end{hallazgos}
+
+\section{Extensión}
+
+Original: Sección~3.3, 657 palabras; Sección~3.4, 687 (1344 en total). Propuesto: \input{../trabajo/conteo_A03.tex}palabras. La reducción viene de eliminar el párrafo de cierre que repetía las cuatro citas y las afirmaciones no sustentadas, aun después de agregar las definiciones que faltaban ($G$, $M$, $S$, $W$) y la verificación con ERSSTv5.
+
+\section{Texto propuesto}
+
+\begin{propuesto}
+\input{../informe/secciones/03_ninos_metodos_toe.tex}
+\end{propuesto}
+
+\bibliographystyle{plainnat}
+\bibliography{../informe/references_rev}
+\end{document}

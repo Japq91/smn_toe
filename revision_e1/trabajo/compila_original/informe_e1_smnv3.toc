@@ -1,0 +1,34 @@
+\babel@toc {spanish}{}\relax 
+\babel@toc {spanish}{}\relax 
+\contentsline {section}{\numberline {1}Resumen}{3}{section.1}%
+\contentsline {section}{\numberline {2}Alcance}{3}{section.2}%
+\contentsline {section}{\numberline {3}Revisi\'on cient\'ifica}{4}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Antecedentes}{4}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Literatura sobre \emph {Time of Emergence}}{5}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Similitudes y diferencias entre Ni\~no~3.4 y Ni\~no~1+2}{6}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Elecci\'on de los dos m\'etodos de \emph {Time of Emergence}}{7}{subsection.3.4}%
+\contentsline {subsubsection}{\numberline {3.4.1}M\'etodo M1 (Szab\'o y Sz\'epsz\'o)}{7}{subsubsection.3.4.1}%
+\contentsline {subsubsection}{\numberline {3.4.2}M\'etodo M2 complementario ToD (Gopika)}{8}{subsubsection.3.4.2}%
+\contentsline {section}{\numberline {4}Datos}{8}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Modelos CMIP6 descargados}{8}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Selecci\'on inicial de modelos}{10}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Dominios oceanogr\'aficos y Periodos}{11}{subsection.4.3}%
+\contentsline {section}{\numberline {5}\emph {Pipeline}}{11}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Script principal \texttt {run.sh}}{13}{subsection.5.1}%
+\contentsline {section}{\numberline {6}\emph {Pipeline}}{13}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Paso 00 -- \texttt {scripts/00\_setup\_env.sh}}{13}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Paso 00b -- \texttt {scripts/00b\_build\_model\_list.py}}{13}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Paso 00c -- \texttt {scripts/00c\_check\_paper\_models.py} (diagn\'ostico, manual)}{15}{subsection.6.3}%
+\contentsline {subsection}{\numberline {6.4}Paso 01 -- \texttt {scripts/01\_query\_esgf\_catalog.py}}{15}{subsection.6.4}%
+\contentsline {subsection}{\numberline {6.5}Paso 02 -- descarga en cascada}{15}{subsection.6.5}%
+\contentsline {subsection}{\numberline {6.6}Paso 03 -- \texttt {scripts/03\_download\_ersstv5.sh}}{16}{subsection.6.6}%
+\contentsline {subsection}{\numberline {6.7}Paso 04 -- \texttt {scripts/04\_process\_to\_common\_grid.sh}}{16}{subsection.6.7}%
+\contentsline {subsection}{\numberline {6.8}Paso 05 -- \texttt {scripts/05\_apply\_ocean\_mask.py}}{17}{subsection.6.8}%
+\contentsline {subsection}{\numberline {6.9}Paso 06 -- \texttt {scripts/06\_qc\_checks.py}}{17}{subsection.6.9}%
+\contentsline {subsection}{\numberline {6.10}Paso 07 -- \texttt {scripts/07\_build\_inventory\_report.py}}{17}{subsection.6.10}%
+\contentsline {subsection}{\numberline {6.11}Reporte de estado -- \texttt {scripts/generate\_status\_report.py}}{17}{subsection.6.11}%
+\contentsline {section}{\numberline {7}Resultados del Entregable 1}{17}{section.7}%
+\contentsline {section}{\numberline {8}Proximos pasos}{23}{section.8}%
+\contentsline {section}{\numberline {9}Conclusiones}{24}{section.9}%
+\contentsline {section}{\numberline {10}Recomendaciones}{24}{section.10}%
+\contentsline {section}{\numberline {11}Anexos}{27}{section.11}%

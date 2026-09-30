@@ -1,0 +1,55 @@
+% ============================================================
+\section{Revisión científica}
+\label{sec:marco}
+% ============================================================
+
+\subsection{Antecedentes}
+\label{sec:antecedentes}
+
+\textbf{Partición de incertidumbre (Hawkins y Sutton).} \citet{hawkins2009,hawkins2011precip} establecieron la partición de la incertidumbre de una proyección climática en tres fuentes: variabilidad interna ($V$, no reducible, propia de la dinámica caótica del sistema climático), incertidumbre de modelo ($M$, dispersión entre las respuestas de distintos modelos ante un mismo forzante) e incertidumbre de escenario ($S$, dispersión entre trayectorias de emisiones). Cada simulación se ajusta con un polinomio de cuarto orden, el residuo del ajuste representa la variabilidad interna y, al tratar las tres fuentes como independientes, la varianza total es su suma, $T = V + M + S$. \citet{hawkins2012} llevaron el marco al \emph{Time of Emergence} por modelo individual: la señal local se obtiene regresando la variable sobre la temperatura media global suavizada con el mismo polinomio, el ruido es la desviación estándar interanual del residuo y el TOE es el primer año en que la razón señal-ruido supera 1 o 2. Estimaron además que la incertidumbre del propio TOE es de al menos 30 años y llega a 60 en algunas regiones. La partición en tres fuentes es la base del análisis de incertidumbre previsto en el TdR para el Entregable~4.
+
+\textbf{Aplicación de Szabó y Szépszó.} \citet{szabo2016} implementan el método de Hawkins y Sutton para temperatura y precipitación sobre Europa (15 modelos CMIP3, tres escenarios SRES, referencia 1971--2000) e introducen cuatro cambios: la variabilidad interna se recalcula cada año sobre los 30 años previos, en lugar de asumirse constante; se usan medias anuales y estacionales en vez de decadales; los modelos no se ponderan; y el TOE se define con la variabilidad interna como único ruido, mientras que la razón señal-ruido conserva la incertidumbre total. Esta formulación es la que el equipo técnico adopta como método M1 (Sección~\ref{sec:toe_metodos}).
+
+\textbf{Trabajo de Bruno Ramírez.} \citet{bruno2023}, trabajo de suficiencia profesional de la Universidad Nacional Agraria La Molina, aplica la metodología de \citet{szabo2016} a temperatura y precipitación sobre Sudamérica con 53 modelos CMIP6, periodo de referencia 1981--2010 (1981--2014 en este proyecto) y los escenarios SSP2-4.5 y SSP5-8.5, calculando variabilidad interna, razón señal-ruido y TOE. Su validación de modelos combina un componente físico (posición e intensidad del anticiclón del Pacífico Sur, la Alta de Bolivia y la Baja Amazónica) y uno estadístico frente a ERA5 (correlación de Pearson, sesgo, RMSE y diagrama de Taylor). Es el antecedente metodológico más cercano: muestra que M1 ya se aplicó con CMIP6 en Sudamérica, aunque sobre variables atmosféricas continentales y no sobre las cajas oceánicas Niño~3.4 y Niño~1+2. Su lista de modelos se tomó como referencia para la selección de este entregable, que abarca todo el catálogo CMIP6 disponible (Sección~\ref{sec:desviacion}).
+
+\textbf{Trabajo de Álvarez Sánchez.} \citet{alvarez2024}, también trabajo de suficiencia profesional de la misma universidad, proyectó la temperatura superficial del mar y el nivel del mar en las costas de Sudamérica y el Pacífico tropical con modelos CMIP5. Comparte con este proyecto el dominio oceánico y permite, en entregables posteriores, contrastar las generaciones CMIP5 y CMIP6.
+
+\textbf{Niño costero.} \citet{takahashi2019} reconstruyen con observaciones in situ el Niño costero de 1925: calentamiento intenso en el Pacífico oriental lejano con condiciones frías en el Pacífico central, a diferencia de los eventos extraordinarios de 1982--1983 y 1997--1998. Las ondas Kelvin ecuatoriales tuvieron un papel menor en su inicio; el evento se asocia con vientos del norte a través del ecuador, con la intensificación de la zona de convergencia intertropical al sur del ecuador y con realimentaciones océano-atmósfera locales. Existen, por tanto, dos tipos de eventos de fuerte impacto en Niño~1+2, con dinámicas distintas, lo que justifica analizar esta caja por separado de Niño~3.4.
+
+La revisión de metodologías de TOE que pide la actividad~(a) se extendió más allá de Hawkins-Sutton y Szabó; la Sección~\ref{sec:referencias} sintetiza la bibliografía revisada, de la que se deriva el método complementario ToD (Sección~\ref{sec:toe_metodos}).
+
+\subsection{Literatura sobre \emph{Time of Emergence}}
+\label{sec:referencias}
+
+El Cuadro~\ref{tab:referencias} resume la bibliografía sobre TOE revisada para este proyecto: los antecedentes de la Sección~\ref{sec:antecedentes} y literatura complementaria que sustenta la discusión del Entregable~4.
+
+\begin{longtable}{@{}L{3.6cm}L{3.2cm}L{\dimexpr\textwidth-3.6cm-3.2cm-4\tabcolsep\relax}@{}}
+\caption{Bibliografía sobre \emph{Time of Emergence} revisada para este proyecto.}
+\label{tab:referencias} \\
+\toprule
+\textbf{Referencia} & \textbf{Dominio} & \textbf{Aporte principal a este proyecto} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Referencia} & \textbf{Dominio} & \textbf{Aporte principal a este proyecto} \\
+\midrule
+\endhead
+\citet{hawkins2009,hawkins2011precip} & Global y regional (CMIP3) & Partición de la incertidumbre en tres fuentes ($T=V+M+S$) \\
+\citet{hawkins2012} & Global, temperatura del aire (CMIP3) & TOE por modelo individual; umbrales S/N de 1 y 2 \\
+\citet{szabo2016} & Europa (CMIP3) & Método M1: variabilidad interna móvil; TOE con ruido igual a $V$ \\
+\citet{bruno2023} & Sudamérica, temperatura y precipitación (CMIP6) & Aplicación de M1 a CMIP6 en Sudamérica \\
+\citet{alvarez2024} & Costas de Sudamérica y Pacífico tropical (CMIP5) & Antecedente institucional; comparación CMIP5 frente a CMIP6 \\
+\citet{takahashi2019} & Pacífico oriental lejano & Dinámica del Niño costero \\
+\citet{gopika2024} & Océanos tropicales, 30°S--30°N (CMIP5/6) & \emph{Time of Detection} (ToD), método complementario adoptado \\
+\citet{zhong2023} & Pacífico tropical (CMIP6 y grandes ensambles) & Regímenes de incertidumbre distintos para el estado medio y para el ENOS \\
+\citet{larson2025} & Océano global (CESM2, 1900--2014) & La variabilidad de la circulación forzada por viento retrasa el TOE de la TSM \\
+\citet{poul2025} & Mar del Norte, Báltico y Atlántico Norte & Razón S/N con varianzas combinadas; la surgencia retrasa el TOE \\
+\citet{keller2014} & Océano global, biogeoquímica (CMIP5) & TOE de TSM de 45--90 años; TOE largo frente a Perú y Chile \\
+\citet{chadwick2019} & Chile semiárido y mediterráneo & TOE local por potencia estadística; relación entre CV y TOE \\
+\citet{lois2026} & Océano Austral (CMIP6) & \emph{Storylines} y TOE; criterio alternativo de selección de modelos \\
+\citet{giorgi2009} & Precipitación global (CMIP3) & TOE de \emph{hot-spots}; emergencia tardía en la cuenca amazónica \\
+\citet{john2023,deng2022,barrow2019,ryu2024,ryu2025,im2021,nguyen2018} & Australia, Canadá, Corea del Sur, oeste de EE.\,UU., CORDEX-CORE, precipitación global & Otras aplicaciones de TOE revisadas y no adoptadas (hidrología, extremos de temperatura, estrés térmico, aridez, precipitación) \\
+\bottomrule
+\end{longtable}
+
+El hallazgo transversal de esta bibliografía es que no existe un método estándar de TOE y que las decisiones metodológicas desplazan la fecha resultante en décadas. El umbral varía entre estudios (S/N de 1 en \citealp{szabo2016}, de 1 y 2 en \citealp{hawkins2012}, de 1{,}6 en \citealp{gopika2024} y de 2 en \citealp{poul2025}); \citet{hawkins2012} estiman una incertidumbre del TOE de 30 a 60 años, y \citet{chadwick2019} encuentran diferencias de más de 40 años según el percentil de tendencia de los modelos. El equipo técnico adopta el método de Szabó (M1) y añade el ToD de Gopika como segundo método independiente, para reportar un rango de fechas y no un único número.

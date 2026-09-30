@@ -1,0 +1,27 @@
+# Todas las longitudes en este archivo estan en formato 0-360 (no
+# -180/180), por consistencia y practicidad de calculo en todos los
+# pasos del pipeline (descarga, homogeneizacion, regrillado y cajas de
+# analisis usan la misma convencion).
+
+nino34:
+  # Nino 3.4 clasico: 170W-120W, 5S-5N -> en 0-360: 190-240
+  lon_min: 190.0
+  lon_max: 240.0
+  lat_min: -5.0
+  lat_max: 5.0
+nino12:
+  # Nino 1+2 clasico: 90W-80W, 10S-0 -> en 0-360: 270-280
+  lon_min: 270.0
+  lon_max: 280.0
+  lat_min: -10.0
+  lat_max: 0.0
+# caja de descarga regional. Actualizado (Entregable 2): longitud
+# global completa y latitud ampliada a 30S-30N -- antes 100E-70W,
+# 20S-20N (Pacifico tropical), insuficiente para calcular la TSM media
+# tropical que necesita el indice RONI (Nino 3.4 relativo al promedio
+# de las 3 cuencas oceanicas, no solo el Pacifico).
+download_window:
+  lon_min: 0.0      # global
+  lon_max: 360.0    # global
+  lat_min: -30.0    # 30S
+  lat_max: 30.0     # 30N

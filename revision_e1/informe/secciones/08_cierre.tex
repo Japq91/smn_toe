@@ -1,0 +1,56 @@
+% ============================================================
+\section{Próximos pasos}
+\label{sec:roadmap}
+% ============================================================
+
+El Cuadro~\ref{tab:roadmap} resume, para dar continuidad al proyecto, los análisis previstos en los Entregables~2 a~4 según las actividades~(b) a~(e) del TdR.
+
+\begin{table}[htbp]
+\caption{Análisis previstos para los Entregables~2 a~4.}
+\label{tab:roadmap}
+\small
+\begin{tabular}{@{}L{2.2cm}L{\dimexpr\textwidth-2.2cm-2\tabcolsep\relax}@{}}
+\toprule
+\textbf{Entregable} & \textbf{Análisis previstos} \\
+\midrule
+E2 & Climatología y ciclo anual observados y simulados; sesgo, RMSE, correlación y diagrama de Taylor en ambas cajas; variabilidad interanual; eventos cálidos extremos del ENOS con ONI y RONI (Niño~3.4) e ICEN (Niño~1+2), con análisis compuesto del evento típico; puntaje de habilidad para seleccionar los modelos que mejor representan el periodo histórico. \\
+E3 & Proyección del estado medio y de la variabilidad de la TSM en Niño~3.4 y Niño~1+2 bajo SSP2-4.5 y SSP5-8.5 (con SSP3-7.0 como escenario intermedio), para 2036--2065 y 2071--2100; cambios en la ocurrencia de eventos extremos del ENOS mediante ONI e ICEN. \\
+E4 & Partición de la incertidumbre (variabilidad interna, modelo y escenario) y razón señal-ruido; TOE por los métodos M1 y ToD en ambas cajas; estudio técnico final con documentación metodológica, bases de datos, \emph{scripts}, conclusiones y recomendaciones, incluida la contrastación de la hipótesis de la Sección~\ref{sec:similitudes}. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+El Entregable~2 puede comenzar leyendo solo \texttt{data/processed/}, sin volver a ejecutar ni conocer el detalle interno de este módulo.
+
+% ============================================================
+\section{Conclusiones}
+\label{sec:conclusiones}
+% ============================================================
+
+El Entregable~1, en cumplimiento de la actividad~(a) del TdR, deja construido, verificado y versionado el insumo del que dependen los Entregables~2 a~4. De su ejecución se desprenden las siguientes conclusiones:
+
+\begin{enumerate}[label=(\roman*)]
+\item El \emph{pipeline} está completo y verificado: 40 modelos CMIP6 con sus cuatro experimentos aprobados (Sección~\ref{sec:resultados}). Sus controles por valor numérico detectan problemas de los datos de origen que un control basado solo en metadatos no detectaría, como la contaminación numérica de FGOALS-f3-L y las unidades mal declaradas de GISS-E2-1-G.
+
+\item La revisión científica (Sección~\ref{sec:marco}) sustenta la adopción de dos métodos de TOE conceptualmente independientes, M1 \citep{szabo2016} y ToD \citep{gopika2024}, y fija sus ecuaciones antes de su aplicación en el Entregable~4. De esa revisión surge además una hipótesis de trabajo contrastable: Niño~1+2 emergerá más tarde, o con mayor incertidumbre, que Niño~3.4. La mayor variabilidad interanual observada en Niño~1+2 es coherente con ella.
+
+\item La comparación preliminar con ERSSTv5 muestra un sesgo cálido en Niño~1+2 en 38 de los 40 modelos (mediana de $+2{,}2$\,°C), mientras que en Niño~3.4 los modelos se distribuyen alrededor de la observación. La evaluación formal del Entregable~2 debe tratar ambas cajas por separado.
+
+\item Ampliar el universo de candidatos más allá de la selección de \citet{bruno2023} deja al Entregable~2 con más información: la decisión sobre qué modelos representan mejor el ENOS se tomará con evaluación propia y no con una lista pensada para otras variables.
+
+\item El trabajo es reproducible: el repositorio \archivo{smn_toe} es de libre acceso y, con el entorno instalado, \texttt{./run.sh} reconstruye el conjunto de datos documentado; cada corrida deja además un reporte de estado verificable. El procedimiento se detalla en el documento de anexos.
+\end{enumerate}
+
+% ============================================================
+\section{Recomendaciones}
+\label{sec:recomendaciones}
+% ============================================================
+
+Para la continuidad del proyecto se recomienda:
+
+\begin{itemize}
+\item Evaluar en el Entregable~2 la representación del ENOS en los 40 modelos (climatología, sesgos, métricas estadísticas e índices ONI, RONI e ICEN en ambas cajas) antes de dar por buena su idoneidad. El control de calidad de este entregable verifica la integridad y homogeneidad del dato, no su desempeño climático.
+\item Verificar que la selección final de modelos del Entregable~2 conserve la dispersión estructural del ensamble \citep{lois2026}, para no subestimar la incertidumbre de modelo ni el rango del TOE.
+\item Considerar la incorporación de los 8 modelos que publican \texttt{historical}, \texttt{ssp245} y \texttt{ssp585} pero no \texttt{ssp370} en los análisis que usan solo SSP2-4.5 y SSP5-8.5, lo que ampliaría los candidatos de 41 a 49 modelos.
+\item Calcular y reportar M1 y ToD siempre en paralelo, documentando en el Entregable~4 los casos en que difieran sustancialmente: la bibliografía revisada muestra que esa discrepancia entre métodos es la norma y no la excepción.
+\end{itemize}
