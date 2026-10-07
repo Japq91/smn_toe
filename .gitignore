@@ -59,3 +59,6 @@ informe/informe_e1_smnv3.pdf
 # borradores): se conserva en disco, no se versiona.
 /revision_e1/
 informe/borradores/informe_e1_smnv3.pdf
+# Salidas de corridas (nohup.out, logs/run_*.out, etc.): por corrida/maquina,
+# no se versionan.
+*.out
