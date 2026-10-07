@@ -83,6 +83,22 @@ if [ -n "${CONDA_PREFIX:-}" ]; then
     export PATH="$CONDA_PREFIX/bin:$PATH"
 fi
 
+# Ignora los paquetes instalados con "pip install --user" en
+# ~/.local/lib/pythonX.Y/site-packages: Python los pone en sys.path
+# ANTES que los del entorno conda, asi que un numpy 2.x de ahi (verificado:
+# lo arrastro opencv-python) tapa al numpy 1.26 del entorno y rompe
+# netCDF4/matplotlib ("numpy.dtype size changed ... binary incompatibility").
+export PYTHONNOUSERSITE=1
+# Ademas se deja guardada en el propio entorno conda (una sola vez), para
+# que tambien la tengan los scripts sueltos y el notebook tras un
+# "conda activate" -- sin que el usuario tenga que configurar nada.
+# No fatal: si conda no esta o falla, la proteccion de arriba alcanza
+# para todo lo que corre run.sh.
+if [ -n "${CONDA_PREFIX:-}" ] && command -v conda >/dev/null 2>&1 \
+   && ! grep -qs '"PYTHONNOUSERSITE"' "$CONDA_PREFIX/conda-meta/state"; then
+    conda env config vars set PYTHONNOUSERSITE=1 -p "$CONDA_PREFIX" >/dev/null 2>&1 || true
+fi
+
 RUN_TS="$(date +%Y%m%d_%H%M%S)"
 RUN_START_HUMAN="$(date '+%Y-%m-%d %H:%M:%S')"
 

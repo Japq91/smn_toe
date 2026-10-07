@@ -98,16 +98,24 @@ for e in entries:
 # y cada uno deja un hueco real en el mergetime de 04 (sintoma visto
 # recien en plot_maps.py: "se esperaba un campo 2D... shape=(0, ...)").
 DOWNLOAD_RETRIES=3
+# Se descarga a "$outfile.part" y solo se renombra al nombre final si wget
+# termino bien: antes wget escribia directo en $outfile, y si el proceso
+# moria a mitad de la descarga (ej. otra corrida de run.sh lanzada encima)
+# quedaba un .nc truncado que el chequeo "-s" de abajo daba por completo
+# (visto con ACCESS-CM2 historical: 18 MB de ~400 MB, "NetCDF: HDF error"
+# recien en el paso 04).
 download_with_mirrors () {
     local urls_csv="$1" outfile="$2"
+    local partfile="$outfile.part"
     IFS=',' read -ra urls <<< "$urls_csv"
     for url in "${urls[@]}"; do
         local attempt=1
         while [ "$attempt" -le "$DOWNLOAD_RETRIES" ]; do
-            if wget -q --timeout="$WGET_TIMEOUT" --tries=1 -O "$outfile" "$url"; then
-                [ -s "$outfile" ] && return 0
+            if wget -q --timeout="$WGET_TIMEOUT" --tries=1 -O "$partfile" "$url" \
+               && [ -s "$partfile" ]; then
+                mv -f "$partfile" "$outfile" && return 0
             fi
-            rm -f "$outfile"
+            rm -f "$partfile"
             attempt=$((attempt + 1))
             [ "$attempt" -le "$DOWNLOAD_RETRIES" ] && sleep 3
         done

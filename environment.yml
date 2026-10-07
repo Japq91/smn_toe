@@ -13,6 +13,10 @@
 # python3, requests) mas el resto de paquetes que usan los demas
 # pasos del pipeline y el notebook de graficos exploratorios.
 name: smn_toe
+# Ignorar paquetes de "pip install --user" (~/.local): un numpy 2.x de
+# ahi tapa al del entorno y rompe netCDF4/matplotlib (binary incompatibility).
+variables:
+  PYTHONNOUSERSITE: "1"
 channels:
   - conda-forge
 dependencies:
