@@ -211,12 +211,17 @@ RONI (Relative Oceanic Niño Index): la misma anomalía de Niño 3.4,
 menos la anomalía de TSM media tropical (20°N-20°S, todos los
 océanos), reescalada para que su varianza iguale a la del ONI original
 (definición oficial NOAA CPC, implementada en
-scripts_e2/p01_indices_enso.py::roni_index) -- remueve la tendencia de
+scripts_e2/common_e2.py::roni_index) -- remueve la tendencia de
 calentamiento de fondo para que el umbral operacional de El Niño/La
 Niña no se "infle" solo por cambio climático de largo plazo:
 
-    RONI(y, m) = [ ONI(y, m) - A_tropical_media(y, m) ] * escala
-    escala = sigma(ONI) / sigma(ONI - A_tropical_media)
+    RONI(y, m) = rolling3[ A_nino34(y, m) - A_tropical_media(y, m) ] * escala
+    escala = sigma(rolling3[A_nino34]) / sigma(rolling3[A_nino34 - A_tropical_media])
+
+    (A_nino34 y A_tropical_media con la MISMA base fija de 30 anios --
+    1985-2014 con datos hasta 2014; NOAA usa 1991-2020 --, no con las
+    bases moviles del ONI: la resta de la media tropical ya quita la
+    tendencia. Implementado en scripts_e2/common_e2.py::roni_index.)
 
 NOTA (actualizado tras investigación web, ver
 informe/borradores/propuesta_puntos_11_12.md): NOAA CPC adoptó RONI

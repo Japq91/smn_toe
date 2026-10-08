@@ -255,38 +255,40 @@ def roni_index(nino34_da, tropical_da, ref_inicio=None, ref_fin=None):
 # FIN NUEVAS FUNCIONES #
 ########################
 
-def find_indices_csv(ref_inicio, ref_fin):
-    """Ubica el CSV de indices que escribio p01_indices_enso.py para
-    ese periodo de referencia (el nombre incluye ademas la ventana
-    real de datos, que p01 calcula solo -- se busca por patron)."""
+def find_indices_csv():
+    """Ubica el CSV de indices que escribio p01_indices_enso.py
+    (indices_enso_<y0>-<y1>.csv; el nombre lleva la ventana real de
+    datos, que p01 calcula solo -- se busca por patron). Sin 'ref' en el
+    nombre: ONI/ICEN usan bases moviles de 30 anios y RONI una base fija
+    propia (ver oni_index/icen_index/roni_index), no un periodo de
+    referencia unico."""
     import glob
-    pattern = str(E2_DIR / f"indices_enso_*_ref{ref_inicio}-{ref_fin}.csv")
+    pattern = str(E2_DIR / "indices_enso_????-????.csv")
     matches = sorted(glob.glob(pattern))
     if not matches:
-        sys.exit(f"Falta {pattern}. Correr antes p01_indices_enso.py con REF_INICIO={ref_inicio}, REF_FIN={ref_fin}.")
+        sys.exit(f"Falta {pattern}. Correr antes p01_indices_enso.py.")
     return matches[-1]
 
-def obs_indices(ref_inicio, ref_fin):
+def obs_indices():
     """indices_enso_*.csv (p01) deliberadamente NO incluye ERSSTv5
     (columnas solo M01..M40, pedido explicito del usuario) -- se
     recalculan aca los 3 indices de obs, para poder comparar cada
     modelo contra obs (usado por p07_eventos.py y
     p08_taylor_compuesto.py)."""
     series = {k: box_series(obs_path(), box, "sst", weighted=WEIGHTED[k]) for k, box in BOXES.items()}
-    clim = {k: climatology(v, ref_inicio, ref_fin) for k, v in series.items()}
     # oni = oni_index(series["nino34"], clim["nino34"])
     oni = oni_index(series["nino34"])
     # roni = roni_index(oni, series["tropical"], clim["tropical"])
-    roni = roni_index(oni, series["tropical"])
+    roni = roni_index(series["nino34"], series["tropical"])   # la serie cruda, no el ONI (mismo llamado que p01)
     # icen = icen_index(series["nino12"], clim["nino12"])
     icen = icen_index(series["nino12"])
     return pd.DataFrame({"OBS_ONI": oni.to_pandas(), "OBS_RONI": roni.to_pandas(), "OBS_ICEN": icen.to_pandas()})
 
-def load_all_indices(ref_inicio, ref_fin):
+def load_all_indices():
     """Indices de los 40 modelos (CSV de p01) + OBS (recalculado aca) en
     un solo DataFrame, indexado por tiempo."""
-    df = pd.read_csv(find_indices_csv(ref_inicio, ref_fin), index_col="time", parse_dates=True)
-    return df.join(obs_indices(ref_inicio, ref_fin), how="left")
+    df = pd.read_csv(find_indices_csv(), index_col="time", parse_dates=True)
+    return df.join(obs_indices(), how="left")
 
 def taylor_stats_arrays(model_vals, obs_vals):
     """Igual que pearson_r/rmse pero sobre arrays numpy simples (no

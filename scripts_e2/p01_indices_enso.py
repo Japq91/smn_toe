@@ -4,6 +4,18 @@ e ICEN (Nino1+2), para los 40 modelos de model_registry_e2.csv.
 Ejecutable de forma independiente (no depende de que otro pXX haya
 corrido antes): lee directamente data/processed/masked/ y
 data/processed/e2/model_registry_e2.csv.
+
+Anomalias (ver common_e2.py y scripts_e2/actualizacion_manual.txt):
+  - ONI: bases moviles de 30 anios del CPC (cambian cada 5 anios).
+  - ICEN: bases de 30 anios por quinquenio del ENFEN.
+  - RONI: base fija (ultimos 30 anios disponibles, 1985-2014 con estos
+    datos) para Nino3.4 y para la banda tropical; la resta de la media
+    tropical ya quita la tendencia. Recibe la serie CRUDA de Nino3.4,
+    no el ONI (que ya es anomalia con otra base y ya esta suavizado).
+Ninguno usa el periodo de referencia 1981-2014 del resto de E2, por eso
+el archivo de salida no lleva 'ref' en el nombre:
+data/processed/e2/indices_enso_<y0>-<y1>.csv.
+
 Uso: python3 scripts_e2/p01_indices_enso.py
 """
 import sys
@@ -12,12 +24,9 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import common_e2 as c2
 
-# Periodo de referencia para la climatologia de las anomalias -- EDITAR
-# ACA para cambiarlo; el nombre del archivo de salida se arma solo a
-# partir de estos dos valores, no hace falta tocarlo aparte.
 def indices_for(series, name_prefix):    
     oni = c2.oni_index(series["nino34"])
-    roni = c2.roni_index(oni, series["tropical"])
+    roni = c2.roni_index(series["nino34"], series["tropical"])
     icen = c2.icen_index(series["nino12"])
     return pd.DataFrame({
         f"{name_prefix}_ONI": oni.to_pandas(),
@@ -66,7 +75,7 @@ def main():
     result = result.dropna(subset=all_idx_cols, how="all")
 
     y0, y1 = common_start.year, common_end.year
-    out_path = c2.E2_DIR / f"p01_indices_enso_{y0}-{y1}.csv"
+    out_path = c2.E2_DIR / f"indices_enso_{y0}-{y1}.csv"
     result.to_csv(out_path, float_format="%.4f")
     print(f"Ventana comun a los 40 modelos: {common_start.date()} a {common_end.date()}", file=sys.stderr)
     print(f"Listo: {out_path} ({result.shape[0]} filas, {result.shape[1]} columnas)", file=sys.stderr)

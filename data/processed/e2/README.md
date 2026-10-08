@@ -27,7 +27,7 @@ salida se arma siempre a partir de esas constantes, nunca a mano:
 cambiar `REF_INICIO`/`REF_FIN` en el script cambia el nombre del CSV
 solo, en la próxima corrida.
 
-- `p01_indices_enso.py` -- ONI/RONI/ICEN (ver `indices_enso_*.csv`
+- `p01_indices_enso.py` -- ONI/RONI/ICEN (ver `indices_enso_<periodo>.csv`
   abajo).
 - `p02_climatologia.py` -- climatología y ciclo anual (ver
   `climatologia_*.csv` abajo).
@@ -63,25 +63,46 @@ resolution_km` -- las últimas 4 reusadas tal cual de
 `informe/model_registry.csv` (join por nombre de modelo), no
 recalculadas.
 
-## `indices_enso_<periodo>_ref<ref>.csv`
+## `indices_enso_<periodo>.csv`
 
 Una sola tabla: primera columna `time`, y 3 columnas por modelo usando
 su `number`: `M01_ONI, M01_RONI, M01_ICEN, M02_ONI, ...` hasta
-`M40_ICEN` (121 columnas para 40 modelos). El nombre de archivo
-codifica dos períodos distintos, no confundir:
-- `<periodo>` (ej. `1900-2014`): rango temporal real de los datos en
-  el archivo (ver "Ventana temporal común" abajo).
-- `ref<ref>` (ej. `ref1981-2014`): período de referencia de la
-  climatología usada para las anomalías (`config/periods.yaml`,
-  `referencia_historica`) -- fijo, no cambia aunque cambie la ventana
-  de datos.
+`M40_ICEN` (121 columnas para 40 modelos). `<periodo>` (ej.
+`1900-2014`) es el rango temporal real de los datos en el archivo (ver
+"Ventana temporal común" abajo).
+
+**Sin `ref` en el nombre, a propósito**: los índices **no** usan el
+período de referencia 1981-2014 del resto de E2. Cada uno sigue la
+convención operativa de su índice (ver `scripts_e2/common_e2.py` y
+`scripts_e2/actualizacion_manual.txt`):
+- **ONI**: anomalía con bases móviles de 30 años del CPC (cambian cada
+  5 años; 1996-2000 usa 1981-2010, etc.), media móvil de 3 meses.
+- **ICEN**: anomalía con bases de 30 años por quinquenio del ENFEN,
+  media móvil de 3 meses.
+- **RONI**: anomalía de Niño 3.4 menos anomalía de la banda tropical
+  20°S-20°N, **ambas con la misma base fija** (los últimos 30 años
+  disponibles, 1985-2014 con estos datos; NOAA usa 1991-2020), media
+  móvil de 3 meses y reescalado a la σ del Niño 3.4 suavizado con esa
+  misma base. La resta de la media tropical ya quita la tendencia, por
+  eso no hace falta base móvil.
+Antes de 1946-1950 ni CPC ni ENFEN definen bases: el patrón se extiende
+hacia atrás (decisión propia, documentar en el informe). Modelos y OBS
+pasan por exactamente las mismas funciones.
+
+Historial: hasta el 2026-10-08 el archivo era
+`indices_enso_1900-2014_ref1981-2014.csv`, con base fija 1981-2014 para
+los tres índices (versión anterior de p01), mientras que OBS ya se
+calculaba con las bases móviles -- modelos y OBS no eran comparables.
+Además el RONI recibía el ONI ya suavizado en vez de la serie cruda de
+Niño 3.4. Se corrigió y se regeneró toda la cadena p01 → p07 → p08 → p09.
 
 Calculado **sin corrección Linear Scaling (LS)**: se probó y se
 descartó -- LS es una resta constante por mes calendario, y cualquier
 anomalía (que es todo lo que alimenta ONI/RONI/ICEN) la cancela
 algebraicamente sola. Los índices son la anomalía respecto a la
 climatología **propia** de cada dataset (ERSSTv5 con la suya, cada
-modelo con la suya), igual que se calcula ONI en la práctica real. El
+modelo con la suya, con las bases descritas arriba), igual que se
+calcula ONI en la práctica real. El
 sesgo (`C_m^modelo - C_m^obs`) se reporta aparte, como diagnóstico
 independiente que no alimenta este cálculo.
 
@@ -270,8 +291,9 @@ completa):
   SENAMHI/IGP/NOAA operacionalmente. ONI/RONI: débil 0.5-0.9,
   moderado 1.0-1.4, fuerte 1.5-1.9, muy fuerte ≥2.0 (confianza alta,
   NOAA CPC). RONI usa la misma tabla que ONI -- por construcción
-  `std(RONI) == std(ONI)` (el reescalado de varianza de
-  `p01_indices_enso.py::roni_index`), así que la tabla de ONI es
+  `std(RONI)` es la del Niño 3.4 suavizado con la base del RONI,
+  prácticamente la misma que la del ONI (el reescalado de varianza de
+  `common_e2.py::roni_index`), así que la tabla de ONI es
   directamente aplicable, no una elección arbitraria. ICEN: débil
   0.4-1.3, moderado 1.3-2.1, fuerte 2.1-3.5, extraordinario >3.5
   (confianza MEDIA -- fuente secundaria sobre el evento de 2017, no la

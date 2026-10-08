@@ -63,7 +63,7 @@ sin alimentar el score final.
 Ejecutable de forma independiente: lee directamente
 data/processed/e2/eventos_*_ref<REF_INICIO>-<REF_FIN>.csv (salida de
 p07_eventos.py -- si no existe, avisa y corta) y
-data/processed/e2/indices_enso_*_ref<REF_INICIO>-<REF_FIN>.csv (salida
+data/processed/e2/indices_enso_<y0>-<y1>.csv (salida
 de p01_indices_enso.py).
 
 Uso:
@@ -137,7 +137,7 @@ def composite_curve(serie, fechas_pico, ventana=None):
 
 
 def taylor_compuesto_tabla(index_key):
-    df_indices = c2.load_all_indices(REF_INICIO, REF_FIN)
+    df_indices = c2.load_all_indices()
     df_eventos = pd.read_csv(eventos_path(index_key), parse_dates=["fecha_pico"])
 
     obs_serie = df_indices[f"OBS_{index_key}"]

@@ -89,7 +89,8 @@ taylor_nino12_ref<ref>.csv, taylor_compuesto_ONI/RONI/ICEN_vent12m_ref<ref>.csv
 avisa y corta).
 
 Uso:
-    python3 scripts_e2/p09_skill_score.py
+    python3 scripts_e2/p09_skill_score.py        # ventana VENTANA_MESES (12) -> skill_score_ref<ref>.csv
+    python3 scripts_e2/p09_skill_score.py 18     # otra ventana -> skill_score_vent18m_ref<ref>.csv
 """
 import sys
 from pathlib import Path
@@ -110,8 +111,10 @@ REF_FIN = 2014
 
 # Ancho de ventana del compuesto a consumir -- debe coincidir con
 # VENTANA_MESES de p08_taylor_compuesto.py. Se usa la corrida principal
-# (12, 25 puntos); la de sensibilidad (15, 31 puntos) NO alimenta el
-# score final, queda solo como comparacion en el informe.
+# (12, 25 puntos); las de sensibilidad (15 y 18) NO alimentan el
+# score final, quedan solo como comparacion en el informe. Se pueden
+# correr pasando la ventana como argumento (ver "Uso" arriba): escriben
+# skill_score_vent<V>m_ref<ref>.csv, sin pisar el resultado principal.
 VENTANA_MESES = 12
 
 # R0: correlacion maxima alcanzable en la formula de Taylor (2001).
@@ -210,6 +213,9 @@ def natural_break_2(values):
 
 
 def main():
+    global VENTANA_MESES
+    if len(sys.argv) > 1:
+        VENTANA_MESES = int(sys.argv[1])
     print("Cargando taylor_*.csv (5 tablas) ...", file=sys.stderr)
     s_nino34 = cargar_S(c2.E2_DIR / f"taylor_nino34_ref{REF_INICIO}-{REF_FIN}.csv", "S_nino34")
     s_nino12 = cargar_S(c2.E2_DIR / f"taylor_nino12_ref{REF_INICIO}-{REF_FIN}.csv", "S_nino12")
@@ -246,7 +252,9 @@ def main():
     df = df.sort_values("S_final", ascending=False)
     df.index.name = "number"
 
-    out_path = c2.E2_DIR / f"skill_score_ref{REF_INICIO}-{REF_FIN}.csv"
+    # La ventana principal (12) conserva el nombre historico del archivo.
+    sufijo = "" if VENTANA_MESES == 12 else f"vent{VENTANA_MESES}m_"
+    out_path = c2.E2_DIR / f"skill_score_{sufijo}ref{REF_INICIO}-{REF_FIN}.csv"
     df.to_csv(out_path, float_format="%.4f")
     print(f"Listo: {out_path} ({df.shape[0]} filas, {df.shape[1]} columnas)", file=sys.stderr)
 

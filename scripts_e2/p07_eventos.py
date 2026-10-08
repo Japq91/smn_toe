@@ -15,9 +15,10 @@ sigma_norm muy distinta entre si, ver taylor_*.csv):
     tabla de categorias de magnitud -- debil/moderado/fuerte/
     extraordinario -- es de confianza MEDIA, no verificada contra la
     fuente primaria de ENFEN, ver propuesta_puntos_11_12.md).
-    RONI usa las MISMAS categorias que ONI: por construccion,
-    std(RONI) == std(ONI) (ver p01_indices_enso.py::roni_index, el
-    reescalado de varianza), asi que aplicar la tabla de ONI a RONI es
+    RONI usa las MISMAS categorias que ONI: por construccion, std(RONI)
+    == std del Nino3.4 suavizado con la base del RONI, practicamente la
+    misma que la del ONI (ver common_e2.py::roni_index, el reescalado
+    de varianza), asi que aplicar la tabla de ONI a RONI es
     consistente, no arbitrario.
 
   - RELATIVO: umbral proporcional a la propia sigma de cada dataset
@@ -45,7 +46,7 @@ fecha_pico la usa p08_taylor_compuesto.py para centrar la ventana del
 compuesto.
 
 Ejecutable de forma independiente: lee directamente
-data/processed/e2/indices_enso_*_ref<REF_INICIO>-<REF_FIN>.csv (salida
+data/processed/e2/indices_enso_<y0>-<y1>.csv (salida
 de p01_indices_enso.py -- si no existe, avisa y corta en vez de
 recalcular indices por su cuenta).
 
@@ -168,7 +169,7 @@ def eventos_para_indice(df, index_key):
 
 def main():
     print("Cargando indices (40 modelos + OBS) ...", file=sys.stderr)
-    df = c2.load_all_indices(REF_INICIO, REF_FIN)
+    df = c2.load_all_indices()
 
     for index_key in ("ONI", "RONI", "ICEN"):
         print(f"  Detectando eventos {index_key} ...", file=sys.stderr)
