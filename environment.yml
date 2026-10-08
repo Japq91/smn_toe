@@ -33,6 +33,8 @@ dependencies:
   - jupyterlab
   - pyyaml
   - cartopy
+  - scipy          # test t de scripts_e2/p06_correlacion.py
+  - scikit-learn   # KMeans del gap statistic en scripts_e2/p09_skill_score.py
   - pip
   - pip:
       - cdsapi
