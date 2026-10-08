@@ -82,6 +82,12 @@ representacion") sin imponer un umbral arbitrario.
        Journal of the American Statistical Association, 53(284),
        789-798. doi:10.2307/2281952
 
+5. Seleccion final (decision del usuario, 2026-10-08): como el gap
+   statistic no confirma una separacion natural (K=1, ver punto 3), se
+   seleccionan los modelos con S_final >= percentil 75 de S_final de
+   los 40 (el cuarto superior, ~10 modelos). Columna `seleccionado`
+   (True/False); el umbral usado queda en el log de la corrida.
+
 Ejecutable de forma independiente: lee directamente
 data/processed/e2/taylor_nino34_ref<ref>.csv,
 taylor_nino12_ref<ref>.csv, taylor_compuesto_ONI/RONI/ICEN_vent12m_ref<ref>.csv
@@ -116,6 +122,10 @@ REF_FIN = 2014
 # correr pasando la ventana como argumento (ver "Uso" arriba): escriben
 # skill_score_vent<V>m_ref<ref>.csv, sin pisar el resultado principal.
 VENTANA_MESES = 12
+
+# Percentil de S_final para la seleccion final de modelos (punto 5 del
+# docstring): se seleccionan los que tienen S_final >= este percentil.
+PERCENTIL_SELECCION = 75
 
 # R0: correlacion maxima alcanzable en la formula de Taylor (2001).
 # R0=1 -- default estandar sin una estimacion propia de incertidumbre
@@ -248,6 +258,12 @@ def main():
         print("  Sin separacion real confirmada (K=1) -- se deja 'grupo' vacio, "
               "solo ranking continuo por S_final.", file=sys.stderr)
         df["grupo"] = ""
+
+    # Seleccion final: cuarto superior de S_final (ver punto 5 del docstring)
+    umbral_p75 = float(df["S_final"].quantile(PERCENTIL_SELECCION / 100))
+    df["seleccionado"] = df["S_final"] >= umbral_p75
+    print(f"  Seleccion: S_final >= p{PERCENTIL_SELECCION} = {umbral_p75:.4f} -> "
+          f"{int(df['seleccionado'].sum())} modelos", file=sys.stderr)
 
     df = df.sort_values("S_final", ascending=False)
     df.index.name = "number"

@@ -419,6 +419,13 @@ descendente por `S_final`. Columnas:
   confirmó (resultado obtenido con `ref1981-2014`: vacío para los 40 --
   no hay un quiebre objetivamente distinguible, los modelos caen en un
   continuo de `S_final`).
+- `seleccionado` -- `True` si `S_final` ≥ percentil 75 de `S_final`
+  de los 40 modelos (el cuarto superior, 10 modelos): **criterio de
+  selección final** de E2, decisión del usuario (2026-10-08) ante la
+  ausencia de un corte natural (`grupo` vacío). Constante
+  `PERCENTIL_SELECCION` en `p09_skill_score.py`. Se calcula igual en
+  `skill_score_vent15m_*`/`vent18m_*` (sensibilidad), pero la
+  selección oficial es la de la ventana principal (±12 meses).
 
 **Fórmula ($S$, Taylor 2001)**, forma general con exponente $n$, sobre
 `r` y `sigma_norm` ya presentes en cada `taylor_*.csv` (no usa
