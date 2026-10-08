@@ -36,8 +36,9 @@ Metodologia:
      +-VENTANA_MESES centrada en fecha_pico. Se corre con dos anchos
      (decision del usuario, sin cita que fije un valor "correcto"):
      VENTANA_MESES=12 (25 puntos, resultado principal) y
-     VENTANA_MESES=15 (31 puntos, prueba de sensibilidad -- confirma
-     si el resultado depende fuertemente del ancho elegido).
+     VENTANA_MESES=15 (31 puntos) y VENTANA_MESES=18 (37 puntos),
+     pruebas de sensibilidad -- confirman si el resultado depende
+     fuertemente del ancho elegido.
   2. Eventos en el borde del registro (la ventana pediria meses fuera
      del rango disponible) se DESCARTAN enteros, no se rellenan con
      NaN -- decision explicita del usuario.
@@ -54,7 +55,7 @@ Salida: 3 archivos por corrida, mismo formato de 4 columnas que
 taylor_*.csv (fila OBS + M01..M40), con el ancho de ventana en el
 nombre: taylor_compuesto_ONI_vent<V>m_ref<ref>.csv,
 taylor_compuesto_RONI_vent<V>m_ref<ref>.csv,
-taylor_compuesto_ICEN_vent<V>m_ref<ref>.csv (V=12 o V=15 segun
+taylor_compuesto_ICEN_vent<V>m_ref<ref>.csv (V=12, 15 o 18 segun
 VENTANA_MESES al momento de correr). p09_skill_score.py consume solo
 la version V=12 (resultado principal); V=15 queda como sensibilidad,
 sin alimentar el score final.
@@ -66,7 +67,8 @@ data/processed/e2/indices_enso_*_ref<REF_INICIO>-<REF_FIN>.csv (salida
 de p01_indices_enso.py).
 
 Uso:
-    python3 scripts_e2/p08_taylor_compuesto.py
+    python3 scripts_e2/p08_taylor_compuesto.py        # ventana VENTANA_MESES (12)
+    python3 scripts_e2/p08_taylor_compuesto.py 18     # otra ventana, sin editar
 """
 import sys
 from pathlib import Path
@@ -88,8 +90,9 @@ REF_FIN = 2014
 # nombre del archivo de salida se arma solo a partir de esta constante
 # (mismo patron que REF_INICIO/REF_FIN). Sin cita que fije un valor
 # "correcto" (ver nota del docstring del modulo) -- decision propia,
-# corrida con dos anchos: 12 (resultado principal, 25 puntos) y 15
-# (sensibilidad, 31 puntos).
+# corrida con tres anchos: 12 (resultado principal, 25 puntos), 15 y 18
+# (sensibilidad, 31 y 37 puntos). Tambien se puede pasar por linea de
+# comandos sin editar: python3 scripts_e2/p08_taylor_compuesto.py 18
 VENTANA_MESES = 12
 
 
@@ -100,13 +103,15 @@ def eventos_path(index_key):
     return p
 
 
-def composite_curve(serie, fechas_pico, ventana=VENTANA_MESES):
+def composite_curve(serie, fechas_pico, ventana=None):
     """serie: pd.Series indexada por tiempo (mensual, sin huecos).
     fechas_pico: lista de Timestamps. Devuelve (curva, n_usados,
     n_descartados) -- curva: array de 2*ventana+1 puntos (mes relativo
     -ventana..+ventana), promedio de los eventos con ventana COMPLETA
     disponible; los que caen parcialmente fuera del rango se descartan
     enteros (no se rellenan), decision explicita del usuario."""
+    if ventana is None:
+        ventana = VENTANA_MESES   # se lee al llamar, para respetar el argumento de main()
     ventanas_validas = []
     n_descartados = 0
     for fecha in fechas_pico:
@@ -163,6 +168,9 @@ def taylor_compuesto_tabla(index_key):
 
 
 def main():
+    global VENTANA_MESES
+    if len(sys.argv) > 1:
+        VENTANA_MESES = int(sys.argv[1])
     for index_key in ("ONI", "RONI", "ICEN"):
         df = taylor_compuesto_tabla(index_key)
         out_path = c2.E2_DIR / f"taylor_compuesto_{index_key}_vent{VENTANA_MESES}m_ref{REF_INICIO}-{REF_FIN}.csv"

@@ -304,8 +304,8 @@ Generado por `scripts_e2/p07_eventos.py`. Insumo directo del punto
 
 ## `taylor_compuesto_<INDICE>_vent<V>m_ref<ref>.csv`
 
-Seis archivos, uno por índice (`ONI`, `RONI`, `ICEN`) × ancho de
-ventana (`V=12`, `V=15`) -- punto (12.) del cálculo, **no
+Nueve archivos, uno por índice (`ONI`, `RONI`, `ICEN`) × ancho de
+ventana (`V=12`, `V=15`, `V=18`) -- punto (12.) del cálculo, **no
 independiente**: consume directamente `eventos_<INDICE>_ref<ref>.csv`
 (punto 11., arriba). Mismo formato de 4 columnas que
 `taylor_<caja>_ref<ref>.csv` (fila 1 = `OBS`, filas 2-41 =
@@ -325,7 +325,7 @@ problema: en vez de "¿pasó el evento el mismo año?", compara "cuando
 el modelo sí genera un evento, ¿tiene la **forma** correcta (arma,
 pico, decaimiento)?" -- pregunta respondible con una corrida libre.
 Confirma la hipótesis en la práctica: con los mismos 40 modelos, $r$
-en `taylor_compuesto_ONI_vent12m_ref1981-2014.csv` va de ~0.94 a
+en `taylor_compuesto_ONI_vent12m_ref1981-2014.csv` va de ~0.86 a
 ~0.99, contra valores cercanos a 0 en `taylor_nino34_ref1981-2014.csv`.
 
 **Sin cita de respaldo para la técnica en sí** -- se buscó un paper que
@@ -353,17 +353,19 @@ $t=-V..0..+V$): el "evento típico" de ese dataset. Esa curva compuesta
 del modelo se compara contra la curva compuesta de OBS con las mismas
 4 métricas del Taylor de caja.
 
-Se corre con **dos anchos de ventana**, sin que ningún paper fije cuál
+Se corre con **tres anchos de ventana**, sin que ningún paper fije cuál
 es "correcto" (decisión del usuario, ver nota de arriba):
 - `V=12` (25 puntos) -- **resultado principal**, el que alimenta
   `skill_score_ref<ref>.csv` (punto 14., abajo).
-- `V=15` (31 puntos) -- **prueba de sensibilidad**: confirma si el
-  resultado depende fuertemente del ancho elegido. No alimenta el
-  score final, se reporta solo como comparación.
+- `V=15` (31 puntos) y `V=18` (37 puntos) -- **pruebas de
+  sensibilidad**: confirman si el resultado depende fuertemente del
+  ancho elegido. No alimentan el score final, se reportan solo como
+  comparación (`scripts_e2/plots_e2.ipynb`, secciones 8d/8e).
 
 Generado por `scripts_e2/p08_taylor_compuesto.py` (constante
 `VENTANA_MESES`, editable, arma el nombre de archivo sola -- mismo
-patrón que `REF_INICIO`/`REF_FIN`). Sin corrección Linear Scaling
+patrón que `REF_INICIO`/`REF_FIN`; también se puede pasar como
+argumento sin editar: `python3 scripts_e2/p08_taylor_compuesto.py 18`). Sin corrección Linear Scaling
 (mismo criterio que el resto de E2). Sobre la anomalía propia de cada
 dataset (mismos índices ONI/RONI/ICEN de
 `indices_enso_*.csv`/`load_all_indices()`, no un recálculo aparte).
