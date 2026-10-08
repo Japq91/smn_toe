@@ -207,6 +207,10 @@ lo que serían 4 cálculos por separado (variabilidad, RMSE centrado,
 correlación, estadísticos de Taylor). Filas = modelos, **fila 1 =
 `OBS`** (ERSSTv5, valores triviales por definición: `r=1`,
 `rmse_centrado=0`, `sigma_norm=1`), filas 2-41 = `M01`...`M40`.
+Todo se calcula **solo dentro de 1981-2014** (408 meses), modelos y OBS
+recortados al mismo período, igual que p03/p04/p06 -- hasta el
+2026-10-08 se usaba la serie completa (ERSSTv5 1854-2026, modelos
+1850-2014), con lo que σ, r y RMSE' no salían de los mismos meses.
 Columnas:
 
 - `sigma` -- desviación estándar de la anomalía (°C).

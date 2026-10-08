@@ -4,7 +4,8 @@ para el diagrama de Taylor, por caja (Nino3.4, Nino1+2).
 
 Para cada dataset (ERSSTv5 y cada uno de los 40 modelos), sobre la
 ANOMALIA (climatologia propia de cada dataset, periodo de referencia,
-sin LS):
+sin LS), calculado todo SOLO dentro de REF_INICIO-REF_FIN (series
+recortadas a ese periodo antes de calcular, modelos y OBS):
   - sigma: desviacion estandar de la anomalia -- (5.) Variabilidad.
   - r: correlacion de PEARSON con la anomalia de ERSSTv5 -- (7.).
     Pearson y no Spearman: la identidad de Taylor de abajo se deriva
@@ -58,7 +59,13 @@ def taylor_table(box_key):
     box = c2.BOXES[box_key]
     weighted = c2.WEIGHTED[box_key]
 
-    obs_serie = c2.box_series(c2.obs_path(), box, "sst", weighted=weighted)
+    # Todo (climatologia, sigma, r, RMSE') sobre el MISMO periodo
+    # REF_INICIO-REF_FIN, igual que p03/p04/p06: asi modelos y OBS usan
+    # los mismos meses (ERSSTv5 llega a 2026 y los modelos arrancan en
+    # 1850), la identidad de Taylor cierra y la tendencia de largo plazo
+    # no infla sigma.
+    periodo = slice(f"{REF_INICIO}", f"{REF_FIN}")
+    obs_serie = c2.box_series(c2.obs_path(), box, "sst", weighted=weighted).sel(time=periodo)
     obs_clim = c2.climatology(obs_serie, REF_INICIO, REF_FIN)
     obs_anom = c2.anomaly(obs_serie, obs_clim)
     sigma_obs = float(obs_anom.std(ddof=1))
@@ -68,7 +75,7 @@ def taylor_table(box_key):
     for row in registry:
         number, model = row["number"], row["model"]
         print(f"  [{box_key}] {number} {model} ...", file=sys.stderr)
-        serie = c2.box_series(c2.model_path(model), box, "tos", weighted=weighted)
+        serie = c2.box_series(c2.model_path(model), box, "tos", weighted=weighted).sel(time=periodo)
         clim = c2.climatology(serie, REF_INICIO, REF_FIN)
         anom = c2.anomaly(serie, clim)
 
