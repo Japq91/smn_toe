@@ -1,3 +1,4 @@
+# Instalar: conda env create -f environment.yml  |  Actualizar (si ya existe): conda env update -n smn_toe -f environment.yml --prune
 # Entorno reproducible del pipeline SST (CMIP6 + ERSSTv5).
 # Primer paso en cualquier maquina Linux, UNA SOLA VEZ, antes de correr run.sh:
 #
