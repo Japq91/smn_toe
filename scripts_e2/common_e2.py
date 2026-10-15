@@ -10,6 +10,7 @@ necesita otro periodo de referencia, se cambia solo ahi, sin afectar
 a los demas).
 """
 import sys
+import warnings
 from pathlib import Path
 
 import numpy as np
@@ -124,9 +125,14 @@ def lag1_autocorr(da, dim="time"):
     arrays numpy por indice, sin coordenadas."""
     vals = da.values
     a, b = vals[:-1], vals[1:]
-    a_mean, b_mean = np.nanmean(a, axis=0), np.nanmean(b, axis=0)
-    cov = np.nanmean((a - a_mean) * (b - b_mean), axis=0)
-    r1 = cov / (np.nanstd(a, axis=0) * np.nanstd(b, axis=0))
+    # Puntos de tierra (todo NaN en la mascara) dan NaN, que es lo
+    # correcto; se silencian los avisos de numpy que generan ("Mean of
+    # empty slice", "Degrees of freedom <= 0 for slice").
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=RuntimeWarning)
+        a_mean, b_mean = np.nanmean(a, axis=0), np.nanmean(b, axis=0)
+        cov = np.nanmean((a - a_mean) * (b - b_mean), axis=0)
+        r1 = cov / (np.nanstd(a, axis=0) * np.nanstd(b, axis=0))
     if da.ndim > 1:
         other_dims = [d for d in da.dims if d != dim]
         coords = {k: v for k, v in da.coords.items() if dim not in v.dims}
