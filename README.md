@@ -81,10 +81,10 @@ data/interim/ocean_mask.nc                         # 05: máscara 1=océano
 data/processed/masked/tos_<modelo>_<exp>.nc        # 05: dato final, listo para el cálculo de TOE
 data/processed/qc_report.csv                       # 06
 data/processed/models_inventory_final.csv          # 07: modelos selected=True (los que se grafican)
-figures/                                            # scripts/plot_*.py (automatico, run.sh)
+figures/e1/                                         # scripts/plot_*.py (automatico, run.sh); figures/e2/ = rune2.sh
 ```
 
-`data/interim/processed/` es un paso intermedio (regrillado, todavía sin máscara); `data/processed/masked/` es el dato final. `run.sh` genera los PNG de `figures/` el mismo (`scripts/plot_*.py`, al final de cada corrida).
+`data/interim/processed/` es un paso intermedio (regrillado, todavía sin máscara); `data/processed/masked/` es el dato final. `run.sh` genera los PNG de `figures/e1/` el mismo (`scripts/plot_*.py`, al final de cada corrida).
 
 ## Pasos
 
@@ -144,7 +144,7 @@ Filtro de aceptación: por archivo, evalúa el rango físico de la SST (−2 a 3
 Combina el resultado del control de calidad con la resolución real de cada modelo (`cdo griddes`) en `models_inventory_final.csv`: un modelo queda `selected=True` solo si aprueba **los experimentos requeridos** (`pipeline_config.experiments()`, la misma fuente única de verdad que el resto del pipeline), no simplemente si aprueba lo que haya llegado a intentarse. Bug real corregido en producción: la versión anterior comparaba `experiments_pass == experiments_total`, donde `experiments_total` solo contaba las filas que existían en `qc_report.csv` para ese modelo -- un modelo con descarga parcial (ej. `MIROC-ES2H`, solo `historical`) que aprobaba QC en lo poco que tenía quedaba `selected=True` igual (1 de 1 "aprobado"), aunque le faltaran los demás experimentos requeridos.
 
 ### Gráficos (`scripts/plot_*.py`, automático al final de `run.sh`)
-Cada corrida de `run.sh`, sin importar `STEP_FROM`/`STEP_TO`, termina generando las figuras en `figures/`, en este orden (los que dependen de datos descargados van al final, a propósito): `plot_qc_summary.py`, `plot_boxplot_comparison.py`, `plot_region_nino_orthographic.py`, `plot_maps.py`, `plot_box_series.py`. No fatales (si a alguna le faltan datos de entrada, o falla por algo del entorno como `cartopy`, avisa y sigue con la siguiente, sin bloquear el reporte de estado ni el paquete final).
+Cada corrida de `run.sh`, sin importar `STEP_FROM`/`STEP_TO`, termina generando las figuras en `figures/e1/`, en este orden (los que dependen de datos descargados van al final, a propósito): `plot_qc_summary.py`, `plot_boxplot_comparison.py`, `plot_region_nino_orthographic.py`, `plot_maps.py`, `plot_box_series.py`. No fatales (si a alguna le faltan datos de entrada, o falla por algo del entorno como `cartopy`, avisa y sigue con la siguiente, sin bloquear el reporte de estado ni el paquete final).
 
 **Idempotencia por lote, no por archivo**: una figura de un modelo que todavía no existe se genera sin preguntar (`plot_maps.py`/`plot_box_series.py`/`plot_boxplot_comparison.py` grafican únicamente los modelos `selected=True` de `data/processed/models_inventory_final.csv`, paso 07 -- no cualquier archivo que exista en `data/processed/masked/`, ver el bug real corregido en el paso 07 más arriba). Si YA existen figuras de una corrida anterior, se pregunta **una sola vez por todo el lote** ("¿Regenerar TODAS?", 15s, por defecto NO) en vez de una pregunta por archivo; en una corrida no interactiva (sin terminal, ej. cron/sbatch) se mantienen las existentes sin preguntar.
 
@@ -163,7 +163,7 @@ Todos leen los escenarios SSP de `config/periods.yaml` (vía `pipeline_config.py
 ### `scripts/graficos_exploratorios.ipynb` (prototipo histórico, no versionado)
 Notebook con el que se prototiparon interactivamente las figuras de arriba antes de convertirlas en los scripts reproducibles `scripts/plot_*.py`. Ya cumplió ese propósito: no es una vía paralela vigente para las figuras del informe -- eso lo cubre `run.sh` por completo -- y, como el resto de notebooks del repositorio, no se versiona en GitHub (`.gitignore`); vive solo localmente.
 
-Los cinco fuerzan el backend `Agg` de matplotlib (sin ventana), así que no necesitan `$DISPLAY` -- los cuatro primeros vía `scripts/plot_common.py` (que también centraliza `should_regenerate_batch()`, la lógica de pregunta-antes-de-regenerar por lote); `plot_region_nino_orthographic.py` lo hace por su cuenta (deliberadamente independiente del resto, con su propia copia de `should_regenerate()`, la variante de un solo archivo -- esta figura no tiene "lote", es una sola) y es el único que requiere `cartopy` (incluido en `environment.yml`). Todos guardan en `figures/` con DPI 100 (livianas, pensadas para el informe).
+Los cinco fuerzan el backend `Agg` de matplotlib (sin ventana), así que no necesitan `$DISPLAY` -- los cuatro primeros vía `scripts/plot_common.py` (que también centraliza `should_regenerate_batch()`, la lógica de pregunta-antes-de-regenerar por lote); `plot_region_nino_orthographic.py` lo hace por su cuenta (deliberadamente independiente del resto, con su propia copia de `should_regenerate()`, la variante de un solo archivo -- esta figura no tiene "lote", es una sola) y es el único que requiere `cartopy` (incluido en `environment.yml`). Todos guardan en `figures/e1/` con DPI 100 (livianas, pensadas para el informe).
 
 `check_model_availability.py` queda como herramienta manual opcional: re-verifica lo mismo contra ESGF por una vía independiente (útil como segunda opinión, o para un modelo puntual sin correr 00b entero). Es idempotente — si `informe/model_availability_report.csv` ya existe, avisa y no consulta nada; para forzar una nueva verificación manual hay que borrarlo primero:
 ```
@@ -172,7 +172,7 @@ python3 scripts/check_model_availability.py
 ```
 
 ### Informe (`informe/informe_e1_smnv3.tex`)
-El `.tex` referencia sus figuras como `figuras/<archivo>.png` (carpeta en español, convención propia del informe). `informe/figuras/` es un directorio versionado con **symlinks** a solo los archivos de `figures/` que el `.tex` realmente usa -- no un symlink a toda `figures/` (eso expondría las figuras de los 102 modelos sin necesidad). La única excepción es `cmip6_contribution.png`, una imagen manual/externa (no generada por `run.sh`) que vive como archivo real directamente en `informe/figuras/`, no como symlink. Si se agrega una figura nueva al `.tex`, hay que agregar a mano el symlink correspondiente en `informe/figuras/` (`ln -sf ../../figures/<archivo>.png informe/figuras/<archivo>.png`). Para compilar: `cd informe && pdflatex informe_e1_smnv3.tex` (requiere `run.sh` ya corrido, para que `figures/` tenga las imágenes reales).
+El `.tex` referencia sus figuras como `figuras/<archivo>.png` (carpeta en español, convención propia del informe). `informe/figuras/` es un directorio versionado con **symlinks** a solo los archivos de `figures/e1/` que el `.tex` realmente usa -- no un symlink a toda `figures/e1/` (eso expondría las figuras de los 102 modelos sin necesidad). La única excepción es `cmip6_contribution.png`, una imagen manual/externa (no generada por `run.sh`) que vive como archivo real directamente en `informe/figuras/`, no como symlink. Si se agrega una figura nueva al `.tex`, hay que agregar a mano el symlink correspondiente en `informe/figuras/` (`ln -sf ../../figures/e1/<archivo>.png informe/figuras/<archivo>.png`). Para compilar: `cd informe && pdflatex informe_e1_smnv3.tex` (requiere `run.sh` ya corrido, para que `figures/e1/` tenga las imágenes reales).
 
 ## Convenciones
 

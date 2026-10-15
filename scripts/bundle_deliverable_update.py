@@ -30,14 +30,14 @@ EXPECTED_FILES = [
      "run.sh (paso 00b) -- se genera junto con models_seed_cmip6.csv"),
     ("informe/model_registry.csv",
      "python3 scripts/build_model_registry.py (ya se corre solo al final de run.sh) -- "
-     "numero M001..M102 por modelo, cruzado con el eje de figures/sst_QD_vf.png"),
+     "numero M001..M102 por modelo, cruzado con el eje de figures/e1/sst_QD_vf.png"),
     ("data/processed/qc_report.csv",
      "run.sh (paso 06) -- necesita 02-05 ya corridos (datos descargados y procesados)"),
     ("data/processed/models_inventory_final.csv",
      "run.sh (paso 07) -- necesita 06 ya corrido"),
-    ("figures/sst_QD_vf.png",
+    ("figures/e1/sst_QD_vf.png",
      "python3 scripts/plot_qc_summary.py (ya se corre solo al final de run.sh)"),
-    ("figures/sst_2d_ERSSTv5.png",
+    ("figures/e1/sst_2d_ERSSTv5.png",
      "python3 scripts/plot_maps.py (ya se corre solo al final de run.sh) -- "
      "necesita data/processed/masked/ersstv5_region.nc (pasos 03-05) -- el observado"),
     # Los 3 modelos de grilla mas gruesa entre los seleccionados (ver
@@ -47,32 +47,32 @@ EXPECTED_FILES = [
     # criterio que el resto del proyecto) -- mapa 2D + series de caja de
     # cada uno. Nombre de archivo con el codigo M como primer segmento
     # (scripts/plot_common.py: sst_2d_filename/series_filename).
-    ("figures/M001_sst_2d_ACCESS-CM2.png",
+    ("figures/e1/M001_sst_2d_ACCESS-CM2.png",
      "python3 scripts/plot_maps.py (ya se corre solo al final de run.sh) -- "
      "necesita que ACCESS-CM2 este descargado y procesado (pasos 02-05)"),
-    ("figures/M002_sst_2d_ACCESS-ESM1-5.png",
+    ("figures/e1/M002_sst_2d_ACCESS-ESM1-5.png",
      "python3 scripts/plot_maps.py (ya se corre solo al final de run.sh) -- "
      "necesita que ACCESS-ESM1-5 este descargado y procesado (pasos 02-05)"),
-    ("figures/M057_sst_2d_GISS-E2-1-G.png",
+    ("figures/e1/M057_sst_2d_GISS-E2-1-G.png",
      "python3 scripts/plot_maps.py (ya se corre solo al final de run.sh) -- "
      "necesita que GISS-E2-1-G este descargado y procesado (pasos 02-05)"),
-    ("figures/M001_serie_ACCESS-CM2_sst_Nino3.4.png",
+    ("figures/e1/M001_serie_ACCESS-CM2_sst_Nino3.4.png",
      "python3 scripts/plot_box_series.py (ya se corre solo al final de run.sh)"),
-    ("figures/M001_serie_ACCESS-CM2_sst_Nino1+2.png",
+    ("figures/e1/M001_serie_ACCESS-CM2_sst_Nino1+2.png",
      "python3 scripts/plot_box_series.py (ya se corre solo al final de run.sh)"),
-    ("figures/M002_serie_ACCESS-ESM1-5_sst_Nino3.4.png",
+    ("figures/e1/M002_serie_ACCESS-ESM1-5_sst_Nino3.4.png",
      "python3 scripts/plot_box_series.py (ya se corre solo al final de run.sh)"),
-    ("figures/M002_serie_ACCESS-ESM1-5_sst_Nino1+2.png",
+    ("figures/e1/M002_serie_ACCESS-ESM1-5_sst_Nino1+2.png",
      "python3 scripts/plot_box_series.py (ya se corre solo al final de run.sh)"),
-    ("figures/M057_serie_GISS-E2-1-G_sst_Nino3.4.png",
+    ("figures/e1/M057_serie_GISS-E2-1-G_sst_Nino3.4.png",
      "python3 scripts/plot_box_series.py (ya se corre solo al final de run.sh)"),
-    ("figures/M057_serie_GISS-E2-1-G_sst_Nino1+2.png",
+    ("figures/e1/M057_serie_GISS-E2-1-G_sst_Nino1+2.png",
      "python3 scripts/plot_box_series.py (ya se corre solo al final de run.sh)"),
-    ("figures/boxplot_Nino3.4.png",
+    ("figures/e1/boxplot_Nino3.4.png",
      "python3 scripts/plot_boxplot_comparison.py (ya se corre solo al final de run.sh)"),
-    ("figures/boxplot_Nino1+2.png",
+    ("figures/e1/boxplot_Nino1+2.png",
      "python3 scripts/plot_boxplot_comparison.py (ya se corre solo al final de run.sh)"),
-    ("figures/region_nino_proj.png",
+    ("figures/e1/region_nino_proj.png",
      "python3 scripts/plot_region_nino_orthographic.py (ya se corre solo al final de run.sh) -- "
      "no depende de datos descargados, requiere cartopy (esta en environment.yml)"),
 ]

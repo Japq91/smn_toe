@@ -11,7 +11,7 @@ dibujaba la ventana de descarga, y guardaba en
 figures/region_nino_orthographic.png, un nombre que ningun informe
 referencia. informe/informe_e1_smn(v2).tex esperan
 figuras/region_nino_proj.png -- este script ahora escribe
-figures/region_nino_proj.png (misma convencion de carpeta que el resto
+figures/e1/region_nino_proj.png (misma convencion de carpeta que el resto
 de scripts/plot_*.py; la carpeta "figuras/" del .tex es responsabilidad
 de quien arma el PDF, no de este pipeline).
 
@@ -50,7 +50,7 @@ from matplotlib.ticker import MultipleLocator  # noqa: E402
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DOMAINS_YAML = BASE_DIR / "config/domains.yaml"
-DEFAULT_OUT = BASE_DIR / "figures/region_nino_proj.png"
+DEFAULT_OUT = BASE_DIR / "figures/e1/region_nino_proj.png"
 
 # Cajas de referencia geografica (no usadas por el proyecto, solo dan
 # contexto): no estan en config/domains.yaml a proposito.

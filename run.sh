@@ -194,6 +194,8 @@ python3 scripts/build_model_registry.py 2>&1 | tee -a logs/pipeline.log \
 # si todavia le faltan datos de entrada (ej. si esta corrida no llego a
 # descargar/procesar nada). No fatal: una figura que no se pudo generar no
 # debe bloquear el paquete de abajo, que precisamente avisa que falta.
+# Todas guardan en figures/e1/ (FIGURES_DIR de scripts/plot_common.py),
+# igual que E2 guarda en figures/e2/ (rune2.sh).
 for plot_script in plot_qc_summary.py plot_boxplot_comparison.py \
                     plot_region_nino_orthographic.py plot_maps.py plot_box_series.py; do
     echo "== Graficos: $plot_script ==" | tee -a logs/pipeline.log
