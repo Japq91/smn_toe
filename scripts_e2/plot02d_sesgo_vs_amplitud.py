@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""plot06 -- figura e2_02d_sesgo_vs_amplitud.png (seccion 2d de scripts_e2/plots_e2.ipynb).
+"""plot02d -- figura e2_02d_sesgo_vs_amplitud.png (seccion 2d de scripts_e2/plots_e2.ipynb).
 
 Sesgo de la media vs amplitud del ciclo anual (usa la tabla de la seccion 2c).
 
 Entrada: climatologia_<caja>_<ref>.csv (p02) + ERSSTv5
 Salida: figures/e2/e2_02d_sesgo_vs_amplitud.png
 
-Uso: python3 scripts_e2/plot06_sesgo_vs_amplitud.py   (o bash rune2plot.sh 06 06)
+Uso: python3 scripts_e2/plot02d_sesgo_vs_amplitud.py   (o bash rune2plot.sh 02d 02d)
 """
 import sys
 from pathlib import Path

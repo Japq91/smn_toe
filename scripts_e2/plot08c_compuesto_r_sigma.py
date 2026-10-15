@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""plot24 -- figura e2_08c_compuesto_r_sigma.png (seccion 8c de scripts_e2/plots_e2.ipynb).
+"""plot08c -- figura e2_08c_compuesto_r_sigma.png (seccion 8c de scripts_e2/plots_e2.ipynb).
 
 Zoom del Taylor compuesto (r vs σ normalizado), ventanas ±12, ±15 y ±18 meses.
 
 Entrada: taylor_compuesto_<INDICE>_vent<V>m_<y0>-<y1>.csv (p08), skill_score_vent<V>m_<y0>-<y1>.csv (p09)
 Salida: figures/e2/e2_08c_compuesto_r_sigma.png
 
-Uso: python3 scripts_e2/plot24_compuesto_r_sigma.py   (o bash rune2plot.sh 24 24)
+Uso: python3 scripts_e2/plot08c_compuesto_r_sigma.py   (o bash rune2plot.sh 08c 08c)
 """
 import sys
 from pathlib import Path

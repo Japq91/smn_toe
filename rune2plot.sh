@@ -1,15 +1,21 @@
 #!/usr/bin/env bash
 # Figuras del Entregable 2: corre solo los scripts de graficos
-# scripts_e2/plotNN_*.py (salidos de scripts_e2/plots_e2.ipynb), en orden,
-# sobre lo que rune2.sh ya dejo en data/processed/e2/.
+# scripts_e2/plot<codigo>_<nombre>.py (salidos de scripts_e2/plots_e2.ipynb),
+# en orden, sobre lo que rune2.sh ya dejo en data/processed/e2/. Cada
+# script lleva el codigo de la figura que genera:
+# plot07c_magnitud_eventos.py -> figures/e2/e2_07c_magnitud_eventos.png.
 #
 # Uso: bash rune2plot.sh [DESDE] [HASTA]
-#   - Sin args: plot01..plot28 (todas las figuras).
-#   - Con args: rango por numero (ej. bash rune2plot.sh 17 21 rehace
-#     solo las figuras de eventos; bash rune2plot.sh 28 28 solo el portrait).
+#   - Sin args: todas las figuras (01a ... 10).
+#   - Con args: rango por codigo de figura, inclusive. Un codigo sin
+#     letra abarca toda su seccion:
+#       bash rune2plot.sh 07          -> 07a..07e (solo eventos)
+#       bash rune2plot.sh 07c         -> solo 07c
+#       bash rune2plot.sh 04b 06      -> 04b..06b
+#       bash rune2plot.sh 10          -> solo el portrait (y su CSV)
 #
-# Salida: figures/e2/e2_<seccion>_<nombre>.png (mismo nombre que el
-# notebook) + figures/e2/e2_10_resumen_metricas.csv (plot28). Log en
+# Salida: figures/e2/e2_<codigo>_<nombre>.png (mismo nombre que el
+# notebook) + figures/e2/e2_10_resumen_metricas.csv (plot10). Log en
 # logs/plots_e2.log. Una figura que falla no corta las demas (no
 # dependen entre si); al final se listan las que fallaron y el script
 # sale con error si hubo alguna.
@@ -20,7 +26,8 @@ mkdir -p logs
 # Argumentos leidos ANTES de activar conda: los scripts activate.d de
 # algunos paquetes pueden pisar $1/$2 del script que los invoca.
 DESDE="${1:-01}"
-HASTA="${2:-99}"
+HASTA="${2:-$DESDE}"
+[ "$#" -eq 0 ] && HASTA="99"
 
 # Entorno conda: mismo bloque que run.sh / rune2.sh.
 set +eu
@@ -40,10 +47,11 @@ export PYTHONNOUSERSITE=1
 
 LOG_FILE="logs/plots_e2.log"
 
-if ! [[ "$DESDE" =~ ^[0-9]+$ && "$HASTA" =~ ^[0-9]+$ ]]; then
-    echo "DESDE/HASTA deben ser numeros de plot (ej. 01 28), se recibio: desde='$DESDE' hasta='$HASTA'" >&2
+if ! [[ "$DESDE" =~ ^[0-9]{2}[a-z]?$ && "$HASTA" =~ ^[0-9]{2}[a-z]?$ ]]; then
+    echo "DESDE/HASTA deben ser codigos de figura (ej. 07, 07c, 10), se recibio: desde='$DESDE' hasta='$HASTA'" >&2
     exit 1
 fi
+export LC_ALL=C   # comparacion de codigos por orden ASCII (07 < 07a < 07b < 08)
 
 if ! python3 -c "import numpy, pandas, xarray, netCDF4, scipy, matplotlib" 2>/dev/null; then
     echo "Al entorno de Python ($(command -v python3)) le faltan dependencias de los graficos de E2." >&2
@@ -61,10 +69,15 @@ fi
 echo "== rune2plot.sh: $(date '+%Y-%m-%d %H:%M:%S') (plots $DESDE..$HASTA) ==" | tee -a "$LOG_FILE"
 
 FALLIDOS=()
-for script in scripts_e2/plot[0-9][0-9]_*.py; do
-    nn=$(basename "$script" | sed -E 's/^plot([0-9]{2})_.*/\1/')
-    [ "$nn" = "00" ] && continue   # plot00_comun.py: helpers, no es una figura
-    if [ $((10#$nn)) -lt $((10#$DESDE)) ] || [ $((10#$nn)) -gt $((10#$HASTA)) ]; then
+for script in scripts_e2/plot[0-9][0-9]*_*.py; do
+    code=$(basename "$script" | sed -E 's/^plot([0-9]{2}[a-z]?)_.*/\1/')
+    [ "$code" = "00" ] && continue   # plot00_comun.py: helpers, no es una figura
+    # Dentro del rango si code >= DESDE y (code <= HASTA o code empieza
+    # con HASTA, para que "07" como limite superior incluya 07a..07e).
+    if [[ "$code" < "$DESDE" ]]; then
+        continue
+    fi
+    if [[ "$code" > "$HASTA" && "$code" != "$HASTA"* ]]; then
         continue
     fi
     echo "== $(basename "$script") ==" | tee -a "$LOG_FILE"

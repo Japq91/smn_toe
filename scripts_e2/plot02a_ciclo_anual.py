@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""plot04 -- figura e2_02a_ciclo_anual.png (seccion 2a de scripts_e2/plots_e2.ipynb).
+"""plot02a -- figura e2_02a_ciclo_anual.png (seccion 2a de scripts_e2/plots_e2.ipynb).
 
 Ciclo anual: 40 modelos + ERSSTv5 (absoluto y sin la media anual).
 
 Entrada: climatologia_<caja>_<ref>.csv (p02) + ERSSTv5
 Salida: figures/e2/e2_02a_ciclo_anual.png
 
-Uso: python3 scripts_e2/plot04_ciclo_anual.py   (o bash rune2plot.sh 04 04)
+Uso: python3 scripts_e2/plot02a_ciclo_anual.py   (o bash rune2plot.sh 02a 02a)
 """
 import sys
 from pathlib import Path

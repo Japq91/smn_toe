@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""plot02 -- figura e2_01b_sesgo_por_modelo.png (seccion 1b de scripts_e2/plots_e2.ipynb).
+"""plot01b -- figura e2_01b_sesgo_por_modelo.png (seccion 1b de scripts_e2/plots_e2.ipynb).
 
 Sesgo por modelo (Pacifico tropical 120E-70W), un mapa por modelo.
 
 Entrada: sesgo_tsm_ref<ref>.nc (p03)
 Salida: figures/e2/e2_01b_sesgo_por_modelo.png
 
-Uso: python3 scripts_e2/plot02_sesgo_por_modelo.py   (o bash rune2plot.sh 02 02)
+Uso: python3 scripts_e2/plot01b_sesgo_por_modelo.py   (o bash rune2plot.sh 01b 01b)
 """
 import sys
 from pathlib import Path

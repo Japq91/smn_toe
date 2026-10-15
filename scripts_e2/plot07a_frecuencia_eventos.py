@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""plot17 -- figura e2_07a_frecuencia_eventos.png (seccion 7a de scripts_e2/plots_e2.ipynb).
+"""plot07a -- figura e2_07a_frecuencia_eventos.png (seccion 7a de scripts_e2/plots_e2.ipynb).
 
 Frecuencia de eventos por categoria (oficial y relativa), eventos por siglo.
 
 Entrada: eventos_<INDICE>_<y0>-<y1>.csv (p07), indices_enso_<y0>-<y1>.csv (p01)
 Salida: figures/e2/e2_07a_frecuencia_eventos.png
 
-Uso: python3 scripts_e2/plot17_frecuencia_eventos.py   (o bash rune2plot.sh 17 17)
+Uso: python3 scripts_e2/plot07a_frecuencia_eventos.py   (o bash rune2plot.sh 07a 07a)
 """
 import sys
 from pathlib import Path

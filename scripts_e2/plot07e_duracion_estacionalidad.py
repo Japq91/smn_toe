@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""plot21 -- figura e2_07e_duracion_estacionalidad.png (seccion 7e de scripts_e2/plots_e2.ipynb).
+"""plot07e -- figura e2_07e_duracion_estacionalidad.png (seccion 7e de scripts_e2/plots_e2.ipynb).
 
 Distribucion de duraciones y estacionalidad del pico (mes calendario).
 
 Entrada: eventos_<INDICE>_<y0>-<y1>.csv (p07)
 Salida: figures/e2/e2_07e_duracion_estacionalidad.png
 
-Uso: python3 scripts_e2/plot21_duracion_estacionalidad.py   (o bash rune2plot.sh 21 21)
+Uso: python3 scripts_e2/plot07e_duracion_estacionalidad.py   (o bash rune2plot.sh 07e 07e)
 """
 import sys
 from pathlib import Path

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""plot25 -- figura e2_08d_sensibilidad_ventana.png (seccion 8d de scripts_e2/plots_e2.ipynb).
+"""plot08d -- figura e2_08d_sensibilidad_ventana.png (seccion 8d de scripts_e2/plots_e2.ipynb).
 
 Sensibilidad al ancho de ventana (12 vs 15 y 12 vs 18 meses).
 
 Entrada: taylor_compuesto_<INDICE>_vent<V>m_<y0>-<y1>.csv (p08), skill_score_vent<V>m_<y0>-<y1>.csv (p09)
 Salida: figures/e2/e2_08d_sensibilidad_ventana.png
 
-Uso: python3 scripts_e2/plot25_sensibilidad_ventana.py   (o bash rune2plot.sh 25 25)
+Uso: python3 scripts_e2/plot08d_sensibilidad_ventana.py   (o bash rune2plot.sh 08d 08d)
 """
 import sys
 from pathlib import Path

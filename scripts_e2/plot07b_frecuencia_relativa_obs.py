@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""plot18 -- figura e2_07b_frecuencia_relativa_obs.png (seccion 7b de scripts_e2/plots_e2.ipynb).
+"""plot07b -- figura e2_07b_frecuencia_relativa_obs.png (seccion 7b de scripts_e2/plots_e2.ipynb).
 
 Mapa de calor de frecuencia por categoria oficial, relativa a ERSSTv5.
 
 Entrada: eventos_<INDICE>_<y0>-<y1>.csv (p07), indices_enso_<y0>-<y1>.csv (p01)
 Salida: figures/e2/e2_07b_frecuencia_relativa_obs.png
 
-Uso: python3 scripts_e2/plot18_frecuencia_relativa_obs.py   (o bash rune2plot.sh 18 18)
+Uso: python3 scripts_e2/plot07b_frecuencia_relativa_obs.py   (o bash rune2plot.sh 07b 07b)
 """
 import sys
 from pathlib import Path

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""plot27 -- figura e2_09b_heatmap_skill.png (seccion 9b de scripts_e2/plots_e2.ipynb).
+"""plot09b -- figura e2_09b_heatmap_skill.png (seccion 9b de scripts_e2/plots_e2.ipynb).
 
 Mapa de calor de S (modelos x componentes) y concordancia entre indices, ventanas ±12, ±15 y ±18 meses.
 
 Entrada: skill_score_vent<V>m_<y0>-<y1>.csv (p09)
 Salida: figures/e2/e2_09b_heatmap_skill.png
 
-Uso: python3 scripts_e2/plot27_heatmap_skill.py   (o bash rune2plot.sh 27 27)
+Uso: python3 scripts_e2/plot09b_heatmap_skill.py   (o bash rune2plot.sh 09b 09b)
 """
 import sys
 from pathlib import Path

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""plot07 -- figura e2_03a_variabilidad_multimodelo.png (seccion 3a de scripts_e2/plots_e2.ipynb).
+"""plot03a -- figura e2_03a_variabilidad_multimodelo.png (seccion 3a de scripts_e2/plots_e2.ipynb).
 
 Variabilidad: mediana multimodelo, acuerdo de signo y dispersion entre modelos.
 
 Entrada: variabilidad_tsm_ref<ref>.nc (p04)
 Salida: figures/e2/e2_03a_variabilidad_multimodelo.png
 
-Uso: python3 scripts_e2/plot07_variabilidad_multimodelo.py   (o bash rune2plot.sh 07 07)
+Uso: python3 scripts_e2/plot03a_variabilidad_multimodelo.py   (o bash rune2plot.sh 03a 03a)
 """
 import sys
 from pathlib import Path

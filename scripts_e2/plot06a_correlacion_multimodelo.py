@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""plot15 -- figura e2_06a_correlacion_multimodelo.png (seccion 6a de scripts_e2/plots_e2.ipynb).
+"""plot06a -- figura e2_06a_correlacion_multimodelo.png (seccion 6a de scripts_e2/plots_e2.ipynb).
 
 Correlacion multimodelo y % de modelos con correlacion significativa.
 
 Entrada: correlacion_tsm_ref<ref>.nc (p06)
 Salida: figures/e2/e2_06a_correlacion_multimodelo.png
 
-Uso: python3 scripts_e2/plot15_correlacion_multimodelo.py   (o bash rune2plot.sh 15 15)
+Uso: python3 scripts_e2/plot06a_correlacion_multimodelo.py   (o bash rune2plot.sh 06a 06a)
 """
 import sys
 from pathlib import Path

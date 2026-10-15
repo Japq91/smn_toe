@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""plot10 -- figura e2_04a_indices_envolvente.png (seccion 4a de scripts_e2/plots_e2.ipynb).
+"""plot04a -- figura e2_04a_indices_envolvente.png (seccion 4a de scripts_e2/plots_e2.ipynb).
 
 ONI, RONI e ICEN -- envolvente multimodelo vs OBS.
 
 Entrada: indices_enso_<y0>-<y1>.csv (p01) + OBS
 Salida: figures/e2/e2_04a_indices_envolvente.png
 
-Uso: python3 scripts_e2/plot10_indices_envolvente.py   (o bash rune2plot.sh 10 10)
+Uso: python3 scripts_e2/plot04a_indices_envolvente.py   (o bash rune2plot.sh 04a 04a)
 """
 import sys
 from pathlib import Path

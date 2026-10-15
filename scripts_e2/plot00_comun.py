@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 """plot00 -- configuracion, helpers de dibujo y carga de datos compartidos
-por los scripts de figuras de E2 (scripts_e2/plot01_*.py ... plot28_*.py).
+por los scripts de figuras de E2 (scripts_e2/plot01a_*.py ... plot10_*.py).
 
-No genera ninguna figura: cada plotNN_*.py hace 'from plot00_comun import *'
-y dibuja una sola figura, con el mismo codigo de la seccion correspondiente
-de scripts_e2/plots_e2.ipynb (de donde salieron estos scripts). Las
-figuras se guardan en figures/e2/e2_<seccion>_<nombre>.png -- mismo nombre
-que el notebook, que es el que citan informe/borradores/.
+No genera ninguna figura: cada plot<codigo>_<nombre>.py hace
+'from plot00_comun import *' y dibuja una sola figura,
+figures/e2/e2_<codigo>_<nombre>.png (ej. plot07c_magnitud_eventos.py ->
+e2_07c_magnitud_eventos.png), con el mismo codigo de la seccion
+correspondiente de scripts_e2/plots_e2.ipynb (de donde salieron estos
+scripts) -- mismo nombre de PNG que el notebook, que es el que citan
+informe/borradores/.
 
 Datos de entrada: data/processed/e2/ (salidas de p01-p09, ver rune2.sh).
 Las cargas comunes van con lru_cache: un script que usa varias (ej.
-plot28_portrait_resumen.py) lee cada archivo una sola vez.
+plot10_portrait_resumen.py) lee cada archivo una sola vez.
 """
 import logging
 import sys

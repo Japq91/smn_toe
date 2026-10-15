@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""plot01 -- figura e2_01a_sesgo_multimodelo.png (seccion 1a de scripts_e2/plots_e2.ipynb).
+"""plot01a -- figura e2_01a_sesgo_multimodelo.png (seccion 1a de scripts_e2/plots_e2.ipynb).
 
 Sesgo medio multimodelo, acuerdo de signo y dispersion entre modelos.
 
 Entrada: sesgo_tsm_ref<ref>.nc (p03)
 Salida: figures/e2/e2_01a_sesgo_multimodelo.png
 
-Uso: python3 scripts_e2/plot01_sesgo_multimodelo.py   (o bash rune2plot.sh 01 01)
+Uso: python3 scripts_e2/plot01a_sesgo_multimodelo.py   (o bash rune2plot.sh 01a 01a)
 """
 import sys
 from pathlib import Path

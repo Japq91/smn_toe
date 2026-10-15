@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""plot26 -- figura e2_09a_ranking_skill.png (seccion 9a de scripts_e2/plots_e2.ipynb).
+"""plot09a -- figura e2_09a_ranking_skill.png (seccion 9a de scripts_e2/plots_e2.ipynb).
 
 Ranking por S_final, con el S de cada indice, ventanas ±12, ±15 y ±18 meses.
 
 Entrada: skill_score_vent<V>m_<y0>-<y1>.csv (p09)
 Salida: figures/e2/e2_09a_ranking_skill.png
 
-Uso: python3 scripts_e2/plot26_ranking_skill.py   (o bash rune2plot.sh 26 26)
+Uso: python3 scripts_e2/plot09a_ranking_skill.py   (o bash rune2plot.sh 09a 09a)
 """
 import sys
 from pathlib import Path

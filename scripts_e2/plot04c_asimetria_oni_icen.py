@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""plot12 -- figura e2_04c_asimetria_oni_icen.png (seccion 4c de scripts_e2/plots_e2.ipynb).
+"""plot04c -- figura e2_04c_asimetria_oni_icen.png (seccion 4c de scripts_e2/plots_e2.ipynb).
 
 Asimetria ICEN vs ONI.
 
 Entrada: indices_enso_<y0>-<y1>.csv (p01) + OBS
 Salida: figures/e2/e2_04c_asimetria_oni_icen.png
 
-Uso: python3 scripts_e2/plot12_asimetria_oni_icen.py   (o bash rune2plot.sh 12 12)
+Uso: python3 scripts_e2/plot04c_asimetria_oni_icen.py   (o bash rune2plot.sh 04c 04c)
 """
 import sys
 from pathlib import Path

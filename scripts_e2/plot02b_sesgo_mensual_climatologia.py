@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""plot05 -- figura e2_02b_sesgo_mensual_climatologia.png (seccion 2b de scripts_e2/plots_e2.ipynb).
+"""plot02b -- figura e2_02b_sesgo_mensual_climatologia.png (seccion 2b de scripts_e2/plots_e2.ipynb).
 
 Sesgo mensual de la climatologia (modelo - ERSSTv5), por caja.
 
 Entrada: climatologia_<caja>_<ref>.csv (p02) + ERSSTv5
 Salida: figures/e2/e2_02b_sesgo_mensual_climatologia.png
 
-Uso: python3 scripts_e2/plot05_sesgo_mensual_climatologia.py   (o bash rune2plot.sh 05 05)
+Uso: python3 scripts_e2/plot02b_sesgo_mensual_climatologia.py   (o bash rune2plot.sh 02b 02b)
 """
 import sys
 from pathlib import Path

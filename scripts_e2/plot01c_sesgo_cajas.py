@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""plot03 -- figura e2_01c_sesgo_cajas.png (seccion 1c de scripts_e2/plots_e2.ipynb).
+"""plot01c -- figura e2_01c_sesgo_cajas.png (seccion 1c de scripts_e2/plots_e2.ipynb).
 
 Sesgo medio en las cajas Niño3.4 y Niño1+2, por modelo.
 
 Entrada: sesgo_tsm_ref<ref>.nc (p03)
 Salida: figures/e2/e2_01c_sesgo_cajas.png
 
-Uso: python3 scripts_e2/plot03_sesgo_cajas.py   (o bash rune2plot.sh 03 03)
+Uso: python3 scripts_e2/plot01c_sesgo_cajas.py   (o bash rune2plot.sh 01c 01c)
 """
 import sys
 from pathlib import Path

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""plot20 -- figura e2_07d_frecuencia_magnitud_duracion.png (seccion 7d de scripts_e2/plots_e2.ipynb).
+"""plot07d -- figura e2_07d_frecuencia_magnitud_duracion.png (seccion 7d de scripts_e2/plots_e2.ipynb).
 
 Frecuencia vs magnitud vs duracion de los eventos.
 
 Entrada: eventos_<INDICE>_<y0>-<y1>.csv (p07), indices_enso_<y0>-<y1>.csv (p01)
 Salida: figures/e2/e2_07d_frecuencia_magnitud_duracion.png
 
-Uso: python3 scripts_e2/plot20_frecuencia_magnitud_duracion.py   (o bash rune2plot.sh 20 20)
+Uso: python3 scripts_e2/plot07d_frecuencia_magnitud_duracion.py   (o bash rune2plot.sh 07d 07d)
 """
 import sys
 from pathlib import Path

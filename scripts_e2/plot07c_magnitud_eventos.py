@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""plot19 -- figura e2_07c_magnitud_eventos.png (seccion 7c de scripts_e2/plots_e2.ipynb).
+"""plot07c -- figura e2_07c_magnitud_eventos.png (seccion 7c de scripts_e2/plots_e2.ipynb).
 
 Magnitud del pico de cada evento (boxplot por dataset, ordenado por mediana).
 
 Entrada: eventos_<INDICE>_<y0>-<y1>.csv (p07)
 Salida: figures/e2/e2_07c_magnitud_eventos.png
 
-Uso: python3 scripts_e2/plot19_magnitud_eventos.py   (o bash rune2plot.sh 19 19)
+Uso: python3 scripts_e2/plot07c_magnitud_eventos.py   (o bash rune2plot.sh 07c 07c)
 """
 import sys
 from pathlib import Path

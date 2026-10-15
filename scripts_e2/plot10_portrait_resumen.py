@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""plot28 -- figura e2_10_portrait_resumen.png (seccion 10 y 10b de scripts_e2/plots_e2.ipynb).
+"""plot10 -- figura e2_10_portrait_resumen.png (seccion 10 y 10b de scripts_e2/plots_e2.ipynb).
 
 Resumen cruzado (portrait diagram) y tabla de errores absolutos por modelo.
 
@@ -7,7 +7,7 @@ Entrada: salidas de p01-p09 (sesgo, climatologia, variabilidad, indices, eventos
 Salida: figures/e2/e2_10_portrait_resumen.png
 y figures/e2/e2_10_resumen_metricas.csv (tabla 10b)
 
-Uso: python3 scripts_e2/plot28_portrait_resumen.py   (o bash rune2plot.sh 28 28)
+Uso: python3 scripts_e2/plot10_portrait_resumen.py   (o bash rune2plot.sh 10 10)
 """
 import sys
 from pathlib import Path

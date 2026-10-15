@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""plot13 -- figura e2_04d_espectro_indices.png (seccion 4d de scripts_e2/plots_e2.ipynb).
+"""plot04d -- figura e2_04d_espectro_indices.png (seccion 4d de scripts_e2/plots_e2.ipynb).
 
 Espectro de potencia (Welch) -- periodo dominante del ENOS.
 
 Entrada: indices_enso_<y0>-<y1>.csv (p01) + OBS
 Salida: figures/e2/e2_04d_espectro_indices.png
 
-Uso: python3 scripts_e2/plot13_espectro_indices.py   (o bash rune2plot.sh 13 13)
+Uso: python3 scripts_e2/plot04d_espectro_indices.py   (o bash rune2plot.sh 04d 04d)
 """
 import sys
 from pathlib import Path

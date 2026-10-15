@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""plot08 -- figura e2_03b_variabilidad_por_modelo.png (seccion 3b de scripts_e2/plots_e2.ipynb).
+"""plot03b -- figura e2_03b_variabilidad_por_modelo.png (seccion 3b de scripts_e2/plots_e2.ipynb).
 
 Variabilidad por modelo (Pacifico tropical 120E-70W), un mapa por modelo.
 
 Entrada: variabilidad_tsm_ref<ref>.nc (p04)
 Salida: figures/e2/e2_03b_variabilidad_por_modelo.png
 
-Uso: python3 scripts_e2/plot08_variabilidad_por_modelo.py   (o bash rune2plot.sh 08 08)
+Uso: python3 scripts_e2/plot03b_variabilidad_por_modelo.py   (o bash rune2plot.sh 03b 03b)
 """
 import sys
 from pathlib import Path

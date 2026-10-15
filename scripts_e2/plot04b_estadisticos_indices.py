@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""plot11 -- figura e2_04b_estadisticos_indices.png (seccion 4b de scripts_e2/plots_e2.ipynb).
+"""plot04b -- figura e2_04b_estadisticos_indices.png (seccion 4b de scripts_e2/plots_e2.ipynb).
 
 σ, asimetria (skewness) y curtosis de cada indice por modelo.
 
 Entrada: indices_enso_<y0>-<y1>.csv (p01) + OBS
 Salida: figures/e2/e2_04b_estadisticos_indices.png
 
-Uso: python3 scripts_e2/plot11_estadisticos_indices.py   (o bash rune2plot.sh 11 11)
+Uso: python3 scripts_e2/plot04b_estadisticos_indices.py   (o bash rune2plot.sh 04b 04b)
 """
 import sys
 from pathlib import Path

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""plot16 -- figura e2_06b_correlacion_por_modelo.png (seccion 6b de scripts_e2/plots_e2.ipynb).
+"""plot06b -- figura e2_06b_correlacion_por_modelo.png (seccion 6b de scripts_e2/plots_e2.ipynb).
 
 Correlacion por modelo (Pacifico tropical 120E-70W), un mapa por modelo.
 
 Entrada: correlacion_tsm_ref<ref>.nc (p06)
 Salida: figures/e2/e2_06b_correlacion_por_modelo.png
 
-Uso: python3 scripts_e2/plot16_correlacion_por_modelo.py   (o bash rune2plot.sh 16 16)
+Uso: python3 scripts_e2/plot06b_correlacion_por_modelo.py   (o bash rune2plot.sh 06b 06b)
 """
 import sys
 from pathlib import Path

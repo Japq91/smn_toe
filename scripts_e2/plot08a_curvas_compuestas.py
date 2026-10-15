@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""plot22 -- figura e2_08a_curvas_compuestas.png (seccion 8a de scripts_e2/plots_e2.ipynb).
+"""plot08a -- figura e2_08a_curvas_compuestas.png (seccion 8a de scripts_e2/plots_e2.ipynb).
 
 Curvas compuestas (evento tipico) centradas en el pico, ventanas ±12, ±15 y ±18 meses.
 
 Entrada: eventos_<INDICE>_<y0>-<y1>.csv (p07), indices_enso_<y0>-<y1>.csv (p01)
 Salida: figures/e2/e2_08a_curvas_compuestas.png
 
-Uso: python3 scripts_e2/plot22_curvas_compuestas.py   (o bash rune2plot.sh 22 22)
+Uso: python3 scripts_e2/plot08a_curvas_compuestas.py   (o bash rune2plot.sh 08a 08a)
 """
 import sys
 from pathlib import Path
