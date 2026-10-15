@@ -32,7 +32,7 @@ del equipo, justificada por el argumento del parrafo anterior (evade
 el problema de fase), no por precedente bibliografico directo.
 
 Metodologia:
-  1. Para cada evento de eventos_<INDICE>_ref<ref>.csv: ventana de
+  1. Para cada evento de eventos_<INDICE>_<y0>-<y1>.csv: ventana de
      +-VENTANA_MESES centrada en fecha_pico. Se corre con dos anchos
      (decision del usuario, sin cita que fije un valor "correcto"):
      VENTANA_MESES=12 (25 puntos, resultado principal) y
@@ -53,15 +53,15 @@ Metodologia:
 
 Salida: 3 archivos por corrida, mismo formato de 4 columnas que
 taylor_*.csv (fila OBS + M01..M40), con el ancho de ventana en el
-nombre: taylor_compuesto_ONI_vent<V>m_ref<ref>.csv,
-taylor_compuesto_RONI_vent<V>m_ref<ref>.csv,
-taylor_compuesto_ICEN_vent<V>m_ref<ref>.csv (V=12, 15 o 18 segun
+nombre: taylor_compuesto_ONI_vent<V>m_<y0>-<y1>.csv,
+taylor_compuesto_RONI_vent<V>m_<y0>-<y1>.csv,
+taylor_compuesto_ICEN_vent<V>m_<y0>-<y1>.csv (V=12, 15 o 18 segun
 VENTANA_MESES al momento de correr). p09_skill_score.py consume solo
 la version V=12 (resultado principal); V=15 queda como sensibilidad,
 sin alimentar el score final.
 
 Ejecutable de forma independiente: lee directamente
-data/processed/e2/eventos_*_ref<REF_INICIO>-<REF_FIN>.csv (salida de
+data/processed/e2/eventos_*_<y0>-<y1>.csv (salida de
 p07_eventos.py -- si no existe, avisa y corta) y
 data/processed/e2/indices_enso_<y0>-<y1>.csv (salida
 de p01_indices_enso.py).
@@ -79,16 +79,13 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import common_e2 as c2
 
-# Periodo de referencia -- EDITAR ACA para cambiarlo; debe coincidir
-# con el usado en p01_indices_enso.py y p07_eventos.py (busca los
-# archivos de entrada por este sufijo). Independiente del
-# REF_INICIO/REF_FIN de los demas pXX.
-REF_INICIO = 1981
-REF_FIN = 2014
+# Sin REF_INICIO/REF_FIN: entrada y salida llevan el periodo real de
+# los indices de p01 (c2.indices_period(), ej. 1900-2014), igual que
+# p07_eventos.py.
 
 # Ancho de la ventana compuesta -- EDITAR ACA para cambiarlo; el
 # nombre del archivo de salida se arma solo a partir de esta constante
-# (mismo patron que REF_INICIO/REF_FIN). Sin cita que fije un valor
+# (mismo patron que el periodo del nombre). Sin cita que fije un valor
 # "correcto" (ver nota del docstring del modulo) -- decision propia,
 # corrida con tres anchos: 12 (resultado principal, 25 puntos), 15 y 18
 # (sensibilidad, 31 y 37 puntos). Tambien se puede pasar por linea de
@@ -97,9 +94,9 @@ VENTANA_MESES = 12
 
 
 def eventos_path(index_key):
-    p = c2.E2_DIR / f"eventos_{index_key}_ref{REF_INICIO}-{REF_FIN}.csv"
+    p = c2.E2_DIR / f"eventos_{index_key}_{c2.indices_period()}.csv"
     if not p.exists():
-        sys.exit(f"Falta {p}. Correr antes p07_eventos.py con REF_INICIO={REF_INICIO}, REF_FIN={REF_FIN}.")
+        sys.exit(f"Falta {p}. Correr antes p07_eventos.py.")
     return p
 
 
@@ -173,7 +170,7 @@ def main():
         VENTANA_MESES = int(sys.argv[1])
     for index_key in ("ONI", "RONI", "ICEN"):
         df = taylor_compuesto_tabla(index_key)
-        out_path = c2.E2_DIR / f"taylor_compuesto_{index_key}_vent{VENTANA_MESES}m_ref{REF_INICIO}-{REF_FIN}.csv"
+        out_path = c2.E2_DIR / f"taylor_compuesto_{index_key}_vent{VENTANA_MESES}m_{c2.indices_period()}.csv"
         df.to_csv(out_path, float_format="%.4f")
         print(f"Listo: {out_path} ({df.shape[0]} filas, {df.shape[1]} columnas)", file=sys.stderr)
 

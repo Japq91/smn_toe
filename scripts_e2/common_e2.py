@@ -269,6 +269,13 @@ def find_indices_csv():
         sys.exit(f"Falta {pattern}. Correr antes p01_indices_enso.py.")
     return matches[-1]
 
+def indices_period():
+    """'<y0>-<y1>' del CSV de indices de p01 (ej. '1900-2014'): la
+    ventana real de datos sobre la que trabajan p07/p08/p09 -- se usa
+    en sus nombres de archivo en vez de un 'ref<periodo>' que esos
+    calculos no aplican."""
+    return Path(find_indices_csv()).stem.replace("indices_enso_", "")
+
 def obs_indices():
     """indices_enso_*.csv (p01) deliberadamente NO incluye ERSSTv5
     (columnas solo M01..M40, pedido explicito del usuario) -- se

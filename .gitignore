@@ -62,3 +62,9 @@ informe/borradores/informe_e1_smnv3.pdf
 # Salidas de corridas (nohup.out, logs/run_*.out, etc.): por corrida/maquina,
 # no se versionan.
 *.out
+# Resultados de E2 (scripts_e2/pXX, rune2.sh): se regeneran en cada
+# maquina, no se versionan. Solo quedan el README y el registro de
+# modelos (insumo, no lo genera ningun script).
+data/processed/e2/*
+!data/processed/e2/README.md
+!data/processed/e2/model_registry_e2.csv

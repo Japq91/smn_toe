@@ -16,9 +16,9 @@
 #   p04 variabilidad_tsm_ref<ref>.nc        <- masked/
 #   p05 taylor_<caja>_ref<ref>.csv          <- masked/
 #   p06 correlacion_tsm_ref<ref>.nc         <- masked/
-#   p07 eventos_<INDICE>_ref<ref>.csv       <- p01
+#   p07 eventos_<INDICE>_<y0>-<y1>.csv      <- p01  (<y0>-<y1> = periodo de indices_enso)
 #   p08 taylor_compuesto_<INDICE>_vent<N>m  <- p01 + p07  (N = 12, 15, 18)
-#   p09 skill_score_[vent<N>m_]ref<ref>.csv <- p05 + p08  (N = 12, 15, 18)
+#   p09 skill_score_vent<N>m_<y0>-<y1>.csv  <- p05 + p08  (N = 12, 15, 18)
 # p02-p06 son independientes entre sí; p07-p09 son una cadena y deben
 # correr en ese orden después de p01/p05. Todo lo que generan es lo que
 # leen después los gráficos de E2 (scripts_e2/plots_e2.ipynb, figures/e2/).

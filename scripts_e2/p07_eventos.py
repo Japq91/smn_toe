@@ -39,8 +39,8 @@ sigma_norm muy distinta entre si, ver taylor_*.csv):
 
 Salida: 3 archivos (uno por indice), formato LARGO (una fila por
 evento detectado, no una fila por modelo -- un modelo puede tener 0 o
-varios eventos): eventos_ONI_ref<ref>.csv, eventos_RONI_ref<ref>.csv,
-eventos_ICEN_ref<ref>.csv. Columnas: number, inicio, fin, fecha_pico,
+varios eventos): eventos_ONI_<y0>-<y1>.csv, eventos_RONI_<y0>-<y1>.csv,
+eventos_ICEN_<y0>-<y1>.csv (mismo periodo que indices_enso_<y0>-<y1>.csv). Columnas: number, inicio, fin, fecha_pico,
 duracion_meses, magnitud_pico, categoria_oficial, categoria_relativa.
 fecha_pico la usa p08_taylor_compuesto.py para centrar la ventana del
 compuesto.
@@ -62,12 +62,10 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import common_e2 as c2
 
-# Periodo de referencia -- EDITAR ACA para cambiarlo; debe coincidir
-# con el usado al correr p01_indices_enso.py (busca el archivo de
-# indices por este sufijo). Independiente del REF_INICIO/REF_FIN de
-# los demas pXX.
-REF_INICIO = 1981
-REF_FIN = 2014
+# Sin REF_INICIO/REF_FIN: los eventos se buscan en toda la serie de
+# indices de p01 (cada indice con sus propias bases, ver common_e2.py),
+# asi que el nombre de salida lleva ese mismo periodo
+# (c2.indices_period(), ej. eventos_ONI_1900-2014.csv).
 
 # Umbrales oficiales: (inicio, duracion_minima_meses, categorias)
 # categorias: lista de (min, max, nombre), evaluada sobre la magnitud
@@ -174,7 +172,7 @@ def main():
     for index_key in ("ONI", "RONI", "ICEN"):
         print(f"  Detectando eventos {index_key} ...", file=sys.stderr)
         eventos = eventos_para_indice(df, index_key)
-        out_path = c2.E2_DIR / f"eventos_{index_key}_ref{REF_INICIO}-{REF_FIN}.csv"
+        out_path = c2.E2_DIR / f"eventos_{index_key}_{c2.indices_period()}.csv"
         eventos.to_csv(out_path, index=False, float_format="%.4f")
         print(f"  Listo: {out_path} ({len(eventos)} eventos)", file=sys.stderr)
 

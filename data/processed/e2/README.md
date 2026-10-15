@@ -270,7 +270,7 @@ Scaling (mismo criterio que el resto de E2). Es la propuesta del
 usuario, listada como punto (13.) del cálculo, no del listado original
 de 12 puntos.
 
-## `eventos_<INDICE>_ref<ref>.csv`
+## `eventos_<INDICE>_<y0>-<y1>.csv`
 
 Tres archivos, uno por índice (`ONI`, `RONI`, `ICEN`) -- punto (11.)
 del cálculo. A diferencia de todos los archivos anteriores, formato
@@ -328,11 +328,11 @@ corregido durante la construcción de este script.
 Generado por `scripts_e2/p07_eventos.py`. Insumo directo del punto
 (12.) (`p08_taylor_compuesto.py`, ver abajo) -- no independientes.
 
-## `taylor_compuesto_<INDICE>_vent<V>m_ref<ref>.csv`
+## `taylor_compuesto_<INDICE>_vent<V>m_<y0>-<y1>.csv`
 
 Nueve archivos, uno por índice (`ONI`, `RONI`, `ICEN`) × ancho de
 ventana (`V=12`, `V=15`, `V=18`) -- punto (12.) del cálculo, **no
-independiente**: consume directamente `eventos_<INDICE>_ref<ref>.csv`
+independiente**: consume directamente `eventos_<INDICE>_<y0>-<y1>.csv`
 (punto 11., arriba). Mismo formato de 4 columnas que
 `taylor_<caja>_ref<ref>.csv` (fila 1 = `OBS`, filas 2-41 =
 `M01`...`M40`, columnas `sigma, r, rmse_centrado, sigma_norm`, mismas
@@ -351,7 +351,7 @@ problema: en vez de "¿pasó el evento el mismo año?", compara "cuando
 el modelo sí genera un evento, ¿tiene la **forma** correcta (arma,
 pico, decaimiento)?" -- pregunta respondible con una corrida libre.
 Confirma la hipótesis en la práctica: con los mismos 40 modelos, $r$
-en `taylor_compuesto_ONI_vent12m_ref1981-2014.csv` va de ~0.86 a
+en `taylor_compuesto_ONI_vent12m_1900-2014.csv` va de ~0.86 a
 ~0.99, contra valores cercanos a 0 en `taylor_nino34_ref1981-2014.csv`.
 
 **Sin cita de respaldo para la técnica en sí** -- se buscó un paper que
@@ -367,7 +367,7 @@ aplicación específica ENOS+Taylor que se buscaba -- se presenta como
 argumento del párrafo anterior (evade el problema de fase), no por un
 precedente bibliográfico directo.
 
-Metodología: para cada evento de `eventos_<INDICE>_ref<ref>.csv`, se
+Metodología: para cada evento de `eventos_<INDICE>_<y0>-<y1>.csv`, se
 extrae una ventana de **±`V` meses centrada en `fecha_pico`**; los
 eventos cuya ventana pediría meses fuera del rango disponible (bordes
 del registro, ej. cerca de 1900 por IITM-ESM o cerca de 2014) se
@@ -382,7 +382,7 @@ del modelo se compara contra la curva compuesta de OBS con las mismas
 Se corre con **tres anchos de ventana**, sin que ningún paper fije cuál
 es "correcto" (decisión del usuario, ver nota de arriba):
 - `V=12` (25 puntos) -- **resultado principal**, el que alimenta
-  `skill_score_ref<ref>.csv` (punto 14., abajo).
+  `skill_score_vent12m_<y0>-<y1>.csv` (punto 14., abajo).
 - `V=15` (31 puntos) y `V=18` (37 puntos) -- **pruebas de
   sensibilidad**: confirman si el resultado depende fuertemente del
   ancho elegido. No alimentan el score final, se reportan solo como
@@ -396,7 +396,7 @@ argumento sin editar: `python3 scripts_e2/p08_taylor_compuesto.py 18`). Sin corr
 dataset (mismos índices ONI/RONI/ICEN de
 `indices_enso_*.csv`/`load_all_indices()`, no un recálculo aparte).
 
-## `skill_score_ref<ref>.csv`
+## `skill_score_vent12m_<y0>-<y1>.csv`
 
 Punto (14.) del cálculo -- responde directamente a la actividad (b) del
 TdR ("seleccionar los modelos con mejor capacidad de representación"),
@@ -409,7 +409,7 @@ descendente por `S_final`. Columnas:
   (serie completa). Se reportan solo como **referencia/diagnóstico** --
   **no entran en `S_final`** (ver por qué abajo).
 - `S_ONI`, `S_RONI`, `S_ICEN` -- mismo $S$ calculado sobre
-  `taylor_compuesto_<INDICE>_vent12m_ref<ref>.csv` (evolución
+  `taylor_compuesto_<INDICE>_vent12m_<y0>-<y1>.csv` (evolución
   compuesta del evento extremo, ventana principal ±12 meses, ver
   arriba).
 - `S_final` -- `mean(S_ONI, S_RONI, S_ICEN)`, el número usado para

@@ -341,11 +341,11 @@ reconocibles).
 Las categorías se evalúan sobre la magnitud pico ya redondeada a 1
 decimal, porque las tablas oficiales (NOAA CPC / IGP-ENFEN) se
 definieron sobre el valor publicado, no el continuo -- ver
-data/processed/e2/README.md, sección eventos_<INDICE>_ref<ref>.csv,
+data/processed/e2/README.md, sección eventos_<INDICE>_<y0>-<y1>.csv,
 para el detalle del bug real que este redondeo corrige.
 
 Implementación: scripts_e2/p07_eventos.py, salida
-data/processed/e2/eventos_<INDICE>_ref<ref>.csv.
+data/processed/e2/eventos_<INDICE>_<y0>-<y1>.csv.
 
 
 12. ANALISIS COMPUESTO Y DIAGRAMA DE TAYLOR SOBRE EL EVENTO TIPICO
@@ -432,7 +432,7 @@ Esa curva compuesta se compara, modelo contra ERSSTv5, con las mismas
 correlación de Pearson, RMSE centrado, sigma_norm) -- el diagrama de
 Taylor resultante evalúa forma del evento compuesto, no fase temporal.
 Resultado obtenido (V=12): con los mismos 40 modelos, la correlación
-del compuesto (taylor_compuesto_ONI_vent12m_ref1981-2014.csv) va de
+del compuesto (taylor_compuesto_ONI_vent12m_1900-2014.csv) va de
 ~0.94 a ~0.99, frente a valores cercanos a 0 en el Taylor de serie
 completa -- confirma la hipótesis de que el problema era de fase, no
 de forma.
@@ -440,7 +440,7 @@ de forma.
 Implementación: scripts_e2/p08_taylor_compuesto.py (constante
 VENTANA_MESES, editable, arma el nombre de archivo sola), insumo
 directo de scripts_e2/p07_eventos.py (no independiente de él), salida
-data/processed/e2/taylor_compuesto_<INDICE>_vent<V>m_ref<ref>.csv.
+data/processed/e2/taylor_compuesto_<INDICE>_vent<V>m_<y0>-<y1>.csv.
 
 
 13. SCORE DE HABILIDAD S Y SELECCION FINAL DE MODELOS
@@ -527,7 +527,7 @@ partición.
 
 Implementación: scripts_e2/p09_skill_score.py, insumo directo de
 scripts_e2/p05_taylor.py y scripts_e2/p08_taylor_compuesto.py, salida
-data/processed/e2/skill_score_ref<ref>.csv.
+data/processed/e2/skill_score_vent12m_<y0>-<y1>.csv.
 
 
 PENDIENTE DE REVISION (antes de portar a informe_e2.tex)

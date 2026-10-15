@@ -90,13 +90,13 @@ representacion") sin imponer un umbral arbitrario.
 
 Ejecutable de forma independiente: lee directamente
 data/processed/e2/taylor_nino34_ref<ref>.csv,
-taylor_nino12_ref<ref>.csv, taylor_compuesto_ONI/RONI/ICEN_vent12m_ref<ref>.csv
+taylor_nino12_ref<ref>.csv, taylor_compuesto_ONI/RONI/ICEN_vent12m_<y0>-<y1>.csv
 (salidas de p05_taylor.py y p08_taylor_compuesto.py -- si falta alguna,
 avisa y corta).
 
 Uso:
-    python3 scripts_e2/p09_skill_score.py        # ventana VENTANA_MESES (12) -> skill_score_ref<ref>.csv
-    python3 scripts_e2/p09_skill_score.py 18     # otra ventana -> skill_score_vent18m_ref<ref>.csv
+    python3 scripts_e2/p09_skill_score.py        # ventana VENTANA_MESES (12) -> skill_score_vent12m_<y0>-<y1>.csv
+    python3 scripts_e2/p09_skill_score.py 18     # otra ventana -> skill_score_vent18m_<y0>-<y1>.csv
 """
 import sys
 from pathlib import Path
@@ -108,10 +108,10 @@ from sklearn.cluster import KMeans
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import common_e2 as c2
 
-# Periodo de referencia -- EDITAR ACA para cambiarlo; debe coincidir
-# con el usado al generar las 5 tablas taylor_*.csv que este script
-# consume (p05_taylor.py, p08_taylor_compuesto.py). Independiente del
-# REF_INICIO/REF_FIN de los demas pXX.
+# Periodo de referencia -- solo para ubicar taylor_nino34/nino12_ref*.csv
+# (p05_taylor.py, que si recorta a este periodo); debe coincidir con
+# el de p05. Los taylor_compuesto_* (p08) y la salida de este script
+# llevan el periodo real de los indices (c2.indices_period()), no este.
 REF_INICIO = 1981
 REF_FIN = 2014
 
@@ -120,7 +120,7 @@ REF_FIN = 2014
 # (12, 25 puntos); las de sensibilidad (15 y 18) NO alimentan el
 # score final, quedan solo como comparacion en el informe. Se pueden
 # correr pasando la ventana como argumento (ver "Uso" arriba): escriben
-# skill_score_vent<V>m_ref<ref>.csv, sin pisar el resultado principal.
+# skill_score_vent<V>m_<y0>-<y1>.csv, sin pisar el resultado principal.
 VENTANA_MESES = 12
 
 # Percentil de S_final para la seleccion final de modelos (punto 5 del
@@ -155,7 +155,7 @@ def skill_score(r, sigma_norm):
 
 def cargar_S(path, etiqueta):
     if not path.exists():
-        sys.exit(f"Falta {path}. Correr antes p05_taylor.py / p08_taylor_compuesto.py con REF_INICIO={REF_INICIO}, REF_FIN={REF_FIN}.")
+        sys.exit(f"Falta {path}. Correr antes p05_taylor.py / p08_taylor_compuesto.py.")
     df = pd.read_csv(path, index_col="number")
     df = df.drop(index="OBS")  # S=1 trivial por definicion, no es un modelo a evaluar
     return skill_score(df["r"], df["sigma_norm"]).rename(etiqueta)
@@ -226,12 +226,13 @@ def main():
     global VENTANA_MESES
     if len(sys.argv) > 1:
         VENTANA_MESES = int(sys.argv[1])
+    periodo = c2.indices_period()
     print("Cargando taylor_*.csv (5 tablas) ...", file=sys.stderr)
     s_nino34 = cargar_S(c2.E2_DIR / f"taylor_nino34_ref{REF_INICIO}-{REF_FIN}.csv", "S_nino34")
     s_nino12 = cargar_S(c2.E2_DIR / f"taylor_nino12_ref{REF_INICIO}-{REF_FIN}.csv", "S_nino12")
-    s_oni = cargar_S(c2.E2_DIR / f"taylor_compuesto_ONI_vent{VENTANA_MESES}m_ref{REF_INICIO}-{REF_FIN}.csv", "S_ONI")
-    s_roni = cargar_S(c2.E2_DIR / f"taylor_compuesto_RONI_vent{VENTANA_MESES}m_ref{REF_INICIO}-{REF_FIN}.csv", "S_RONI")
-    s_icen = cargar_S(c2.E2_DIR / f"taylor_compuesto_ICEN_vent{VENTANA_MESES}m_ref{REF_INICIO}-{REF_FIN}.csv", "S_ICEN")
+    s_oni = cargar_S(c2.E2_DIR / f"taylor_compuesto_ONI_vent{VENTANA_MESES}m_{periodo}.csv", "S_ONI")
+    s_roni = cargar_S(c2.E2_DIR / f"taylor_compuesto_RONI_vent{VENTANA_MESES}m_{periodo}.csv", "S_RONI")
+    s_icen = cargar_S(c2.E2_DIR / f"taylor_compuesto_ICEN_vent{VENTANA_MESES}m_{periodo}.csv", "S_ICEN")
 
     df = pd.concat([s_nino34, s_nino12, s_oni, s_roni, s_icen], axis=1)
     registro = c2.read_model_registry()
@@ -268,9 +269,8 @@ def main():
     df = df.sort_values("S_final", ascending=False)
     df.index.name = "number"
 
-    # La ventana principal (12) conserva el nombre historico del archivo.
-    sufijo = "" if VENTANA_MESES == 12 else f"vent{VENTANA_MESES}m_"
-    out_path = c2.E2_DIR / f"skill_score_{sufijo}ref{REF_INICIO}-{REF_FIN}.csv"
+    # Mismo patron de nombre para todas las ventanas (vent12m, vent15m, vent18m).
+    out_path = c2.E2_DIR / f"skill_score_vent{VENTANA_MESES}m_{periodo}.csv"
     df.to_csv(out_path, float_format="%.4f")
     print(f"Listo: {out_path} ({df.shape[0]} filas, {df.shape[1]} columnas)", file=sys.stderr)
 
