@@ -31,6 +31,11 @@ set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 mkdir -p logs
 
+# Argumentos leidos ANTES de activar conda: los scripts activate.d de
+# algunos paquetes pueden pisar $1/$2 del script que los invoca.
+STEP_FROM="${1:-p01}"
+STEP_TO="${2:-p09}"
+
 # Entorno conda: mismo bloque que run.sh (ver ahí el porqué de cada
 # parte) -- en una máquina nueva alcanza con haber hecho una vez
 # "conda env create -f environment.yml".
@@ -82,9 +87,7 @@ if ! python3 -c "import numpy, pandas, xarray, netCDF4, scipy, sklearn" 2>/dev/n
     exit 1
 fi
 
-STEP_ORDER=(p01p02 p03 p04 p05 p06 p07 p08 p09)
-STEP_FROM="${1:-p01}"
-STEP_TO="${2:-p09}"
+STEP_ORDER=(p01 p02 p03 p04 p05 p06 p07 p08 p09)
 
 index_of () {
     local target="$1"
@@ -100,7 +103,7 @@ index_of () {
 FROM_IDX=$(index_of "$STEP_FROM")
 TO_IDX=$(index_of "$STEP_TO")
 if [ "$FROM_IDX" -lt 0 ] || [ "$TO_IDX" -lt 0 ]; then
-    echo "Paso desconocido. Pasos validos: ${STEP_ORDER[*]}" >&2
+    echo "Paso desconocido (recibido: desde='$STEP_FROM' hasta='$STEP_TO'). Pasos validos: ${STEP_ORDER[*]}" >&2
     exit 1
 fi
 
