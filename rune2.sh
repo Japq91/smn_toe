@@ -3,9 +3,9 @@
 # diagrama de Taylor, eventos, skill score). Mismo criterio que run.sh
 # (E1): único punto de entrada, pasos numerados, log propio.
 #
-# Uso: ./run_e2.sh [STEP_FROM] [STEP_TO]
+# Uso: ./rune2.sh [STEP_FROM] [STEP_TO]
 #   - Sin args: corre p01..p09 completos.
-#   - Con args: rango de pasos (ej. ./run_e2.sh p07 p09 rehace solo
+#   - Con args: rango de pasos (ej. ./rune2.sh p07 p09 rehace solo
 #     eventos -> Taylor compuesto -> skill score).
 #   Pasos válidos: p01 p02 p03 p04 p05 p06 p07 p08 p09
 #
@@ -105,7 +105,7 @@ if [ "$FROM_IDX" -lt 0 ] || [ "$TO_IDX" -lt 0 ]; then
 fi
 
 mkdir -p "$OUT_DIR" "$FIGURES_DIR"
-echo "== run_e2.sh: $(date '+%Y-%m-%d %H:%M:%S') (pasos $STEP_FROM..$STEP_TO) ==" | tee -a "$LOG_FILE"
+echo "== rune2.sh: $(date '+%Y-%m-%d %H:%M:%S') (pasos $STEP_FROM..$STEP_TO) ==" | tee -a "$LOG_FILE"
 
 # Corre "$@" si el paso está dentro del rango. Un paso que falla corta
 # la corrida (set -e + pipefail): los siguientes dependen de él.
@@ -134,5 +134,5 @@ for v in "${VENTANAS[@]}"; do
     run_step p09 python3 scripts_e2/p09_skill_score.py "$v"
 done
 
-echo "== run_e2.sh terminado: $(date '+%Y-%m-%d %H:%M:%S') -- salidas en $OUT_DIR/ ==" | tee -a "$LOG_FILE"
+echo "== rune2.sh terminado: $(date '+%Y-%m-%d %H:%M:%S') -- salidas en $OUT_DIR/ ==" | tee -a "$LOG_FILE"
 ls -1 "$OUT_DIR" | tee -a "$LOG_FILE"
