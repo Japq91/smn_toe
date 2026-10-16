@@ -109,7 +109,8 @@ def mapa(ax, da, cmap, norm, titulo=None, punteado=None, cajas=True, levels=None
     if punteado is not None:
         yy, xx = np.meshgrid(punteado.lat, punteado.lon, indexing="ij")
         m = punteado.values.astype(bool)
-        ax.scatter(xx[m], yy[m], s=0.6, c="k", alpha=0.6, linewidths=0)
+        # ax.scatter(xx[m], yy[m], s=0.6, c="k", alpha=0.6, linewidths=0)
+        ax.scatter(xx[m], yy[m], s=16, c="k", alpha=0.4, linewidths=.2, marker="x")
     if cajas:
         dibujar_cajas(ax)
     if titulo:

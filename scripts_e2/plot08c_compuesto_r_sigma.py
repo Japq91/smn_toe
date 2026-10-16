@@ -17,21 +17,29 @@ from plot00_comun import *  # noqa: F401,F403  (config, helpers y cargas comunes
 
 def main():
     tcv, skv, vmin = cargar_tcv(), cargar_skv(), vmin_s()
-    fig, axs = plt.subplots(len(VENTANAS), 3, figsize=(15, 4.5 * len(VENTANAS)), sharex=True, sharey=True)
+    fig, axs = plt.subplots(len(VENTANAS), 3, figsize=(12, 3.5 * len(VENTANAS)),
+                            sharex=True, sharey=True)
+    sc_last = None
     for fila, v in enumerate(VENTANAS):
         for ax, i in zip(axs[fila], INDICES):
             m = tcv[v][i].drop(index="OBS")
-            ax.scatter(m["r"], m["sigma_norm"], c=skv[v][f"S_{i}"].reindex(m.index), cmap="viridis",
-                       vmin=vmin, vmax=1, s=30, edgecolor="k", lw=0.4)
+            sc = ax.scatter(m["r"], m["sigma_norm"],
+                            c=skv[v][f"S_{i}"].reindex(m.index), cmap="viridis", alpha=0.7,
+                            vmin=vmin, vmax=1, s=20, edgecolor="k", lw=0.4)
+            sc_last = sc
             for n in m.index:
-                ax.annotate(n[1:], (m.loc[n, "r"], m.loc[n, "sigma_norm"]), fontsize=6, xytext=(2, 2), textcoords="offset points")
-            ax.scatter(1, 1, marker="*", s=250, c="k")
+                ax.annotate(n[1:], (m.loc[n, "r"], m.loc[n, "sigma_norm"]),
+                            fontsize=6, xytext=(2, 2), textcoords="offset points")
+            ax.scatter(1, 1, marker="D", s=30, alpha=0.8,c="k")
             ax.axhline(1, color="k", lw=0.5, ls="--")
             ax.set_title(f"{i} -- ±{v} m")
             if fila == len(VENTANAS) - 1:
                 ax.set_xlabel("r (forma del compuesto)")
         axs[fila, 0].set_ylabel("σ normalizado")
-    plt.tight_layout()
+
+    fig.colorbar(sc_last, ax=axs, shrink=0.5, pad=0.02,
+                 label="skill score (S)")
+    # plt.tight_layout()
     guardar(fig, "08c_compuesto_r_sigma")
 
 

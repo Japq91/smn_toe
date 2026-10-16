@@ -20,13 +20,13 @@ def main():
     norm_v = mcolors.TwoSlopeNorm(0, -75, 150)
     med = dvar.median("number")
     acuerdo_v = np.maximum((dvar > 0).mean("number"), (dvar < 0).mean("number")) >= 0.8
-    fig, axs = plt.subplots(2, 1, figsize=(13, 6.5))
-    im = mapa(axs[0], med, "PuOr_r", norm_v, "Δσ mediana multimodelo (%) -- punteado: ≥80% de modelos con el mismo signo", punteado=acuerdo_v)
-    fig.colorbar(im, ax=axs[0], label="%", extend="both", shrink=0.9)
+    fig, axs = plt.subplots(2, 1,figsize=(12, 5),sharex=True, constrained_layout=True)
+    im = mapa(axs[0], med, "PuOr_r", norm_v, "Δσ mediana multimodelo -- punteado: ≥80% de modelos con el mismo signo", punteado=acuerdo_v)
+    fig.colorbar(im, ax=axs[0], label="[%]", extend="both", shrink=0.9)
     iqr = dvar.quantile(0.75, "number") - dvar.quantile(0.25, "number")
-    im = mapa(axs[1], iqr, "magma_r", mcolors.Normalize(0, 150), "Rango intercuartil entre modelos (%)")
-    fig.colorbar(im, ax=axs[1], label="%", extend="max", shrink=0.9)
-    plt.tight_layout()
+    im = mapa(axs[1], iqr, "magma_r", mcolors.Normalize(0, 150), "Rango intercuartil entre modelos")
+    fig.colorbar(im, ax=axs[1], label="[%]", extend="max", shrink=.9,pad=.01)
+    # plt.tight_layout()
     guardar(fig, "03a_variabilidad_multimodelo")
 
 

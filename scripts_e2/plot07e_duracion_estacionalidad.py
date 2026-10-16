@@ -17,7 +17,7 @@ from plot00_comun import *  # noqa: F401,F403  (config, helpers y cargas comunes
 
 def main():
     ev = cargar_eventos()
-    fig, axs = plt.subplots(2, 3, figsize=(15, 7))
+    fig, axs = plt.subplots(2, 3, figsize=(12, 5), sharey='row')
     for j, i in enumerate(INDICES):
         e = ev[i]
         mod, obs = e[e["number"] != "OBS"], e[e["number"] == "OBS"]
