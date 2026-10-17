@@ -43,8 +43,10 @@ def main():
     }).reindex(o.index)
     rel = (err - err.median()) / err.median()
 
-    fig, ax = plt.subplots(figsize=(13, 11))
-    im = ax.imshow(rel.values, cmap="RdBu_r", vmin=-1, vmax=1, aspect="auto")
+    fig, ax = plt.subplots(figsize=(13, 11), layout="constrained")
+    lim = np.round(np.arange(-1, 1.001, 0.2), 1)
+    cmap, norm = discreta("RdBu_r", lim)
+    im = ax.imshow(rel.values, cmap=cmap, norm=norm, aspect="auto")
     ax.set_xticks(range(rel.shape[1]))
     ax.set_xticklabels(rel.columns, rotation=45, ha="right")
     ax.xaxis.tick_top()
@@ -54,9 +56,8 @@ def main():
     for lab, n in zip(ax.get_yticklabels(), rel.index):
         lab.set_fontweight("bold" if sel[n] else "normal")
     ax.axvline(rel.shape[1] - len(VENTANAS) - 0.5, color="k", lw=1.5)
-    fig.colorbar(im, ax=ax, shrink=0.4, label="error relativo a la mediana multimodelo", extend="both")
-    ax.set_title(f"Portrait diagram -- modelos ordenados por S_final ±{VENTANA} m", pad=110)
-    plt.tight_layout()
+    barra(fig, im, ax, "error relativo a la mediana multimodelo", lim, extend="both")
+    titulo_panel(ax, None, f"Portrait diagram -- modelos ordenados por S_final ±{VENTANA} m")
     guardar(fig, "10_portrait_resumen")
 
     # 10b. Tabla de errores absolutos

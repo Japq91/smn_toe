@@ -18,7 +18,7 @@ from plot00_comun import *  # noqa: F401,F403  (config, helpers y cargas comunes
 def main():
     ev = cargar_eventos()
     fig, axs = plt.subplots(3, 1, figsize=(14, 10), sharex=False)
-    for ax, i in zip(axs, INDICES):
+    for ax, letra, i in zip(axs, LETRAS, INDICES):
         g = ev[i].groupby("number")["magnitud_pico"]
         orden = g.median().sort_values().index.tolist()
         data = [g.get_group(n).values for n in orden]
@@ -29,7 +29,8 @@ def main():
         ax.axhline(g.get_group("OBS").median(), color="k", ls="--", lw=0.8)
         ax.set_xticks(range(1, len(orden) + 1))
         ax.set_xticklabels([etiqueta.get(n, "ERSSTv5") for n in orden], rotation=90, fontsize=6)
-        ax.set_ylabel(f"pico {i} (°C)")
+        ax.set_ylabel(f"pico {i} [°C]")
+        titulo_panel(ax, letra, i)
     plt.tight_layout()
     guardar(fig, "07c_magnitud_eventos")
 

@@ -5,7 +5,7 @@ para la variable tos/Omon.
 
 NO forma parte de la secuencia automatica de run.sh: 00b_build_model_list.py
 ya genera automaticamente en cada corrida su propio reporte de
-disponibilidad (informe/model_availability_priority.csv, columnas 0/1
+disponibilidad (e1_informe/model_availability_priority.csv, columnas 0/1
 por experimento + prioridad de busqueda manual), a partir de los mismos
 datos que consulta para armar la lista de modelos -- sin peticiones
 adicionales. Este script sirve como segunda opinion manual e
@@ -14,7 +14,7 @@ experiment_id en vez de listado de datasets; y escribe su propio
 .csv/.md con classify()/category_label()/write_report() de aqui abajo),
 util para verificar un modelo puntual o si se sospecha que 00b esta mal.
 
-Idempotente: si informe/model_availability_report.csv ya existe (por
+Idempotente: si e1_informe/model_availability_report.csv ya existe (por
 ejemplo, el que genera 00b), no se vuelve a consultar ESGF. Para forzar
 una nueva verificacion, borrar ese CSV a mano.
 
@@ -184,7 +184,7 @@ def write_report(rows: list[dict], out_prefix: Path, titulo: str = "Disponibilid
 
 if __name__ == "__main__":
     models_file = sys.argv[1] if len(sys.argv) > 1 else None
-    out_prefix = Path(sys.argv[2]) if len(sys.argv) > 2 else BASE_DIR / "informe/model_availability_report"
+    out_prefix = Path(sys.argv[2]) if len(sys.argv) > 2 else BASE_DIR / "e1_informe/model_availability_report"
 
     # Idempotente, igual que el resto del pipeline (ver Convenciones del
     # README): si el reporte ya existe, no se vuelve a consultar ESGF

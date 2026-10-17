@@ -17,7 +17,7 @@ from plot00_comun import *  # noqa: F401,F403  (config, helpers y cargas comunes
 
 def main():
     bias = cargar_bias()
-    fig = multiples(bias, "RdBu_r", mcolors.TwoSlopeNorm(0, -4, 4), f"Sesgo de TSM, modelo - ERSSTv5 (ref {REF})", "[°C]")
+    fig = multiples(bias, "RdBu_r", np.arange(-4, 4.01, 0.5), f"Sesgo de TSM, modelo - ERSSTv5 (ref {REF})", "[°C]", cada=2)
     guardar(fig, "01b_sesgo_por_modelo")
 
 

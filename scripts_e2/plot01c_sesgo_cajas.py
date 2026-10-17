@@ -21,8 +21,8 @@ def main():
     sesgo_caja.plot.bar(ax=ax, width=0.8, color=["steelblue", ".6"])
     ax.axhline(0, color="k", lw=0.8, alpha=.9)
     ax.set_xticklabels([etiqueta[n] for n in sesgo_caja.index], rotation=90, fontsize=9)
-    ax.set_ylabel("sesgo (°C)")
-    ax.set_title("Sesgo medio de TSM por Región")
+    ax.set_ylabel("sesgo [°C]")
+    titulo_panel(ax, None, "Sesgo medio de TSM por Región")
     plt.tight_layout()
     guardar(fig, "01c_sesgo_cajas")
 

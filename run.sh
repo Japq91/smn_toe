@@ -20,7 +20,7 @@
 # - Nota: paso 00b_build_model_list.py se ejecuta entre 00 y 01 (sin renombrar scripts).
 #   Ademas de armar config/models_seed_cmip6.csv (solo modelos con historical +
 #   TODOS los SSP configurados, exigidos bajo una misma grilla), 00b escribe
-#   informe/model_availability_report.csv/.md con la disponibilidad real por
+#   e1_informe/model_availability_report.csv/.md con la disponibilidad real por
 #   experimento de TODOS los modelos inspeccionados (no solo los seleccionados) --
 #   asi se ve, por ejemplo, que un modelo tiene historical+ssp245 pero le falta
 #   ssp370/ssp585. Para 'historical' especificamente, si el nodo principal de
@@ -215,8 +215,8 @@ python3 scripts/generate_status_report.py \
     "${DOWNLOAD_FLAG_ARGS[@]}" \
     || echo "Aviso: no se pudo generar el reporte de estado todavia (probablemente falta un paso anterior)." | tee -a logs/pipeline.log
 
-# Paquete con los artefactos dispersos para actualizar el informe/presentacion
-# (config/, data/, informe/, logs/, figures/): siempre se intenta, sin
+# Paquete con los artefactos dispersos para actualizar el e1_informe/presentacion
+# (config/, data/, e1_informe/, logs/, figures/): siempre se intenta, sin
 # importar STEP_FROM/STEP_TO. Empaqueta lo que ya existe y avisa, para
 # lo que falta, que correr exactamente para generarlo.
 python3 scripts/bundle_deliverable_update.py

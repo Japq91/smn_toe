@@ -1,9 +1,9 @@
-# scripts_e2/
+ # scripts_e2/
 
 Código del Entregable 2: climatología, sesgo, ONI/RONI (Niño 3.4) e
 ICEN (Niño 1+2), diagrama de Taylor -- ver
-`informe/borradores/marco_teorico_e2.txt` para las ecuaciones/citas y
-`informe/informe_e1_smnv3.tex`, sección "Próximos pasos", `tab:roadmap`,
+`e2_informe/informe_e2.tex` (Sección 3, Marco metodológico) para las
+ecuaciones/citas y `e1_informe/informe_e1_smnv3.tex`, sección "Próximos pasos", `tab:roadmap`,
 para lo que exige el TdR. No se usan Índices C/E (Takahashi et al.,
 2011): decisión del usuario, reemplazados por ONI/RONI/ICEN.
 
@@ -37,9 +37,9 @@ mismo TdR van a necesitar el mismo patrón):
 
 - `data/processed/e2/` -- datos procesados propios de E2.
 - `figures/e2/` -- figuras generadas por estos scripts.
-- `informe/figuras/e2/` -- symlinks curados hacia `figures/e2/` para
-  el futuro `informe/informe_e2.tex` (mismo criterio que
-  `informe/figuras/` para E1, ver su README).
+- `e2_informe/figuras/` -- symlinks curados hacia `figures/e2/` para
+  el futuro `e2_informe/informe_e2.tex` (mismo criterio que
+  `e1_informe/figuras/` para E1, ver su README).
 
 Ningún script de esta carpeta debe escribir fuera de esos tres
 subdirectorios, ni modificar nada bajo `scripts/`, `run.sh` o

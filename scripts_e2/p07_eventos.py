@@ -3,18 +3,19 @@
 extremos, para ONI, RONI e ICEN.
 
 Dos sistemas de umbral en paralelo, no uno solo (ver
-informe/borradores/propuesta_puntos_11_12.md para la justificacion
+e2_informe/informe_e2.tex, Seccion 3.4, para la justificacion
 completa -- un umbral absoluto fijo no es robusto entre 40 modelos con
 sigma_norm muy distinta entre si, ver taylor_*.csv):
 
   - OFICIAL: umbral fijo en grados C, el mismo que usa SENAMHI/IGP/
     NOAA operacionalmente -- comparabilidad real con el monitoreo
     oficial. ONI/RONI: >=0.5, sostenido >=5 estaciones consecutivas de
-    3 meses (NOAA CPC, confianza alta). ICEN: >=0.4, sostenido >=3
-    meses consecutivos (confianza alta para el umbral de inicio; la
-    tabla de categorias de magnitud -- debil/moderado/fuerte/
-    extraordinario -- es de confianza MEDIA, no verificada contra la
-    fuente primaria de ENFEN, ver propuesta_puntos_11_12.md).
+    3 meses (NOAA CPC, confianza alta). ICEN: >0.5 (estricto),
+    sostenido >=3 meses consecutivos, sobre el ICEN redondeado a 2
+    decimales; categorias debil (0.5,1.3], moderado (1.3,2.1], fuerte
+    (2.1,3.5], extraordinario >3.5 -- Nota Tecnica ENFEN 01-2024
+    (files_pdf/ICEN_PERU.pdf, Tabla 2), que reemplaza a la de 2012
+    (umbral 0.4 y limites 1.0/1.7/3.0, Takahashi et al. 2014).
     RONI usa las MISMAS categorias que ONI: por construccion, std(RONI)
     == std del Nino3.4 suavizado con la base del RONI, practicamente la
     misma que la del ONI (ver common_e2.py::roni_index, el reescalado
@@ -70,7 +71,9 @@ import common_e2 as c2
 # Umbrales oficiales: (inicio, duracion_minima_meses, categorias)
 # categorias: lista de (min, max, nombre), evaluada sobre la magnitud
 # PICO del evento (NOAA clasifica por el valor pico alcanzado, no mes
-# a mes).
+# a mes). Opcionales: 'estricto' (valor > inicio en vez de >=),
+# 'redondeo' (decimales del valor oficial publicado) e 'intervalo'
+# ("cerrado": min <= v <= max; "semiabierto": min < v <= max).
 UMBRAL_OFICIAL = {
     "ONI": dict(inicio=0.5, duracion_min=5, categorias=[
         (0.5, 0.9, "debil"), (1.0, 1.4, "moderado"),
@@ -80,8 +83,10 @@ UMBRAL_OFICIAL = {
         (0.5, 0.9, "debil"), (1.0, 1.4, "moderado"),
         (1.5, 1.9, "fuerte"), (2.0, float("inf"), "muy_fuerte"),
     ]),
-    "ICEN": dict(inicio=0.4, duracion_min=3, categorias=[
-        (0.4, 1.3, "debil"), (1.3, 2.1, "moderado"),
+    # ENFEN 01-2024: "condiciones calidas" = ICEN > 0.5 (Tabla 2), con
+    # el ICEN reportado a 2 decimales (Takahashi et al. 2014).
+    "ICEN": dict(inicio=0.5, duracion_min=3, estricto=True, redondeo=2, intervalo="semiabierto", categorias=[
+        (0.5, 1.3, "debil"), (1.3, 2.1, "moderado"),
         (2.1, 3.5, "fuerte"), (3.5, float("inf"), "extraordinario"),
     ]),
 }
@@ -94,19 +99,20 @@ UMBRAL_OFICIAL = {
 UMBRAL_RELATIVO_SIGMAS = [(0.5, 1.0, "moderado"), (1.0, 2.0, "fuerte"), (2.0, float("inf"), "extremo")]
 
 
-def detect_events(series, threshold, min_consecutive):
+def detect_events(series, threshold, min_consecutive, estricto=False):
     """series: pd.Series indexada por tiempo (puede tener NaN en los
     bordes). Devuelve lista de dicts inicio/fin/fecha_pico/
     duracion_meses/magnitud_pico. fecha_pico: usada por
     p08_taylor_compuesto.py para centrar la ventana del compuesto."""
     vals = series.values
     times = series.index
+    supera = (lambda v: v > threshold) if estricto else (lambda v: v >= threshold)
     events = []
     i, n = 0, len(vals)
     while i < n:
-        if np.isfinite(vals[i]) and vals[i] >= threshold:
+        if np.isfinite(vals[i]) and supera(vals[i]):
             j = i
-            while j < n and np.isfinite(vals[j]) and vals[j] >= threshold:
+            while j < n and np.isfinite(vals[j]) and supera(vals[j]):
                 j += 1
             if (j - i) >= min_consecutive:
                 idx_pico = i + int(np.nanargmax(vals[i:j]))
@@ -122,16 +128,18 @@ def detect_events(series, threshold, min_consecutive):
     return events
 
 
-def categorize(value, categorias):
+def categorize(value, categorias, redondeo=1, intervalo="cerrado"):
     # NOAA clasifica sobre el valor YA REDONDEADO a 1 decimal (asi se
     # publican los boletines oficiales) -- las categorias oficiales
     # (0.5-0.9/1.0-1.4/1.5-1.9/>=2.0) fueron definidas para ese valor
     # redondeado, no el continuo. Sin redondear, un valor como 1.4179
     # cae en el hueco entre "moderado" (hasta 1.4) y "fuerte" (desde
     # 1.5) -- bug real detectado al revisar la salida.
-    value = round(value, 1)
+    # ICEN (ENFEN 01-2024): 2 decimales e intervalos (min, max].
+    value = round(value, redondeo)
     for lo, hi, nombre in categorias:
-        if lo <= value <= hi:
+        dentro_inf = (lo < value) if intervalo == "semiabierto" else (lo <= value)
+        if dentro_inf and value <= hi:
             return nombre
     return None  # no deberia pasar si value >= umbral de inicio y las categorias cubren desde ahi
 
@@ -153,11 +161,13 @@ def eventos_para_indice(df, index_key):
     for number in numbers:
         serie = df[f"{number}_{index_key}"]
         sigma = float(serie.std(ddof=1))
+        serie_det = serie.round(cfg["redondeo"]) if "redondeo" in cfg else serie
 
-        eventos = detect_events(serie, cfg["inicio"], cfg["duracion_min"])
+        eventos = detect_events(serie_det, cfg["inicio"], cfg["duracion_min"], cfg.get("estricto", False))
         for ev in eventos:
             ev["number"] = number
-            ev["categoria_oficial"] = categorize(ev["magnitud_pico"], cfg["categorias"])
+            ev["categoria_oficial"] = categorize(ev["magnitud_pico"], cfg["categorias"],
+                                                 cfg.get("redondeo", 1), cfg.get("intervalo", "cerrado"))
             ev["categoria_relativa"] = categorize(ev["magnitud_pico"] / sigma, UMBRAL_RELATIVO_SIGMAS)
             rows.append(ev)
 

@@ -1,7 +1,7 @@
 # PDFs de referencia/confidenciales que se dejan en la raiz del repo
 # para consulta local (ej. el TdR) -- nunca se suben a GitHub, a
 # proposito, sin importar el nombre. Solo la raiz (/*.pdf, no recursivo):
-# los PDFs dentro de informe/ tienen su propia regla mas abajo.
+# los PDFs dentro de e1_informe/ tienen su propia regla mas abajo.
 /*.pdf
 
 data/raw/
@@ -25,40 +25,39 @@ logs/step_timings.csv
 logs/download_timings.csv
 # Generado por scripts/00b_build_model_list.py (paso 00b de run.sh):
 # especifico de cada maquina/corrida, no se versiona (ver README).
-informe/model_availability_priority.csv
+e1_informe/model_availability_priority.csv
 config/models_seed_cmip6.csv
 # Generado por scripts/build_model_registry.py: junta datos de 00b/01,
 # especifico de cada maquina/corrida, no se versiona.
-informe/model_registry.csv
+e1_informe/model_registry.csv
 # Generados por scripts/check_model_availability.py (herramienta manual
 # de segunda opinion, independiente de 00b): mismo criterio, no se versionan.
-informe/model_availability_report.csv
-informe/model_availability_report.md
+e1_informe/model_availability_report.csv
+e1_informe/model_availability_report.md
 # Paquete armado por scripts/bundle_deliverable_update.py: por
 # corrida/maquina, se re-genera solo, no se versiona.
-informe/entregable_update.tar.gz
+e1_informe/entregable_update.tar.gz
 # Salidas de graficos_exploratorios.ipynb / scripts/plot_*.py: se
 # regeneran solas por maquina, no se versionan (se incluyen en el
 # paquete de bundle_deliverable_update.py para transferirlas).
 figures/
-# Artefactos de compilar informe/*.tex con pdflatex/bibtex: se
+# Artefactos de compilar e1_informe/*.tex con pdflatex/bibtex: se
 # regeneran en cualquier maquina que compile el informe, no se versionan.
-# Nombrados por basename, no por *.pdf/*.aux genericos -- informe/
+# Nombrados por basename, no por *.pdf/*.aux genericos -- e1_informe/
 # tambien contiene PDFs de referencia (ej. el TdR) que SI hay que
 # versionar u observar, no descartar solo por la extension.
-informe/informe_e1_smnv3.aux
-informe/informe_e1_smnv3.log
-informe/informe_e1_smnv3.toc
-informe/informe_e1_smnv3.lof
-informe/informe_e1_smnv3.lot
-informe/informe_e1_smnv3.out
-informe/informe_e1_smnv3.bbl
-informe/informe_e1_smnv3.blg
-informe/informe_e1_smnv3.pdf
+e1_informe/informe_e1_smnv3.aux
+e1_informe/informe_e1_smnv3.log
+e1_informe/informe_e1_smnv3.toc
+e1_informe/informe_e1_smnv3.lof
+e1_informe/informe_e1_smnv3.lot
+e1_informe/informe_e1_smnv3.out
+e1_informe/informe_e1_smnv3.bbl
+e1_informe/informe_e1_smnv3.blg
+e1_informe/informe_e1_smnv3.pdf
 # Material de trabajo local de la revision del E1 (auditorias, PDF,
 # borradores): se conserva en disco, no se versiona.
-/revision_e1/
-informe/borradores/informe_e1_smnv3.pdf
+/e1_informe/revision_e1/
 # Salidas de corridas (nohup.out, logs/run_*.out, etc.): por corrida/maquina,
 # no se versionan.
 *.out
@@ -68,3 +67,22 @@ informe/borradores/informe_e1_smnv3.pdf
 data/processed/e2/*
 !data/processed/e2/README.md
 !data/processed/e2/model_registry_e2.csv
+# Artefactos de compilar e2_informe/informe_e2.tex (mismo criterio que E1).
+e2_informe/informe_e2.aux
+e2_informe/informe_e2.log
+e2_informe/informe_e2.toc
+e2_informe/informe_e2.lof
+e2_informe/informe_e2.lot
+e2_informe/informe_e2.out
+e2_informe/informe_e2.bbl
+e2_informe/informe_e2.blg
+e2_informe/informe_e2.pdf
+e2_informe/informe_e2.fdb_latexmk
+e2_informe/informe_e2.fls
+# Material de consulta local, no se versiona: papers de referencia (con
+# derechos de autor) y su conversion a Markdown (convertir_pdfs.sh), y el
+# TdR en otros formatos (mismo criterio que /*.pdf).
+/files_pdf/
+/files_MD/
+/TDR_COSTA_NORTE_p1_completado_4meses.docx
+/tdr_senamhi.txt

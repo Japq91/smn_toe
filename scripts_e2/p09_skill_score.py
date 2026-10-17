@@ -24,8 +24,8 @@ representacion") sin imponer un umbral arbitrario.
    (E'^2 = sigma_hat^2 + 1 - 2*sigma_hat*R en forma normalizada),
    meterlo tambien seria contar la misma informacion dos veces. No usa
    sesgo -- se reporta aparte (p03_sesgo.py), fuera del diagrama de
-   Taylor por diseno (ver informe/borradores/marco_teorico_e2.txt,
-   Seccion 3).
+   Taylor por diseno (ver e2_informe/informe_e2.tex,
+   Seccion 3.2).
 
        Taylor, K. E. (2001). Summarizing multiple aspects of model
        performance in a single diagram. Journal of Geophysical

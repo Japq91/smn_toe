@@ -17,7 +17,7 @@ from plot00_comun import *  # noqa: F401,F403  (config, helpers y cargas comunes
 
 def main():
     clim, clim_obs = cargar_clim()
-    fig, axs = plt.subplots(2, 2, figsize=(12, 5), sharex=True)
+    fig, axs = plt.subplots(2, 2, figsize=(12, 5), sharex=True, sharey='row')
     for j, caja in enumerate(CAJAS):
         cl, ob = clim[caja], clim_obs[caja]
         for fila, (datos, obs, ylab) in enumerate([(cl, ob, "TSM [°C]"),
@@ -27,8 +27,7 @@ def main():
             ax.plot(range(1, 13), datos.mean(), color="tab:red", lw=1.8, label="media multimodelo")
             ax.plot(range(1, 13), obs.values, color="k", lw=2, label="ERSSTv5")
             ax.set_ylabel(ylab)
-            if fila == 0:
-                ax.set_title(NOM_CAJA[caja])
+            titulo_panel(ax, LETRAS[2 * fila + j], NOM_CAJA[caja] + ("" if fila == 0 else ": ciclo sin la media anual"))
     axs[0, 0].legend(frameon=False)
     for ax in axs[1]:
         ax.set_xticks(range(1, 13))

@@ -28,7 +28,7 @@ acordado con el proyecto:
 
 Ademas de config/models_seed_cmip6.csv (solo los modelos seleccionados:
 model, institution, grid_label, nominal_resolution_km), escribe
-informe/model_availability_priority.csv -- una fila por TODOS los
+e1_informe/model_availability_priority.csv -- una fila por TODOS los
 modelos inspeccionados (no solo los seleccionados), con columnas 0/1
 (tiene_tos, tiene_hist, tiene_sspXXX por cada escenario de
 config/periods.yaml) y una columna 'prioridad' pensada para buscar
@@ -38,7 +38,7 @@ historical/hist-1950, despues los que tienen historical pero les falta
 el primer SSP configurado, y asi -- los ya completos (prioridad 0)
 quedan al final. check_model_availability.py sigue disponible aparte
 como herramienta manual de segunda opinion (ver su propio docstring),
-con su propio reporte categorico (informe/model_availability_report.*).
+con su propio reporte categorico (e1_informe/model_availability_report.*).
 
 Este script reemplaza a config/models_seed_bruno2023.csv como fuente
 de la lista de modelos; ese archivo se conserva sin usar, como
@@ -48,7 +48,7 @@ Idempotente con deteccion de cambio: antes de decidir si hace falta
 rehacer el barrido completo (100+ modelos, varias peticiones cada
 uno), hace una sola consulta barata (cuantos modelos con tos/Omon hay
 AHORA en el nodo principal) y la compara contra la cantidad de filas
-que tiene informe/model_availability_priority.csv de la corrida
+que tiene e1_informe/model_availability_priority.csv de la corrida
 anterior. Si coincide, no repite el barrido. Si no coincide (o es la
 primera vez), lo rehace -- asi un modelo nuevo publicado en ESGF se
 detecta solo, sin tener que acordarse de borrar nada a mano.
@@ -72,7 +72,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 ESGF_SEARCH_URL = "https://esgf-node.ornl.gov/proxy/search"
 VARIABLE, TABLE = "tos", "Omon"
 REQUIRED_EXPERIMENTS = set(pipeline_config.experiments())
-PRIORITY_REPORT_CSV = BASE_DIR / "informe/model_availability_priority.csv"
+PRIORITY_REPORT_CSV = BASE_DIR / "e1_informe/model_availability_priority.csv"
 
 
 def _first(doc: dict, field: str):
@@ -202,10 +202,10 @@ def priority_tier(present: set[str]) -> int:
 
 
 def write_priority_report(rows: list[dict], out_path: Path) -> None:
-    """Escribe informe/model_availability_priority.csv: una fila por
+    """Escribe e1_informe/model_availability_priority.csv: una fila por
     modelo, 0/1 en vez de True/False, ordenada por prioridad de
     busqueda manual (ver priority_tier). Reemplaza a
-    informe/model_availability_report.csv/.md como reporte principal de
+    e1_informe/model_availability_report.csv/.md como reporte principal de
     00b -- ese esquema viejo (True/False por columna fija) confundia
     'no tiene historical/ssp' con 'no tiene tos en absoluto' (bug real
     encontrado por el usuario, ver has_historical); este es honesto

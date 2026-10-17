@@ -9,7 +9,7 @@ Reescrito para que coincida con graficos_exploratorios.ipynb (GRAFICO
 Ortografica con centro calculado a partir del dominio de los NetCDF, no
 dibujaba la ventana de descarga, y guardaba en
 figures/region_nino_orthographic.png, un nombre que ningun informe
-referencia. informe/informe_e1_smn(v2).tex esperan
+referencia. e1_informe/informe_e1_smn(v2).tex esperan
 figuras/region_nino_proj.png -- este script ahora escribe
 figures/e1/region_nino_proj.png (misma convencion de carpeta que el resto
 de scripts/plot_*.py; la carpeta "figuras/" del .tex es responsabilidad

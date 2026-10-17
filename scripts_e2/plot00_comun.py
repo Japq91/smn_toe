@@ -8,7 +8,7 @@ figures/e2/e2_<codigo>_<nombre>.png (ej. plot07c_magnitud_eventos.py ->
 e2_07c_magnitud_eventos.png), con el mismo codigo de la seccion
 correspondiente de scripts_e2/plots_e2.ipynb (de donde salieron estos
 scripts) -- mismo nombre de PNG que el notebook, que es el que citan
-informe/borradores/.
+e2_informe/info/.
 
 Datos de entrada: data/processed/e2/ (salidas de p01-p09, ver rune2.sh).
 Las cargas comunes van con lru_cache: un script que usa varias (ej.
@@ -65,6 +65,9 @@ NOM_CAJA = {"nino34": "Niño3.4", "nino12": "Niño1+2"}
 MESES = ["E", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"]
 ORD_OF = ["debil", "moderado", "fuerte", "muy_fuerte", "extraordinario"]
 ORD_REL = ["moderado", "fuerte", "extremo"]
+# Clases de D = 100(σ_mod/σ_obs - 1) [%]: 5 a cada lado de 0, asi la mitad
+# (-75) y el doble (+150) ocupan el mismo largo de la barra (03a, 03b)
+LIM_D = [-75, -60, -45, -30, -15, 0, 30, 60, 90, 120, 150]
 
 # OBS: el .nc enmascarado (data/processed/masked/) puede no estar en esta
 # maquina -- en ese caso se usa la copia de data/interim/processed/.
@@ -92,6 +95,19 @@ def guardar(fig, nom):
 # Helpers de dibujo
 # ---------------------------------------------------------------------
 
+LETRAS = "abcdefghijklmnopqrstuvwxyz"
+
+
+def titulo_panel(ax, letra=None, texto="", **kw):
+    """Dos titulos por panel: la letra (a), (b), ... en negrita en el borde
+    izquierdo, para citar el panel desde el informe, y el titulo en su
+    ubicacion por defecto (centro)."""
+    if letra:
+        ax.set_title(f"({letra})", loc="left", fontweight="bold", **kw)
+    if texto:
+        ax.set_title(texto, **kw)
+
+
 def caja_media(da, box):
     """Media ponderada por cos(lat) de un campo (.., lat, lon) dentro de una caja."""
     sub = da.sel(lon=slice(box["lon1"], box["lon2"]), lat=slice(box["lat2"], box["lat1"]))
@@ -101,50 +117,96 @@ def caja_media(da, box):
 def dibujar_cajas(ax, lw=0.9):
     for box, col in [(pc.NINO34, "k"), (pc.NINO12, "m")]:
         x0, x1, y0, y1 = box["lon1"], box["lon2"], box["lat1"], box["lat2"]
-        ax.plot([x0, x1, x1, x0, x0], [y0, y0, y1, y1, y0], color=col, lw=lw)
+        ax.plot([x0, x1, x1, x0, x0], [y0, y0, y1, y1, y0], color=col, lw=lw, zorder=3)
 
 
-def mapa(ax, da, cmap, norm, titulo=None, punteado=None, cajas=True, levels=None, extend=None):
-    im = da.plot(ax=ax, cmap=cmap, norm=norm, add_colorbar=False, add_labels=False, levels=levels, extend=extend)
+def discreta(nombre, limites):
+    """(cmap, norm) discretos: un color por clase entre limites consecutivos,
+    asi los ticks de la barra (ticks=limites) caen en los cambios de color."""
+    limites = np.asarray(limites, dtype=float)
+    cmap = plt.get_cmap(nombre, len(limites) - 1)
+    return cmap, mcolors.BoundaryNorm(limites, cmap.N)
+
+
+def barra(fig, im, ax, label, limites, cada=1, **kw):
+    """Barra de color con ticks en los limites de clase (uno de cada `cada`)."""
+    return fig.colorbar(im, ax=ax, label=label, ticks=np.asarray(limites)[::cada], **kw)
+
+
+SHP_TIERRA = ROOT / "shp_files/World_Countries.shp"
+COLOR_TIERRA = "0.85"
+
+
+@lru_cache(maxsize=None)
+def tierra():
+    """Continentes (shp_files/World_Countries.shp, WGS84, lon -180/180) unidos
+    en una sola geometria y repetidos con +360 grados, para los mapas en 0-360."""
+    import geopandas as gpd
+    from shapely.affinity import translate
+    g = gpd.read_file(SHP_TIERRA)
+    geom = g.geometry.union_all() if hasattr(g.geometry, "union_all") else g.geometry.unary_union
+    return gpd.GeoSeries([geom, translate(geom, xoff=360)], crs=g.crs)
+
+
+def mascara_tierra(ax):
+    """Pinta la tierra con un solo color encima del campo: la mascara de cada
+    modelo (que difiere entre modelos) queda tapada por la misma costa."""
+    xlim, ylim = ax.get_xlim(), ax.get_ylim()
+    tierra().plot(ax=ax, color=COLOR_TIERRA, edgecolor="0.45", linewidth=0.3, zorder=2, aspect=None)
+    ax.set_xlim(xlim)
+    ax.set_ylim(ylim)
+
+
+def mapa(ax, da, cmap, norm, titulo=None, punteado=None, cajas=True, letra=None, marcador="x"):
+    im = da.plot(ax=ax, cmap=cmap, norm=norm, add_colorbar=False, add_labels=False)
+    mascara_tierra(ax)
     if punteado is not None:
         yy, xx = np.meshgrid(punteado.lat, punteado.lon, indexing="ij")
         m = punteado.values.astype(bool)
-        # ax.scatter(xx[m], yy[m], s=0.6, c="k", alpha=0.6, linewidths=0)
-        ax.scatter(xx[m], yy[m], s=16, c="k", alpha=0.4, linewidths=.2, marker="x")
+        if marcador == ".":
+            ax.scatter(xx[m], yy[m], s=1.5, c="k", alpha=0.7, linewidths=0, marker=".")
+        else:
+            ax.scatter(xx[m], yy[m], s=16, c="k", alpha=0.4, linewidths=.2, marker=marcador)
     if cajas:
         dibujar_cajas(ax)
-    if titulo:
-        ax.set_title(titulo, fontsize=10)
-    ax.set_facecolor("0.85")   # tierra / sin dato en gris
+    if titulo or letra:
+        titulo_panel(ax, letra, titulo or "", fontsize=10)
+    ax.set_facecolor(COLOR_TIERRA)   # sin dato en el mismo gris que la tierra
     return im
 
 
-def multiples(da, cmap, norm, titulo, unidad, punteado=None, lon=(120, 290), ncol=8, orden=None):
+def multiples(da, nombre_cmap, limites, titulo, unidad, punteado=None, lon=(120, 290), ncol=8, orden=None,
+              marcador="x", cada=1):
     """40 mapas chicos (uno por modelo), recortados al Pacifico tropical."""
     orden = orden or numbers
+    cmap, norm = discreta(nombre_cmap, limites)
     nrow = int(np.ceil(len(orden) / ncol))
-    fig, axs = plt.subplots(nrow, ncol, figsize=(2.1 * ncol, 1.35 * nrow + 0.8), sharex=True, sharey=True)
+    fig, axs = plt.subplots(nrow, ncol, figsize=(2.1 * ncol, 1.35 * nrow + 0.8), sharex=True, sharey=True,
+                            layout="constrained")
     for ax, n in zip(axs.flat, orden):
         k = int(n[1:])
         sub = da.sel(number=k, lon=slice(*lon))
         p = None if punteado is None else punteado.sel(number=k, lon=slice(*lon))
-        im = mapa(ax, sub, cmap, norm, punteado=p, levels=21, extend="both")
-        ax.set_title(etiqueta[n], fontsize=9, pad=2)
+        im = mapa(ax, sub, cmap, norm, punteado=p, marcador=marcador)
+        ax.set_title(etiqueta[n], loc="left", fontsize=9, pad=2, fontweight="bold")   # el codigo del modelo hace de letra
         ax.tick_params(labelsize=8)
     for ax in axs.flat[len(orden):]:
         ax.axis("off")
-    fig.subplots_adjust(top=0.93)
-    fig.suptitle(titulo, y=0.98)
-    fig.colorbar(im, ax=axs, shrink=0.5, pad=0.01, label=unidad, extend="both")
+    fig.suptitle(titulo)
+    barra(fig, im, axs, unidad, limites, cada=cada, pad=0.01, extend="both")
     return fig
 
 
-def taylor(ax, df, titulo, color=None, rmax=None, etiquetar=True, cbar_label=None):
-    """Diagrama de Taylor (cuarto de circulo) a partir de una tabla taylor_*.csv:
-    radio = sigma_norm, angulo = arccos(r), arcos grises = RMSE' normalizado."""
+def taylor(ax, df, titulo, color=None, rmax=None, etiquetar=True, cbar_label=None, semicirculo=False,
+           cmap="viridis", norm=None, letra=None):
+    """Diagrama de Taylor a partir de una tabla taylor_*.csv:
+    radio = sigma_norm, angulo = arccos(r), arcos grises = RMSE' normalizado.
+    semicirculo=True dibuja tambien r < 0 (angulo > 90 grados); con el cuarto
+    de circulo por defecto esos puntos quedarian fuera del grafico."""
     mod = df.drop(index="OBS", errors="ignore")
     rmax = rmax or max(1.6, float(np.ceil(mod["sigma_norm"].max() * 10) / 10) + 0.1)
-    t = np.linspace(0, np.pi / 2, 200)
+    amax = np.pi if semicirculo else np.pi / 2
+    t = np.linspace(0, amax, 200)
     for r in np.arange(0.25, rmax + 0.01, 0.25):           # sigma constante
         ax.plot(r * np.cos(t), r * np.sin(t), color="0.88", lw=0.6, zorder=0)
     ax.plot(np.cos(t), np.sin(t), color="0.4", lw=0.8, ls="--", zorder=0)
@@ -153,25 +215,32 @@ def taylor(ax, df, titulo, color=None, rmax=None, etiquetar=True, cbar_label=Non
         x, y = 1 + e * np.cos(tt), e * np.sin(tt)
         ok = (np.hypot(x, y) <= rmax) & (y >= 0)
         ax.plot(x[ok], y[ok], color="tab:green", lw=0.5, alpha=0.5, zorder=0)
-    for rc in [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99]:  # correlacion
+        if np.hypot(1, e) <= rmax:                          # valor en la cima del arco
+            ax.text(1, e, f"{e:g}", fontsize=6, color="tab:green", ha="center", va="bottom", zorder=1)
+    rcs = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99]
+    if semicirculo:
+        rcs = [-0.99, -0.9, -0.8, -0.6, -0.4, -0.2, 0.0, 0.2, 0.4, 0.6, 0.8, 0.9, 0.99]
+    for rc in rcs:                                          # correlacion
         a = np.arccos(rc)
         ax.plot([0, rmax * np.cos(a)], [0, rmax * np.sin(a)], color="0.9", lw=0.5, zorder=0)
-        ax.text(1.02 * rmax * np.cos(a), 1.02 * rmax * np.sin(a), f"{rc}", fontsize=6, color="0.4",
-                rotation=np.degrees(a), ha="center", va="center")
+        ax.text(1.04 * rmax * np.cos(a), 1.04 * rmax * np.sin(a), f"{rc}", fontsize=6, color="0.4",
+                rotation=np.degrees(a) - (180 if a > np.pi / 2 else 0), ha="center", va="center")
     th = np.arccos(mod["r"].clip(-1, 1))
     x, y = mod["sigma_norm"] * np.cos(th), mod["sigma_norm"] * np.sin(th)
-    sc = ax.scatter(x, y, c=color if color is not None else "tab:blue", cmap="viridis",
+    sc = ax.scatter(x, y, c=color if color is not None else "tab:blue", cmap=cmap, norm=norm,
                     s=28, edgecolor="k", linewidths=0.4, zorder=3)
     if etiquetar:
         for n, xi, yi in zip(mod.index, x, y):
             ax.annotate(n[1:], (xi, yi), fontsize=5.5, xytext=(2, 2), textcoords="offset points")
-    ax.scatter([1], [0], marker="*", s=200, c="k", zorder=4, clip_on=False, label="ERSSTv5")
-    ax.set_xlim(0, rmax)
+    ax.scatter([1], [0], marker="D", s=70, c="k", zorder=4, clip_on=False, label="ERSSTv5")
+    ax.set_xlim(-rmax if semicirculo else 0, rmax)
     ax.set_ylim(0, rmax)
+    if semicirculo:
+        ax.axvline(0, color="0.6", lw=0.6, zorder=0)        # r = 0
     ax.set_aspect("equal")
     ax.set_xlabel("σ normalizado")
     ax.set_ylabel("σ normalizado")
-    ax.set_title(titulo)
+    titulo_panel(ax, letra, titulo, pad=14)
     for s in ["top", "right"]:
         ax.spines[s].set_visible(False)
     return sc

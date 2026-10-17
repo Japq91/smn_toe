@@ -30,12 +30,11 @@ def main():
             ax.axvline(0, color="0.4", lw=0.6)
             ax.axhline(0, color="0.4", lw=0.6)
             ax.set_xlim(-max(VENTANAS), max(VENTANAS))
-            if fila == 0:
-                ax.set_title(f"ventana ±{v} meses")
+            titulo_panel(ax, LETRAS[fila * len(VENTANAS) + col], f"{i}: ventana ±{v} meses")
             if col == 0:
-                ax.set_ylabel(f"{i} (°C)")
+                ax.set_ylabel(f"{i} [°C]")
             if fila == len(INDICES) - 1:
-                ax.set_xlabel("meses relativos al pico")
+                ax.set_xlabel("tiempo relativo al pico [meses]")
     axs[0, 0].legend(frameon=False, fontsize=8)
     plt.tight_layout()
     guardar(fig, "08a_curvas_compuestas")

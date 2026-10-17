@@ -3,7 +3,7 @@
 Salidas propias del Entregable 2: climatología, sesgo, ONI/RONI
 (Niño 3.4), ICEN (Niño 1+2), diagrama de Taylor -- ver
 `scripts_e2/README.md` para el contrato de entrada y
-`informe/borradores/marco_teorico_e2.txt` para las ecuaciones. No usa
+`e2_informe/informe_e2.tex` (Sección 3) para las ecuaciones. No usa
 Índices C/E (Takahashi et al., 2011): reemplazados por ONI/RONI/ICEN,
 decisión del usuario. No confundir con `data/processed/masked/` ni
 `data/processed/models_inventory_final.csv`, que son insumo de solo
@@ -225,7 +225,7 @@ $E'^2=\sigma_f^2+\sigma_r^2-2\sigma_f\sigma_r r$ -- por eso van juntas
 en un solo archivo, no tiene sentido separarlas. El **por qué**
 metodológico completo (por qué centrado y no total, por qué Pearson y
 no Spearman, por qué normalizado) está en
-`informe/borradores/marco_teorico_e2.txt`, no se repite acá.
+`e2_informe/informe_e2.tex` (Sección 3.2), no se repite acá.
 
 Todo sobre la **anomalía** (climatología propia de cada dataset, sin
 LS, mismo criterio que el resto de E2). El nombre de archivo codifica
@@ -288,7 +288,7 @@ recalcula vía `common_e2.load_all_indices()` (combina el CSV de
 
 **Dos clasificaciones sobre el mismo evento**, no dos listas de
 eventos separadas (ver
-`informe/borradores/propuesta_puntos_11_12.md` para la justificación
+`e2_informe/informe_e2.tex`, Sección 3.4, para la justificación
 completa):
 
 - `categoria_oficial` -- umbral fijo en °C, el mismo que usa
@@ -346,7 +346,7 @@ que un modelo produzca su Niño de 1997 el mismo año que ERSSTv5 --
 `taylor_*.csv` (serie completa) penaliza esa diferencia de **fase**
 igual que penalizaría un error real de forma, y por eso los 40 modelos
 salen con $r$ cercano a 0 ahí (ver
-`informe/borradores/propuesta_puntos_11_12.md`). El compuesto evita el
+`e2_informe/informe_e2.tex`, Sección 3.5). El compuesto evita el
 problema: en vez de "¿pasó el evento el mismo año?", compara "cuando
 el modelo sí genera un evento, ¿tiene la **forma** correcta (arma,
 pico, decaimiento)?" -- pregunta respondible con una corrida libre.
@@ -358,8 +358,8 @@ en `taylor_compuesto_ONI_vent12m_1900-2014.csv` va de ~0.86 a
 describa exactamente esta metodología aplicada a ENOS/CMIP (incluida
 lectura completa de Kaur et al. 2021 y Sardana et al. 2023, los dos
 candidatos que se habían identificado antes) y ninguno la describe
-(ver `informe/borradores/marco_teorico_e2.txt`, Sección 12, para el
-detalle de esa verificación). *Superposed epoch analysis* (alinear
+(ver `e2_informe/informe_e2.tex`, Sección 3.5, para la
+justificación metodológica). *Superposed epoch analysis* (alinear
 eventos por su propio pico en vez de por fecha calendario) es una
 técnica general establecida en climatología, pero no se encontró la
 aplicación específica ENOS+Taylor que se buscaba -- se presenta como

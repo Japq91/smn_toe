@@ -11,7 +11,7 @@ recortadas a ese periodo antes de calcular, modelos y OBS):
     Pearson y no Spearman: la identidad de Taylor de abajo se deriva
     de la covarianza, solo vale para Pearson (Spearman, basado en
     rangos, no tiene esa relacion algebraica con la varianza de la
-    diferencia). Ver informe/borradores/marco_teorico_e2.txt.
+    diferencia). Ver e2_informe/informe_e2.tex, Seccion 3.2.
   - rmse_centrado: RMSE de las anomalias ya centradas (cada serie
     menos su propia media) contra ERSSTv5 -- (6.). Centrado, no el
     RMSE total: asi la identidad de Taylor

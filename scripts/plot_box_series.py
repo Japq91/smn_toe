@@ -90,7 +90,7 @@ def plot_box_series(model: str, box: dict, box_name: str, ax=None, force: bool =
     ax.set_ylabel("SST (°C)")
     ax.set_title(f"{display_name} – {model}")
     # Codigo M001..M102 como titulo aparte a la izquierda -- mismo
-    # criterio que plot_maps.py (informe/model_registry.csv). ERSSTv5
+    # criterio que plot_maps.py (e1_informe/model_registry.csv). ERSSTv5
     # no tiene codigo (no es de los 102 modelos CMIP6), pero tampoco
     # pasa por aca (esta funcion solo grafica modelos, no el observado).
     if model_number:

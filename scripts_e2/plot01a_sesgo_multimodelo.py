@@ -19,12 +19,14 @@ def main():
     bias = cargar_bias()
     media = bias.mean("number")
     acuerdo = np.maximum((bias > 0).mean("number"), (bias < 0).mean("number")) >= 0.8
-    fig, axs = plt.subplots(2, 1, figsize=(12, 5),sharex=True, constrained_layout=True)
-    im = mapa(axs[0], media, "RdBu_r", mcolors.TwoSlopeNorm(0, -3, 3),
-              "Sesgo medio multimodelo -- punteado: ≥80% de modelos con el mismo signo", punteado=acuerdo, levels=21, extend="both")
-    fig.colorbar(im, ax=axs[0], label="[°C]", extend="both", shrink=.9,pad=.01)
-    im = mapa(axs[1], bias.std("number"), "managua", mcolors.Normalize(0, 2.5), "Desviación estándar entre modelos", levels=31,)
-    fig.colorbar(im, ax=axs[1], label="[°C]", extend="max", shrink=.9,pad=.01)
+    fig, axs = plt.subplots(2, 1, figsize=(12, 5), sharex=True, layout="constrained")
+    lim_a = np.arange(-3, 3.01, 0.5)
+    lim_b = np.arange(0, 2.51, 0.25)
+    im = mapa(axs[0], media, *discreta("RdBu_r", lim_a),
+              "Sesgo medio multimodelo -- punteado: ≥80% de modelos con el mismo signo", punteado=acuerdo, letra="a")
+    barra(fig, im, axs[0], "[°C]", lim_a, extend="both", pad=.01)
+    im = mapa(axs[1], bias.std("number"), *discreta("managua", lim_b), "Desviación estándar entre modelos", letra="b")
+    barra(fig, im, axs[1], "[°C]", lim_b, extend="max", pad=.01)
     # plt.tight_layout()
     guardar(fig, "01a_sesgo_multimodelo")
 

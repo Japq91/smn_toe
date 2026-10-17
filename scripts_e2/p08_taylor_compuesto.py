@@ -5,7 +5,7 @@ del indice).
 
 Insumo directo del paso (11.) (eventos_*.csv, p07_eventos.py) -- no
 son pasos independientes. Ver
-informe/borradores/propuesta_puntos_11_12.md para la justificacion
+e2_informe/informe_e2.tex (Seccion 3.5) para la justificacion
 completa: la correlacion de fase entre un modelo historical libre y
 las observaciones es practicamente nula (no reproducen El Nino en el
 mismo anio -- no son corridas inicializadas), asi que el diagrama de
@@ -22,8 +22,8 @@ compuesta centrada en el pico del evento + diagrama de Taylor sobre la
 curva compuesta) aplicada a ENOS/CMIP -- incluyendo lectura completa
 de Kaur et al. (2021) y Sardana et al. (2023), los dos candidatos mas
 cercanos que se habian identificado antes -- y ninguno la describe
-(ver marco_teorico_e2.txt, Seccion 12, para el detalle de esa
-verificacion). La tecnica en si (superposed epoch analysis / epoch
+(ver e2_informe/informe_e2.tex, Seccion 3.5, para la justificacion
+metodologica). La tecnica en si (superposed epoch analysis / epoch
 compositing) es una tecnica general establecida en climatologia para
 alinear eventos por su propio pico en vez de por fecha calendario,
 pero no se encontro la aplicacion especifica ENOS+Taylor que

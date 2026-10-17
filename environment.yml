@@ -34,6 +34,7 @@ dependencies:
   - jupyterlab
   - pyyaml
   - cartopy
+  - geopandas      # mascara de tierra desde shapefile en los mapas de scripts_e2 (plot00_comun.py)
   - scipy          # test t de scripts_e2/p06_correlacion.py
   - scikit-learn   # KMeans del gap statistic en scripts_e2/p09_skill_score.py
   - pip

@@ -3,7 +3,7 @@
 SIN_LINK/UNAVAILABLE (mas el caso especial SOLO_HIST1950) por modelo y
 experimento, a partir de
 data/processed/qc_report.csv (paso 06), la disponibilidad real que
-escribe el paso 00b (informe/model_availability_priority.csv) y el
+escribe el paso 00b (e1_informe/model_availability_priority.csv) y el
 contenido de data/raw/cmip6/ (para distinguir "nunca se descargo" de
 "se descargo pero no llego al QC"). Extraido de
 graficos_exploratorios.ipynb para poder correrlo desde terminal sin
@@ -76,7 +76,7 @@ def plot_qc_summary(n_panels: int = 4) -> None:
     # data/interim/models_catalog_status.csv (paso 01): dice, por
     # modelo/experimento, si se encontro un link de descarga real que
     # respondio (no solo si el experimento existe segun 00b -- eso es
-    # informe/model_availability_priority.csv, una capa mas superficial).
+    # e1_informe/model_availability_priority.csv, una capa mas superficial).
     catalog_df = None
     if pc.CATALOG_CSV.exists():
         catalog_df = pd.read_csv(pc.CATALOG_CSV, dtype=str).set_index("model")
@@ -122,7 +122,7 @@ def plot_qc_summary(n_panels: int = 4) -> None:
 
     # 'tos' es la unica columna aparte de los experimentos -- tiene_tos
     # tal cual (en la practica casi siempre 1, ver
-    # informe/model_availability_priority.csv). La distincion
+    # e1_informe/model_availability_priority.csv). La distincion
     # historical/hist-1950 ya no es una columna aparte: queda fundida
     # en el estado SOLO_HIST1950 de la columna 'historical' (ver arriba).
     tos_available = {
@@ -133,7 +133,7 @@ def plot_qc_summary(n_panels: int = 4) -> None:
     # Orden alfabetico simple (no por PASS/disponibilidad) -- asi el
     # numero M001..M102 que se muestra en el eje queda en secuencia,
     # sin saltos. El cruce numero <-> nombre real de modelo queda en
-    # informe/model_registry.csv (build_model_registry.py, misma
+    # e1_informe/model_registry.csv (build_model_registry.py, misma
     # numeracion: alfabetico sobre el mismo universo de 102 modelos).
     model_order = sorted(all_models)
     width = max(3, len(str(len(model_order))))

@@ -18,7 +18,7 @@ from plot00_comun import *  # noqa: F401,F403  (config, helpers y cargas comunes
 def main():
     df = cargar_indices()
     fig, axs = plt.subplots(1, 3, figsize=(14, 4), sharey=True)
-    for ax, ind in zip(axs, INDICES):
+    for ax, letra, ind in zip(axs, LETRAS, INDICES):
         specs = {}
         for n in numbers + ["OBS"]:
             s = df[f"{n}_{ind}"].dropna().values
@@ -34,9 +34,9 @@ def main():
         ax.set_xlim(1, 20)
         ax.set_xticks([1, 2, 3, 5, 7, 10, 20])
         ax.set_xticklabels([1, 2, 3, 5, 7, 10, 20])
-        ax.set_xlabel("período (años)")
-        ax.set_title(ind)
-    axs[0].set_ylabel("densidad espectral (°C²·año)")
+        ax.set_xlabel("período [años]")
+        titulo_panel(ax, letra, ind)
+    axs[0].set_ylabel("densidad espectral [°C²·año]")
     axs[0].legend(frameon=False, fontsize=8)
     plt.tight_layout()
     guardar(fig, "04d_espectro_indices")

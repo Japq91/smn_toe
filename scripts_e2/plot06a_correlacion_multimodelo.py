@@ -17,14 +17,15 @@ from plot00_comun import *  # noqa: F401,F403  (config, helpers y cargas comunes
 
 def main():
     corr, pval = cargar_corr()
-    fig, axs = plt.subplots(2, 1, figsize=(13, 6.5))
+    fig, axs = plt.subplots(2, 1, figsize=(13, 6.5), layout="constrained")
     frac = (pval < 0.05).mean("number")
-    im = mapa(axs[0], corr.mean("number"), "RdBu_r", mcolors.TwoSlopeNorm(0, -0.6, 0.6),
-              "r medio multimodelo -- punteado: ≥50% de modelos con p<0.05", punteado=frac >= 0.5)
-    fig.colorbar(im, ax=axs[0], label="r", extend="both", shrink=0.9)
-    im = mapa(axs[1], frac * 100, "viridis", mcolors.Normalize(0, 100), "% de modelos con correlación significativa (p<0.05)")
-    fig.colorbar(im, ax=axs[1], label="%", shrink=0.9)
-    plt.tight_layout()
+    lim_r = np.round(np.arange(-0.6, 0.61, 0.1), 2)
+    lim_p = np.arange(0, 101, 10)
+    im = mapa(axs[0], corr.mean("number"), *discreta("RdBu_r", lim_r),
+              "r medio multimodelo -- punteado: ≥50% de modelos con p<0.05", punteado=frac >= 0.5, letra="a")
+    barra(fig, im, axs[0], "r", lim_r, extend="both", pad=.01)
+    im = mapa(axs[1], frac * 100, *discreta("viridis", lim_p), "Modelos con correlación significativa (p<0.05) [%]", letra="b")
+    barra(fig, im, axs[1], "[%]", lim_p, pad=.01)
     guardar(fig, "06a_correlacion_multimodelo")
 
 

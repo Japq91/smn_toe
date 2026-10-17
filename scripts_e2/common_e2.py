@@ -155,7 +155,7 @@ def pearson_r(model_da, obs_da):
     (E'^2 = sigma_f^2 + sigma_r^2 - 2*sigma_f*sigma_r*r) se deriva de
     la covarianza -- solo vale para Pearson, Spearman (basado en
     rangos) no tiene esa relacion algebraica con la varianza de la
-    diferencia (ver informe/borradores/marco_teorico_e2.txt)."""
+    diferencia (ver e2_informe/informe_e2.tex, Seccion 3.2)."""
     m, o = xr.align(model_da, obs_da, join="inner")
     return float(xr.corr(m, o))
 
@@ -170,7 +170,7 @@ def rolling3(da):
 #     """RONI = ONI - anomalia tropical (rolling 3m), reescalado para que
 #     su varianza iguale a la del ONI original (definicion oficial NOAA
 #     CPC; candidata academica: van Oldenborgh et al. 2021, ver
-#     informe/borradores/marco_teorico_e2.txt Seccion 8)."""
+#     e2_informe/informe_e2.tex Seccion 3.3)."""
 #     a_trop = anomaly(tropical_da, clim_tropical_da)
 #     raw = oni_da - rolling3(a_trop)
 #     m_oni, m_raw = xr.align(oni_da, raw, join="inner")
@@ -287,8 +287,16 @@ def obs_indices():
     (columnas solo M01..M40, pedido explicito del usuario) -- se
     recalculan aca los 3 indices de obs, para poder comparar cada
     modelo contra obs (usado por p07_eventos.py y
-    p08_taylor_compuesto.py)."""
-    series = {k: box_series(obs_path(), box, "sst", weighted=WEIGHTED[k]) for k, box in BOXES.items()}
+    p08_taylor_compuesto.py).
+
+    ERSSTv5 se recorta a la misma ventana de anios que los modelos
+    (indices_period(), ej. 1900-2014) ANTES de calcular los indices:
+    asi las bases moviles (ONI/ICEN) y la base fija (RONI) se ajustan
+    a los mismos limites de datos que en los modelos (ej. 1985-2014 al
+    final), en vez de usar 1991-2020 solo para la observacion."""
+    y0, y1 = indices_period().split("-")
+    series = {k: box_series(obs_path(), box, "sst", weighted=WEIGHTED[k]).sel(time=slice(y0, y1))
+              for k, box in BOXES.items()}
     # oni = oni_index(series["nino34"], clim["nino34"])
     oni = oni_index(series["nino34"])
     # roni = roni_index(oni, series["tropical"], clim["tropical"])

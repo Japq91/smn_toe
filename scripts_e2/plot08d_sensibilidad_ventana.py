@@ -65,6 +65,7 @@ def main():
             ax.set_ylim(lo, hi)
             ax.set_aspect("equal", adjustable="box")
 
+            titulo_panel(ax, LETRAS[fila * len(MET) + MET.index(met)], met)
             ax.set_xlabel(f"{met} -- ventana {VENTANA} m")
             ax.set_ylabel(f"{met} -- ventana {v} m")
     axs[0, 0].legend(frameon=False)

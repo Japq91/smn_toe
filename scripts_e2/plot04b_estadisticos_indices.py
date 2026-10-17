@@ -19,12 +19,13 @@ def main():
     est = cargar_est()
     fig, axs = plt.subplots(3, 1, figsize=(12, 8), sharex=True)
     x = np.arange(len(numbers))
-    for ax, stat, lab in zip(axs, ["σ", "skew", "kurt"], ["σ (°C)", "asimetría", "curtosis (exceso)"]):
+    for ax, letra, stat, lab in zip(axs, LETRAS, ["σ", "skew", "kurt"], ["σ [°C]", "asimetría", "curtosis (exceso)"]):
         for k, ind in enumerate(INDICES):
             ax.plot(x + (k - 1) * 0.22, est.loc[numbers, f"{stat}_{ind}"], M_IDX[ind], ms=4, color=COL_IDX[ind], label=ind)
             ax.axhline(est.loc["OBS", f"{stat}_{ind}"], color=COL_IDX[ind], ls="--", lw=0.9)
         ax.axhline(0, color="0.3", lw=0.4)
         ax.set_ylabel(lab)
+        titulo_panel(ax, letra, lab.split(" [")[0].split(" (")[0].capitalize())
         ax.grid(axis="x", color="0.93")
     axs[0].legend(ncol=3, frameon=False, fontsize=8, title="(-- = ERSSTv5)", title_fontsize=8)
     axs[-1].set_xticks(x)

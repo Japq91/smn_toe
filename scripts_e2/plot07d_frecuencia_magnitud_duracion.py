@@ -36,8 +36,8 @@ def main():
     cmap = plt.get_cmap("viridis", N)
     norm = BoundaryNorm(bounds, cmap.N)
 
-    fig, axs = plt.subplots(1, 3, figsize=(12, 3.2),sharey='row')
-    for ax, i in zip(axs, INDICES):
+    fig, axs = plt.subplots(1, 3, figsize=(12, 3.2), sharey='row', layout="constrained")
+    for ax, letra, i in zip(axs, LETRAS, INDICES):
         g = gs[i]
         m, o = g.drop(index="OBS"), g.loc["OBS"]
         sc = ax.scatter(m["freq"], m["mag"], s=m["dur"] * 6, c=m["dur"],
@@ -58,17 +58,16 @@ def main():
         ax.axhline(o["mag"],  color="k", lw=0.9, ls="-", zorder=2, alpha=0.8)
 
         # colorbar con pad extra para alojar la etiqueta ERSSTv5 a su izquierda
-        cb = fig.colorbar(sc, ax=ax, pad=0.05, label="duración media (meses)",
+        cb = fig.colorbar(sc, ax=ax, pad=0.05, label="duración media [meses]",
                           ticks=bounds, extend="both", spacing="uniform")
-        cb.ax.axhline(o["dur"], color="k", lw=1.8)
+        cb.ax.axhline(o["dur"], color="k", lw=1.6)
         cb.ax.text(-0.08, o["dur"], "ERSSTv5",
                    transform=cb.ax.get_yaxis_transform(),
-                   ha="right", va="center", fontsize=7,rotation=90)
+                   ha="right", va="center", fontsize=6,rotation=90)
 
-        ax.set_xlabel("eventos / siglo")
-        ax.set_ylabel("magnitud pico media (°C)")
-        ax.set_title(i)
-    plt.tight_layout()
+        ax.set_xlabel("frecuencia [eventos/siglo]")
+        ax.set_ylabel("magnitud pico media [°C]")
+        titulo_panel(ax, letra, i)
     guardar(fig, "07d_frecuencia_magnitud_duracion")
 
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Arma informe/model_registry.csv: un identificador numerico estable
+"""Arma e1_informe/model_registry.csv: un identificador numerico estable
 (M001..M102, orden alfabetico) para cada uno de los 102 modelos que
 '00b' inspecciona, mas la informacion de referencia que pidio el
 usuario en un solo lugar -- institucion, pais/consorcio, realizacion
@@ -9,7 +9,7 @@ cuando ese experimento existe en ESGF en absoluto (no cuando ya se
 descargo).
 
 Junta 4 fuentes:
-  - informe/model_availability_priority.csv (00b): los 102 modelos y
+  - e1_informe/model_availability_priority.csv (00b): los 102 modelos y
     su disponibilidad real por experimento.
   - config/models_seed_cmip6.csv (00b): institucion y grilla elegida,
     pero SOLO para los modelos seleccionados como seed (los que tienen
@@ -46,11 +46,11 @@ import sys
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-PRIORITY_CSV = BASE_DIR / "informe/model_availability_priority.csv"
+PRIORITY_CSV = BASE_DIR / "e1_informe/model_availability_priority.csv"
 SEED_CSV = BASE_DIR / "config/models_seed_cmip6.csv"
 CATALOG_CSV = BASE_DIR / "data/interim/models_catalog_status.csv"
 INSTITUTION_CV = BASE_DIR / "config/CMIP6_institution_id.json"
-OUT_CSV = BASE_DIR / "informe/model_registry.csv"
+OUT_CSV = BASE_DIR / "e1_informe/model_registry.csv"
 
 
 def load_country_by_institution() -> dict[str, str]:

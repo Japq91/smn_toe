@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Empaqueta en un solo .tar.gz los artefactos dispersos (config/,
-data/, informe/, logs/, figures/) que hacen falta para actualizar
-informe/informe_e1_smnv2.tex y informe/presentacion_e1.html con
+data/, e1_informe/, logs/, figures/) que hacen falta para actualizar
+e1_informe/informe_e1_smnv2.tex y e1_informe/presentacion_e1.html con
 resultados reales de una corrida -- pensado para transferirlos de una
 sola vez desde otra maquina (ej. HPC) en vez de archivo por archivo.
 
@@ -26,9 +26,9 @@ EXPECTED_FILES = [
      "run.sh (paso 00b) -- si ya existe y quedo viejo, borralo primero para forzar un refresco"),
     ("data/interim/models_catalog_status.csv",
      "run.sh (paso 01)"),
-    ("informe/model_availability_priority.csv",
+    ("e1_informe/model_availability_priority.csv",
      "run.sh (paso 00b) -- se genera junto con models_seed_cmip6.csv"),
-    ("informe/model_registry.csv",
+    ("e1_informe/model_registry.csv",
      "python3 scripts/build_model_registry.py (ya se corre solo al final de run.sh) -- "
      "numero M001..M102 por modelo, cruzado con el eje de figures/e1/sst_QD_vf.png"),
     ("data/processed/qc_report.csv",
@@ -41,7 +41,7 @@ EXPECTED_FILES = [
      "python3 scripts/plot_maps.py (ya se corre solo al final de run.sh) -- "
      "necesita data/processed/masked/ersstv5_region.nc (pasos 03-05) -- el observado"),
     # Los 3 modelos de grilla mas gruesa entre los seleccionados (ver
-    # informe/model_registry.csv, columna resolution_km: ACCESS-CM2
+    # e1_informe/model_registry.csv, columna resolution_km: ACCESS-CM2
     # (M001), ACCESS-ESM1-5 (M002) y GISS-E2-1-G (M057) empatan en 250 km,
     # se toman los 3 primeros en orden alfabetico/de codigo M -- mismo
     # criterio que el resto del proyecto) -- mapa 2D + series de caja de
@@ -116,5 +116,5 @@ def main(out_path: Path) -> None:
 
 
 if __name__ == "__main__":
-    out_arg = Path(sys.argv[1]) if len(sys.argv) > 1 else BASE_DIR / "informe" / "entregable_update.tar.gz"
+    out_arg = Path(sys.argv[1]) if len(sys.argv) > 1 else BASE_DIR / "e1_informe" / "entregable_update.tar.gz"
     main(out_arg)

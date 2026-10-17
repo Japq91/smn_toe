@@ -23,10 +23,10 @@ def main():
         ax.scatter(t["sesgo (°C)"], t["amplitud / OBS"], marker=mk, s=28, edgecolor="k", lw=0.4, label=NOM_CAJA[caja])
     ax.axhline(1, color="k", lw=0.6, ls="--")
     ax.axvline(0, color="k", lw=0.6, ls="--")
-    ax.set_xlabel("sesgo medio anual (°C)")
+    ax.set_xlabel("sesgo medio anual [°C]")
     ax.set_ylabel("amplitud del ciclo anual / ERSSTv5")
     ax.legend(frameon=True)
-    ax.set_title("Media vs amplitud del ciclo anual")
+    titulo_panel(ax, None, "Media vs amplitud del ciclo anual")
     plt.tight_layout()
     guardar(fig, "02d_sesgo_vs_amplitud")
 

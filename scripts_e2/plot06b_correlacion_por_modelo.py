@@ -17,8 +17,8 @@ from plot00_comun import *  # noqa: F401,F403  (config, helpers y cargas comunes
 
 def main():
     corr, pval = cargar_corr()
-    fig = multiples(corr, "RdBu_r", mcolors.TwoSlopeNorm(0, -0.8, 0.8), "Correlación modelo vs ERSSTv5 (punteado: p<0.05)", "r",
-                    punteado=pval < 0.05)
+    fig = multiples(corr, "RdBu_r", np.round(np.arange(-0.8, 0.81, 0.1), 2), "Correlación modelo vs ERSSTv5 (puntos: p<0.05)", "r",
+                    punteado=pval < 0.05, marcador=".", cada=2)
     guardar(fig, "06b_correlacion_por_modelo")
 
 

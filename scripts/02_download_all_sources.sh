@@ -28,7 +28,7 @@
 # modelos que sabemos que ni siquiera aparecen en CDS. Reemplaza a
 # config/models_copernicus_ssp245_whitelist.csv (mas acotada, verificada
 # a mano solo para ssp245; se conserva sin usar, como referencia
-# historica del Entregable 1 -- ver informe/).
+# historica del Entregable 1 -- ver e1_informe/).
 set -uo pipefail
 cd "$(dirname "$0")/.."
 

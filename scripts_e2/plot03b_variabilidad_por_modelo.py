@@ -17,8 +17,7 @@ from plot00_comun import *  # noqa: F401,F403  (config, helpers y cargas comunes
 
 def main():
     dvar = cargar_dvar()
-    norm_v = mcolors.TwoSlopeNorm(0, -75, 150)
-    fig = multiples(dvar, "PuOr_r", norm_v, "Diferencia % de σ de la anomalía, modelo vs ERSSTv5", "%")
+    fig = multiples(dvar, "PuOr_r", LIM_D, "Diferencia de σ de la anomalía, modelo vs ERSSTv5 [%]", "[%]")
     guardar(fig, "03b_variabilidad_por_modelo")
 
 

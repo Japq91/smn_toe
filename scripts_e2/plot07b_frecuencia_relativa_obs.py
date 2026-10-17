@@ -17,20 +17,22 @@ from plot00_comun import *  # noqa: F401,F403  (config, helpers y cargas comunes
 
 def main():
     ev, siglos = cargar_eventos(), cargar_siglos()
-    fig, axs = plt.subplots(1, 3, figsize=(14, 9), sharey=True)
-    for ax, i in zip(axs, INDICES):
+    lim = np.arange(-2, 2.01, 0.5)
+    cmap, norm = discreta("BrBG_r", lim)
+    fig, axs = plt.subplots(1, 3, figsize=(14, 9), sharey=True, layout="constrained")
+    for ax, letra, i in zip(axs, LETRAS, INDICES):
         t = ev[i].groupby("number")["categoria_oficial"].value_counts().unstack(fill_value=0).reindex(datasets, fill_value=0)
         t = t[[c for c in ORD_OF if c in t.columns]]
         t = t.div([siglos[(n, i)] for n in t.index], axis=0)
         t["total"] = t.sum(axis=1)
         r = np.log2((t.loc[numbers] + 0.25) / (t.loc["OBS"] + 0.25))   # +0.25 evita log(0)
-        im = ax.imshow(r.values, cmap="BrBG_r", vmin=-2, vmax=2, aspect="auto")
+        im = ax.imshow(r.values, cmap=cmap, norm=norm, aspect="auto")
         ax.set_xticks(range(r.shape[1]))
         ax.set_xticklabels(r.columns, rotation=45, ha="right")
-        ax.set_title(f"{i}  (OBS: " + ", ".join(f"{v:.0f}" for v in t.loc["OBS"]) + ")", fontsize=8)
+        titulo_panel(ax, letra, f"{i}  (OBS: " + ", ".join(f"{v:.0f}" for v in t.loc["OBS"]) + ")", fontsize=8)
     axs[0].set_yticks(range(len(numbers)))
     axs[0].set_yticklabels([etiqueta[n] for n in numbers], fontsize=7)
-    fig.colorbar(im, ax=axs, shrink=0.5, label="log2(frecuencia modelo / ERSSTv5)", extend="both")
+    barra(fig, im, axs, "log2(frecuencia modelo / ERSSTv5)", lim, extend="both")
     guardar(fig, "07b_frecuencia_relativa_obs")
 
 

@@ -18,7 +18,7 @@ from plot00_comun import *  # noqa: F401,F403  (config, helpers y cargas comunes
 def main():
     skv = cargar_skv()
     fig, axs = plt.subplots(len(VENTANAS), 1, figsize=(14, 4.8 * len(VENTANAS)))
-    for ax, v in zip(axs, VENTANAS):
+    for ax, letra, v in zip(axs, LETRAS, VENTANAS):
         ov = skv[v].sort_values("S_final", ascending=False)
         x = np.arange(len(ov))
         ax.bar(x, ov["S_final"], color=np.where(ov["seleccionado"], "0.45", "0.82"), width=0.8,
@@ -32,7 +32,7 @@ def main():
         ax.set_xticklabels([etiqueta[n] for n in ov.index], rotation=90, fontsize=7)
         ax.set_ylabel("S")
         ax.set_ylim(0, 1.02)
-        ax.set_title(f"Score de habilidad de Taylor por modelo (ordenado por S_final) -- compuesto ±{v} m")
+        titulo_panel(ax, letra, f"Score de habilidad de Taylor por modelo (ordenado por S_final) -- compuesto ±{v} m")
     axs[0].legend(ncol=4, fontsize=7, frameon=False, loc="lower left")
     plt.tight_layout()
     guardar(fig, "09a_ranking_skill")

@@ -28,13 +28,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 RAW_DIR = BASE_DIR / "data/raw/cmip6"
 MASKED_DIR = BASE_DIR / "data/processed/masked"
 QC_CSV = BASE_DIR / "data/processed/qc_report.csv"
-MODEL_AVAILABILITY_CSV = BASE_DIR / "informe/model_availability_priority.csv"
+MODEL_AVAILABILITY_CSV = BASE_DIR / "e1_informe/model_availability_priority.csv"
 CATALOG_CSV = BASE_DIR / "data/interim/models_catalog_status.csv"
 INVENTORY_CSV = BASE_DIR / "data/processed/models_inventory_final.csv"
 FIGURES_DIR = BASE_DIR / "figures/e1"  # E1; E2 escribe en figures/e2 (scripts_e2/)
 
 # Todas las figuras se guardan livianas (DPI 100) -- pensado para que
-# el informe/presentacion no pese de mas, y para no generar archivos
+# el e1_informe/presentacion no pese de mas, y para no generar archivos
 # grandes en el HPC sin necesidad.
 DPI = 150
 

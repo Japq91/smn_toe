@@ -17,15 +17,16 @@ from plot00_comun import *  # noqa: F401,F403  (config, helpers y cargas comunes
 
 def main():
     dvar = cargar_dvar()
-    norm_v = mcolors.TwoSlopeNorm(0, -75, 150)
+    lim_d = LIM_D          # 5 clases a cada lado de 0: la mitad (-75) y el doble (+150) pesan igual
+    lim_iqr = np.arange(0, 151, 15)
     med = dvar.median("number")
     acuerdo_v = np.maximum((dvar > 0).mean("number"), (dvar < 0).mean("number")) >= 0.8
-    fig, axs = plt.subplots(2, 1,figsize=(12, 5),sharex=True, constrained_layout=True)
-    im = mapa(axs[0], med, "PuOr_r", norm_v, "Δσ mediana multimodelo -- punteado: ≥80% de modelos con el mismo signo", punteado=acuerdo_v)
-    fig.colorbar(im, ax=axs[0], label="[%]", extend="both", shrink=0.9)
+    fig, axs = plt.subplots(2, 1,figsize=(12, 5), sharex=True, layout="constrained")
+    im = mapa(axs[0], med, *discreta("PuOr_r", lim_d), "Δσ mediana multimodelo -- punteado: ≥80% de modelos con el mismo signo", punteado=acuerdo_v, letra="a")
+    barra(fig, im, axs[0], "[%]", lim_d, extend="both", pad=.01)
     iqr = dvar.quantile(0.75, "number") - dvar.quantile(0.25, "number")
-    im = mapa(axs[1], iqr, "magma_r", mcolors.Normalize(0, 150), "Rango intercuartil entre modelos")
-    fig.colorbar(im, ax=axs[1], label="[%]", extend="max", shrink=.9,pad=.01)
+    im = mapa(axs[1], iqr, *discreta("magma_r", lim_iqr), "Rango intercuartil entre modelos", letra="b")
+    barra(fig, im, axs[1], "[%]", lim_iqr, extend="max", pad=.01)
     # plt.tight_layout()
     guardar(fig, "03a_variabilidad_multimodelo")
 
