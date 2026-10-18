@@ -120,6 +120,25 @@ def dibujar_cajas(ax, lw=0.9):
         ax.plot([x0, x1, x1, x0, x0], [y0, y0, y1, y1, y0], color=col, lw=lw, zorder=3)
 
 
+def cmap_modelos(continua=False, nombre="turbo"):
+    """(cmap, norm, ticks) para colorear por numero de modelo, ticks 1..40.
+    Por defecto discreta: 40 colores cualitativos (tab20 + tab20b), una clase
+    por modelo. continua=True: cmap `nombre` continuo entre 1 y 40."""
+    n = len(numbers)
+    ticks = np.arange(1, n + 1)
+    if continua:
+        return plt.get_cmap(nombre), mcolors.Normalize(1, n), ticks
+    cols = list(plt.get_cmap("tab20").colors) + list(plt.get_cmap("tab20b").colors)
+    cmap = mcolors.ListedColormap(cols[:n])
+    return cmap, mcolors.BoundaryNorm(np.arange(n + 1) + 0.5, cmap.N), ticks
+
+
+def barra_modelos(fig, ax, cmap, norm, ticks, **kw):
+    cb = fig.colorbar(plt.cm.ScalarMappable(norm=norm, cmap=cmap), ax=ax, label="modelo", ticks=ticks, **kw)
+    cb.ax.tick_params(labelsize=7)
+    return cb
+
+
 def discreta(nombre, limites):
     """(cmap, norm) discretos: un color por clase entre limites consecutivos,
     asi los ticks de la barra (ticks=limites) caen en los cambios de color."""
@@ -128,9 +147,16 @@ def discreta(nombre, limites):
     return cmap, mcolors.BoundaryNorm(limites, cmap.N)
 
 
-def barra(fig, im, ax, label, limites, cada=1, **kw):
-    """Barra de color con ticks en los limites de clase (uno de cada `cada`)."""
-    return fig.colorbar(im, ax=ax, label=label, ticks=np.asarray(limites)[::cada], **kw)
+def barra(fig, im, ax, label, limites, cada=1, alto=None, **kw):
+    """Barra de color con ticks en los limites de clase (uno de cada `cada`).
+    alto (0-1, un solo panel): barra en un eje inset a la derecha, centrada y
+    con esa fraccion del alto del panel (en vez de shrink)."""
+    ticks = np.asarray(limites)[::cada]
+    if alto:
+        pad = kw.pop("pad", 0.01)
+        cax = ax.inset_axes([1 + pad, (1 - alto) / 2, 0.012, alto])
+        return fig.colorbar(im, cax=cax, label=label, ticks=ticks, **kw)
+    return fig.colorbar(im, ax=ax, label=label, ticks=ticks, **kw)
 
 
 SHP_TIERRA = ROOT / "shp_files/World_Countries.shp"
@@ -172,16 +198,19 @@ def mapa(ax, da, cmap, norm, titulo=None, punteado=None, cajas=True, letra=None,
     if titulo or letra:
         titulo_panel(ax, letra, titulo or "", fontsize=10)
     ax.set_facecolor(COLOR_TIERRA)   # sin dato en el mismo gris que la tierra
+    ax.set_aspect("equal")   # 1 grado de lon = 1 grado de lat (PlateCarree)
     return im
 
 
-def multiples(da, nombre_cmap, limites, titulo, unidad, punteado=None, lon=(120, 290), ncol=8, orden=None,
-              marcador="x", cada=1):
-    """40 mapas chicos (uno por modelo), recortados al Pacifico tropical."""
+def multiples(da, nombre_cmap, limites, titulo, unidad, punteado=None, lon=(120, 290), ncol=5, orden=None,
+              marcador="x", cada=1, alto_barra=0.5):
+    """40 mapas chicos (uno por modelo), recortados al Pacifico tropical.
+    alto_barra (0-1): fraccion de filas que ocupa la barra, centrada a la
+    derecha (None = todo el alto)."""
     orden = orden or numbers
     cmap, norm = discreta(nombre_cmap, limites)
     nrow = int(np.ceil(len(orden) / ncol))
-    fig, axs = plt.subplots(nrow, ncol, figsize=(2.1 * ncol, 1.35 * nrow + 0.8), sharex=True, sharey=True,
+    fig, axs = plt.subplots(nrow, ncol, figsize=(2.1 * ncol, 0.88 * nrow + 0.8), sharex=True, sharey=True,
                             layout="constrained")
     for ax, n in zip(axs.flat, orden):
         k = int(n[1:])
@@ -193,7 +222,12 @@ def multiples(da, nombre_cmap, limites, titulo, unidad, punteado=None, lon=(120,
     for ax in axs.flat[len(orden):]:
         ax.axis("off")
     fig.suptitle(titulo)
-    barra(fig, im, axs, unidad, limites, cada=cada, pad=0.01, extend="both")
+    ejes_barra = axs
+    if alto_barra:   # la barra se ajusta a las filas centrales (sin shrink)
+        k = int(round(nrow * alto_barra))
+        i0 = (nrow - k) // 2
+        ejes_barra = axs[i0:i0 + k, :]
+    barra(fig, im, ejes_barra, unidad, limites, cada=cada, pad=0.01, extend="both")
     return fig
 
 
