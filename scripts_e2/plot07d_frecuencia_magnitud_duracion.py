@@ -18,6 +18,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from plot00_comun import *  # noqa: F401,F403  (config, helpers y cargas comunes)
 
 
+# color de ERSSTv5 por indice: cruce de lineas en su panel y raya en la barra
+COL_OBS = {"ONI": "b", "RONI": "r", "ICEN": "k"}
+
+
 def main():
     ev, siglos = cargar_eventos(), cargar_siglos()
 
@@ -54,20 +58,21 @@ def main():
                         fontsize=fs, ha="center", va="center", color=txt_color)
 
         # OBS como cruce de lineas (vertical + horizontal)
-        ax.axvline(o["freq"], color="k", lw=0.9, ls="-", zorder=2, alpha=0.8)
-        ax.axhline(o["mag"],  color="k", lw=0.9, ls="-", zorder=2, alpha=0.8)
-
-        # colorbar con pad extra para alojar la etiqueta ERSSTv5 a su izquierda
-        cb = fig.colorbar(sc, ax=ax, pad=0.05, label="duración media [meses]",
-                          ticks=bounds, extend="both", spacing="uniform")
-        cb.ax.axhline(o["dur"], color="k", lw=1.6)
-        cb.ax.text(-0.08, o["dur"], "ERSSTv5",
-                   transform=cb.ax.get_yaxis_transform(),
-                   ha="right", va="center", fontsize=6,rotation=90)
+        ax.axvline(o["freq"], color=COL_OBS[i], lw=0.9, ls="-", zorder=2, alpha=0.8)
+        ax.axhline(o["mag"],  color=COL_OBS[i], lw=0.9, ls="-", zorder=2, alpha=0.8)
 
         ax.set_xlabel("frecuencia [eventos/siglo]")
         ax.set_ylabel("magnitud pico media [°C]")
         titulo_panel(ax, letra, i)
+
+    # una sola barra para los tres paneles (misma escala), 80% del alto del panel;
+    # lineas: duracion media observada de cada indice, con el color de su panel
+    cb = fig.colorbar(sc, cax=barra_inset(axs[-1], 0.8, 0.04, 0.05), label="duración media [meses]",
+                      ticks=bounds, extend="both", spacing="uniform")
+    for i in INDICES:
+        # raya desplazada: mitad dentro de la barra y mitad fuera, a la izquierda
+        cb.ax.plot([-0.5, 0.5], [gs[i].loc["OBS", "dur"]] * 2, color=COL_OBS[i], lw=1.6,
+                   transform=cb.ax.get_yaxis_transform(), clip_on=False)
     guardar(fig, "07d_frecuencia_magnitud_duracion")
 
 

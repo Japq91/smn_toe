@@ -47,8 +47,8 @@ def main():
         ax2.set_yticks(range(len(cols)))
         ax2.set_yticklabels(cols)
         titulo_panel(ax2, LETRAS[len(VENTANAS) + col], f"Spearman ρ entre rankings -- ±{v} m")
-    barra(fig, im, axs[0], "S", lim_s, cada=2, extend="min")
-    barra(fig, im2, axs[1], "Spearman ρ", lim_r)
+    barra(fig, im, axs[0, -1], "S", lim_s, cada=2, extend="min", alto=0.8, ancho=0.04, pad=0.03)
+    barra(fig, im2, axs[1, -1], "Spearman ρ", lim_r, alto=0.8, ancho=0.04, pad=0.03)
     guardar(fig, "09b_heatmap_skill")
 
 

@@ -34,7 +34,7 @@ def main():
         titulo_panel(ax, letra, f"{NOM_CAJA[caja]}: modelo - ERSSTv5")
 
     fig.colorbar(
-        im, ax=axs, label="[°C]", pad=0.02,
+        im, ax=axs, label="[°C]", pad=0.02, shrink=0.5,  # dos filas: 50% de la figura
         ticks=levels, extend="both", spacing="uniform",
     )
     guardar(fig, "02b_sesgo_mensual_climatologia")

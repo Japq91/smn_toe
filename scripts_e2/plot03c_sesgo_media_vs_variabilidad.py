@@ -32,7 +32,7 @@ def main():
     ax.set_ylabel("Δσ de la anomalía [%]")
     ax.legend(frameon=True)
     titulo_panel(ax, None, "Media vs variabilidad interanual")
-    barra_modelos(fig, ax, cmap, norm, ticks[::2], pad=0.02)
+    barra_modelos(fig, ax, cmap, norm, ticks[::2], alto=0.8, ancho=0.04, pad=0.03)
     guardar(fig, "03c_sesgo_media_vs_variabilidad")
 
 

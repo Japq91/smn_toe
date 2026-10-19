@@ -36,7 +36,8 @@ def main():
         )
 
     axs[0].legend(loc="upper left", frameon=False)
-    cb = fig.colorbar(sc, ax=axs, label="S_final", ticks=limites[::4])
+    cax = barra_inset(axs[-1], 0.8, 0.018, 0.04)  # 80% del alto del panel, centrada
+    cb = fig.colorbar(sc, cax=cax, label="S_final", ticks=limites[::4])
     cb.ax.tick_params(labelsize=8)
     guardar(fig, "05a_taylor_serie_completa")
 

@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""plot08b -- figura e2_08b_taylor_compuesto.png (seccion 8b de scripts_e2/plots_e2.ipynb).
+"""plot08b -- figuras e2_08b_taylor_compuesto_<V>m.png (seccion 8b de scripts_e2/plots_e2.ipynb).
 
-Diagrama de Taylor del compuesto (color = S del indice, p09), ventanas ±12, ±15 y ±18 meses.
+Diagrama de Taylor del compuesto (color = S del indice, p09): una figura por
+ventana (±12, ±15 y ±18 meses) con los tres indices. Radio y colores comunes
+a las tres figuras para poder compararlas.
 
 Entrada: taylor_compuesto_<INDICE>_vent<V>m_<y0>-<y1>.csv (p08), skill_score_vent<V>m_<y0>-<y1>.csv (p09)
-Salida: figures/e2/e2_08b_taylor_compuesto.png
+Salida: figures/e2/e2_08b_taylor_compuesto_{12,15,18}m.png
 
 Uso: python3 scripts_e2/plot08b_taylor_compuesto.py   (o bash rune2plot.sh 08b 08b)
 """
@@ -24,17 +26,16 @@ def main():
     cmap = plt.get_cmap("viridis", len(limites) - 1)
     norm = mcolors.BoundaryNorm(limites, cmap.N)
 
-    fig, axs = plt.subplots(len(VENTANAS), 3, figsize=(17, 6 * len(VENTANAS)), layout="constrained")
-    letras = iter(LETRAS)
-    for fila, v in enumerate(VENTANAS):
-        for ax, i in zip(axs[fila], INDICES):
+    for v in VENTANAS:
+        fig, axs = plt.subplots(1, len(INDICES), figsize=(17, 6), layout="constrained")
+        for ax, letra, i in zip(axs, LETRAS, INDICES):
             mod = tcv[v][i].drop(index="OBS")
-            sc = taylor(ax, tcv[v][i], f"{i} (compuesto ±{v} m)", letra=next(letras),
+            sc = taylor(ax, tcv[v][i], f"{i} (compuesto ±{v} m)", letra=letra,
                         color=skv[v][f"S_{i}"].reindex(mod.index), rmax=rmax_c, cmap=cmap, norm=norm)
-    axs[0, 0].legend(loc="upper right", frameon=True)
-    cb = fig.colorbar(sc, ax=axs, label="S (Taylor 2001)", ticks=limites[::3])
-    cb.ax.tick_params(labelsize=8)
-    guardar(fig, "08b_taylor_compuesto")
+        axs[0].legend(loc="upper right", frameon=True)
+        cb = fig.colorbar(sc, cax=barra_inset(axs[-1], 0.8, 0.03, 0.04), label="S (Taylor 2001)", ticks=limites[::3])
+        cb.ax.tick_params(labelsize=8)
+        guardar(fig, f"08b_taylor_compuesto_{v}m")
 
 
 if __name__ == "__main__":

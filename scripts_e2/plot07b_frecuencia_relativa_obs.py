@@ -32,7 +32,7 @@ def main():
         titulo_panel(ax, letra, f"{i}  (OBS: " + ", ".join(f"{v:.0f}" for v in t.loc["OBS"]) + ")", fontsize=8)
     axs[0].set_yticks(range(len(numbers)))
     axs[0].set_yticklabels([etiqueta[n] for n in numbers], fontsize=7)
-    barra(fig, im, axs, "log2(frecuencia modelo / ERSSTv5)", lim, extend="both")
+    barra(fig, im, axs[-1], "log2(frecuencia modelo / ERSSTv5)", lim, extend="both", alto=0.8, ancho=0.05, pad=0.04)
     guardar(fig, "07b_frecuencia_relativa_obs")
 
 

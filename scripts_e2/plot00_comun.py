@@ -133,8 +133,19 @@ def cmap_modelos(continua=False, nombre="turbo"):
     return cmap, mcolors.BoundaryNorm(np.arange(n + 1) + 0.5, cmap.N), ticks
 
 
-def barra_modelos(fig, ax, cmap, norm, ticks, **kw):
-    cb = fig.colorbar(plt.cm.ScalarMappable(norm=norm, cmap=cmap), ax=ax, label="modelo", ticks=ticks, **kw)
+def barra_inset(ax, alto=0.8, ancho=0.012, pad=0.01):
+    """Eje para una barra a la derecha de `ax`, centrado y con `alto` (0-1)
+    del alto del panel; `ancho` y `pad` en fraccion del ancho del panel."""
+    return ax.inset_axes([1 + pad, (1 - alto) / 2, ancho, alto])
+
+
+def barra_modelos(fig, ax, cmap, norm, ticks, alto=None, ancho=0.03, **kw):
+    sm = plt.cm.ScalarMappable(norm=norm, cmap=cmap)
+    if alto:
+        cax = barra_inset(ax, alto, ancho, kw.pop("pad", 0.02))
+        cb = fig.colorbar(sm, cax=cax, label="modelo", ticks=ticks, **kw)
+    else:
+        cb = fig.colorbar(sm, ax=ax, label="modelo", ticks=ticks, **kw)
     cb.ax.tick_params(labelsize=7)
     return cb
 
@@ -147,14 +158,15 @@ def discreta(nombre, limites):
     return cmap, mcolors.BoundaryNorm(limites, cmap.N)
 
 
-def barra(fig, im, ax, label, limites, cada=1, alto=None, **kw):
+def barra(fig, im, ax, label, limites, cada=1, alto=None, ancho=0.012, **kw):
     """Barra de color con ticks en los limites de clase (uno de cada `cada`).
     alto (0-1, un solo panel): barra en un eje inset a la derecha, centrada y
-    con esa fraccion del alto del panel (en vez de shrink)."""
+    con esa fraccion del alto del panel (en vez de shrink); `ancho` en
+    fraccion del ancho del panel. Regla: 0.8 si la barra sirve a una fila,
+    shrink 0.5 de la figura si sirve a dos o mas filas."""
     ticks = np.asarray(limites)[::cada]
     if alto:
-        pad = kw.pop("pad", 0.01)
-        cax = ax.inset_axes([1 + pad, (1 - alto) / 2, 0.012, alto])
+        cax = barra_inset(ax, alto, ancho, kw.pop("pad", 0.01))
         return fig.colorbar(im, cax=cax, label=label, ticks=ticks, **kw)
     return fig.colorbar(im, ax=ax, label=label, ticks=ticks, **kw)
 
@@ -271,6 +283,8 @@ def taylor(ax, df, titulo, color=None, rmax=None, etiquetar=True, cbar_label=Non
     ax.set_ylim(0, rmax)
     if semicirculo:
         ax.axvline(0, color="0.6", lw=0.6, zorder=0)        # r = 0
+        # a la izquierda x = sigma*r < 0: se rotula |x| porque sigma nunca es negativa
+        ax.xaxis.set_major_formatter(plt.FuncFormatter(lambda v, _: f"{abs(v):g}"))
     ax.set_aspect("equal")
     ax.set_xlabel("σ normalizado")
     ax.set_ylabel("σ normalizado")
