@@ -7,7 +7,7 @@
 #   - Sin args: corre p01..p09 completos.
 #   - Con args: rango de pasos (ej. ./rune2.sh p07 p09 rehace solo
 #     eventos -> Taylor compuesto -> skill score).
-#   Pasos válidos: p01 p02 p03 p04 p05 p06 p07 p08 p09
+#   Pasos válidos: p01 p02 p03 p04 p05 p06 p07 p08 p09 p10
 #
 # Orden y dependencias entre pasos (ver data/processed/e2/README.md):
 #   p01 indices_enso_<y0>-<y1>.csv          <- masked/ + model_registry_e2.csv
@@ -19,6 +19,7 @@
 #   p07 eventos_<INDICE>_<y0>-<y1>.csv      <- p01  (<y0>-<y1> = periodo de indices_enso)
 #   p08 taylor_compuesto_<INDICE>_vent<N>m  <- p01 + p07  (N = 12, 15, 18)
 #   p09 skill_score_vent<N>m_<y0>-<y1>.csv  <- p05 + p08  (N = 12, 15, 18)
+#   p10 pruebas_eventos_<y0>-<y1>.csv       <- p01 + p07  (filtro de eventos RONI/ICEN)
 # p02-p06 son independientes entre sí; p07-p09 son una cadena y deben
 # correr en ese orden después de p01/p05. Todo lo que generan es lo que
 # leen después los gráficos de E2 (rune2plot.sh -> figures/e2/).
@@ -34,7 +35,7 @@ mkdir -p logs
 # Argumentos leidos ANTES de activar conda: los scripts activate.d de
 # algunos paquetes pueden pisar $1/$2 del script que los invoca.
 STEP_FROM="${1:-p01}"
-STEP_TO="${2:-p09}"
+STEP_TO="${2:-p10}"
 
 # Entorno conda: mismo bloque que run.sh (ver ahí el porqué de cada
 # parte) -- en una máquina nueva alcanza con haber hecho una vez
@@ -87,7 +88,7 @@ if ! python3 -c "import numpy, pandas, xarray, netCDF4, scipy, sklearn" 2>/dev/n
     exit 1
 fi
 
-STEP_ORDER=(p01 p02 p03 p04 p05 p06 p07 p08 p09)
+STEP_ORDER=(p01 p02 p03 p04 p05 p06 p07 p08 p09 p10)
 
 index_of () {
     local target="$1"
@@ -136,6 +137,7 @@ done
 for v in "${VENTANAS[@]}"; do
     run_step p09 python3 scripts_e2/p09_skill_score.py "$v"
 done
+run_step p10 python3 scripts_e2/p10_pruebas_eventos.py
 
 echo "== rune2.sh terminado: $(date '+%Y-%m-%d %H:%M:%S') -- salidas en $OUT_DIR/ ==" | tee -a "$LOG_FILE"
 ls -1 "$OUT_DIR" | tee -a "$LOG_FILE"

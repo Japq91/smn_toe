@@ -16,7 +16,7 @@ teórico/cálculos de E2), ejecutables con `./rune2.sh [desde] [hasta]` o suelto
 (`python3 scripts_e2/pXX_*.py`). p01–p06 leen directo de
 `data/processed/masked/` y `model_registry_e2.csv` y no dependen
 entre sí; p07 → p08 → p09 son una cadena (p07 lee los índices de p01,
-p08 lee p01 y p07, y p09 lee p05 y p08). Comparten helpers en `scripts_e2/common_e2.py`
+p08 lee p01 y p07, y p09 lee p05 y p08); p10 lee p01 y p07. Comparten helpers en `scripts_e2/common_e2.py`
 (mismo patrón que `scripts/plot_common.py` en E1), pero eso no los
 acopla entre sí, solo evita duplicar `box_series`/climatología/etc.
 
@@ -48,6 +48,10 @@ solo, en la próxima corrida.
 - `p09_skill_score.py` -- score de habilidad S (Taylor, 2001) y
   ranking/selección final de los 40 modelos, punto (14.) (ver
   `skill_score_*.csv` abajo).
+- `p10_pruebas_eventos.py` -- pruebas estadísticas de frecuencia,
+  duración y estacionalidad de los eventos de RONI e ICEN frente a
+  ERSSTv5, filtro previo a la selección (ver
+  `pruebas_eventos_*.csv` abajo).
 
 ## `model_registry_e2.csv`
 
@@ -487,3 +491,57 @@ como medida de qué tan limpia es la partición.
 Generado por `scripts_e2/p09_skill_score.py`. Sin corrección Linear
 Scaling (mismo criterio que el resto de E2, por herencia de las tablas
 `taylor_*.csv` que consume).
+
+## `pruebas_eventos_<y0>-<y1>.csv`
+
+Filtro estadístico del régimen de eventos cálidos, previo a la
+selección por skill score (el corte final todavía no está definido).
+Pregunta, para cada modelo: ¿sus eventos cálidos se pueden distinguir
+estadísticamente de los de ERSSTv5 en frecuencia, duración y
+estacionalidad? Generado por `scripts_e2/p10_pruebas_eventos.py`; el
+docstring tiene la deducción completa de cada estadístico.
+
+**Datos**: `eventos_RONI_*.csv` y `eventos_ICEN_*.csv` (p07, una fila por
+evento: `duracion_meses`, `fecha_pico`) y la longitud de cada serie de
+índices (p01 + OBS), 1900-02 a 2014-11. Solo RONI (Niño 3.4) e ICEN
+(Niño 1+2): el ONI comparte casi todos sus eventos con el RONI, así que
+sus pruebas no serían independientes y Niño 3.4 contaría dos veces.
+
+**Pruebas** (3 por índice, 6 por modelo; H0: el modelo y ERSSTv5 tienen
+la misma distribución de esa propiedad):
+
+| Propiedad | Prueba | Dato que compara | Valor p |
+|---|---|---|---|
+| Frecuencia | Razón de verosimilitud de dos tasas de Poisson: `G = 2 Σ n_k ln(n_k / (T_k λ0))`, con `λ0 = (n_m + n_o)/(T_m + T_o)` | número de eventos `n` en `T` siglos | χ² con 1 g.l. (Wilks) |
+| Duración | Anderson-Darling de 2 muestras (Scholz y Stephens, 1987), versión de rangos medios | distribución de las duraciones de todos los eventos | permutación (9999) |
+| Estacionalidad | Prueba G sobre la tabla 2 × 12 de meses del pico: `G = 2 Σ O ln(O/E)`, `E = fila × columna / N` | distribución del mes del pico | permutación (9999) |
+
+- Frecuencia: es un solo conteo por dataset, por eso no se usa
+  Anderson-Darling. El cociente compara la verosimilitud con una tasa
+  común contra la de una tasa propia por dataset.
+- Duración: Anderson-Darling compara las distribuciones acumuladas
+  completas y pesa más las colas que Kolmogorov-Smirnov; las duraciones
+  son meses enteros con empates, de ahí los rangos medios y la
+  permutación.
+- Estacionalidad: con 30-40 eventos observados muchas celdas tienen
+  frecuencia esperada < 5 y la χ² con 11 g.l. no es fiable, de ahí la
+  permutación. Anderson-Darling no sirve para el mes: lo trata como
+  lineal y deja diciembre y enero en extremos opuestos.
+
+**Comparaciones múltiples**: corrección de Holm (1979) sobre las 6
+pruebas de cada modelo (sin corregir, la probabilidad de al menos un
+rechazo por azar sería 1 − 0.95⁶ ≈ 0.26). `p_holm(j) = max_{l≤j} min(1,
+(6 − l + 1) p(l))` con los valores p ordenados de menor a mayor. Pasa el
+filtro el modelo sin ninguna `p_holm < 0.05`.
+
+**Columnas** (I = RONI, ICEN): `n_eventos_I`, `siglos_I`, `frec_I`
+[eventos/siglo], `G_frec_I`, `p_frec_I`, `dur_media_I` [meses],
+`A2_dur_I`, `p_dur_I`, `G_est_I`, `p_est_I`, `pholm_frec_I`,
+`pholm_dur_I`, `pholm_est_I`, `rechazadas` (pruebas con `p_holm < 0.05`,
+separadas por `;`) y `pasa_filtro`. La fila `OBS` lleva solo los valores
+observados.
+
+**Límites**: los eventos de un dataset se tratan como independientes; un
+solo miembro por modelo; con pocos eventos la potencia es baja, de modo
+que "pasa el filtro" significa "no distinguible con esta muestra", no
+"igual a la observación".

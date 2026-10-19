@@ -194,7 +194,7 @@ Evalúa los 40 modelos que el E1 dejó aprobados (experimento `historical`) fren
 ### Ejecución
 
 ```
-./rune2.sh [desde] [hasta]          # cálculo: pasos p01..p09 (ej. ./rune2.sh p07 p09)
+./rune2.sh [desde] [hasta]          # cálculo: pasos p01..p10 (ej. ./rune2.sh p07 p09)
 bash rune2plot.sh [desde] [hasta]   # figuras por código (ej. bash rune2plot.sh 07, o 07c)
 ```
 
@@ -211,8 +211,9 @@ Usan el mismo entorno conda que `run.sh` y lo activan solos. Logs en `logs/`.
 | p07 | Eventos cálidos y su clasificación oficial y relativa | `eventos_<indice>_1900-2014.csv` |
 | p08 | Evento compuesto (±12, 15 y 18 meses) y sus métricas de Taylor | `taylor_compuesto_<indice>_vent<V>m_1900-2014.csv` |
 | p09 | *Skill score*, *gap statistic* y selección | `skill_score_vent<V>m_1900-2014.csv` |
+| p10 | Pruebas estadísticas de frecuencia, duración y estacionalidad de los eventos de RONI e ICEN frente a ERSSTv5 (filtro previo a la selección; en desarrollo) | `pruebas_eventos_1900-2014.csv` |
 
-p02–p06 solo leen `masked/` y son independientes entre sí. p07 → p08 → p09 es una cadena: p07 necesita p01, p08 necesita p01 y p07, y p09 necesita p05 y p08. El detalle de columnas y convenciones (numeración M01–M40, bases de los índices, ventana común) está en `data/processed/e2/README.md`; el contrato de entrada, en `scripts_e2/README.md`.
+p02–p06 solo leen `masked/` y son independientes entre sí. p07 → p08 → p09 es una cadena: p07 necesita p01, p08 necesita p01 y p07, y p09 necesita p05 y p08. p10 necesita p01 y p07. El detalle de columnas y convenciones (numeración M01–M40, bases de los índices, ventana común) está en `data/processed/e2/README.md`; el contrato de entrada, en `scripts_e2/README.md`.
 
 Cada figura sale de un script con su código: `scripts_e2/plot07c_magnitud_eventos.py` → `figures/e2/e2_07c_magnitud_eventos.png`. Las funciones comunes de cálculo están en `scripts_e2/common_e2.py` y las de gráficos en `scripts_e2/plot00_comun.py`.
 
@@ -220,7 +221,7 @@ Cada figura sale de un script con su código: `scripts_e2/plot07c_magnitud_event
 
 ```
 scripts_e2/                     # pXX_*.py (cálculo), plotXX_*.py (figuras), common_e2.py, plot00_comun.py
-data/processed/e2/              # salidas de p01-p09 (solo README.md y model_registry_e2.csv se versionan)
+data/processed/e2/              # salidas de p01-p10 (solo README.md y model_registry_e2.csv se versionan)
 figures/e2/                     # PNG de rune2plot.sh (no se versiona)
 e2_informe/informe_e2.tex       # informe técnico del E2
 e2_informe/references.bib

@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pruebas de eventos E2</title>
+<style>
+:root{--bg:#fdfdfc;--fg:#1d1f21;--muted:#5b6066;--line:#d9dcdf;--accent:#1f5f8b;--code:#f2f4f5;--rech:#f6d5d1;--raw:#fbefd2}
+@media (prefers-color-scheme:dark){:root{--bg:#16181a;--fg:#e4e6e8;--muted:#a0a6ac;--line:#33383d;--accent:#7fb6dc;--code:#22262a;--rech:#5a2a26;--raw:#4a3f1f}}
+body{background:var(--bg);color:var(--fg);font:16px/1.6 Georgia,"Times New Roman",serif;margin:0;padding:24px 16px}
+main{max-width:860px;margin:0 auto}
+h1{font-size:1.9em;line-height:1.25;margin:.2em 0}
+h2{font-size:1.4em;margin-top:2.2em;padding-top:.6em;border-top:2px solid var(--line);color:var(--accent)}
+h3{font-size:1.1em;margin-top:1.6em;font-family:system-ui,sans-serif}
+p,li{margin:.4em 0}
+code{background:var(--code);padding:1px 4px;border-radius:3px;font-size:.88em}
+.eq{background:var(--code);border-left:3px solid var(--accent);padding:.6em 1em;margin:1em 0;font-family:"Cambria Math","STIX Two Math",Georgia,serif;font-size:1.05em;overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.9em;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{background:var(--code)}
+td.rech{background:var(--rech)}
+td.raw{background:var(--raw)}
+.small{font-size:.82em;color:var(--muted)}
+.nota{font-family:system-ui,sans-serif;font-size:.9em;color:var(--muted)}
+nav{font-family:system-ui,sans-serif;font-size:.9em;background:var(--code);padding:10px 14px;border-radius:6px;margin:1em 0}
+nav a{color:var(--accent);text-decoration:none;margin-right:12px;white-space:nowrap}
+ul,ol{padding-left:1.3em}
+</style>
+</head>
+<body><main>
+<h1>Pruebas estadísticas del régimen de eventos cálidos – Entregable 2</h1>
+<p class="nota">2026-10-19 · Japq91 · Nota de apoyo al paso <code>p10_pruebas_eventos.py</code> (salida <code>data/processed/e2/pruebas_eventos_1900-2014.csv</code>). Explica qué se prueba, con qué datos, cómo se interpretan los resultados y por qué se eligió cada prueba. El informe resume el método; esta nota guarda el razonamiento completo y los ejemplos.</p>
+
+<nav><a href="#proposito">Propósito</a><a href="#datos">Datos</a><a href="#hipotesis">H0 y H1</a><a href="#pruebas">Las tres pruebas</a><a href="#p">Valor p</a><a href="#holm">Holm</a><a href="#lectura">Cómo leer un modelo</a><a href="#resultados">Resultados</a><a href="#tabla">Tabla por modelo</a><a href="#limites">Límites</a><a href="#decisiones">Decisiones</a></nav>
+
+<h2 id="proposito">1. Propósito</h2>
+<p>El <em>skill score</em> S_final (p09) mide sobre todo la amplitud del evento cálido típico. No dice si el modelo produce eventos con la frecuencia, la duración y la estacionalidad observadas, que son justamente lo que pide el TdR al hablar de "eventos cálidos extremos". Este paso agrega un <strong>filtro previo</strong>: primero se descartan los modelos cuyo régimen de eventos es estadísticamente distinto del observado, y solo los que pasan se ordenan después por S_final. El corte final de la selección todavía no está definido.</p>
+
+<h2 id="datos">2. Qué datos se usan</h2>
+<ul>
+<li><strong>Eventos cálidos</strong> de p07 (<code>eventos_RONI_1900-2014.csv</code>, <code>eventos_ICEN_1900-2014.csv</code>): una fila por evento, para los 40 modelos y ERSSTv5. De cada evento se usan la <strong>duración</strong> (meses) y el <strong>mes del pico</strong>.</li>
+<li><strong>Longitud del registro</strong> de cada dataset: los meses válidos de su serie de índices (p01), de 1900-02 a 2014-11, unos 1.15 siglos. Sirve para convertir el número de eventos en eventos por siglo.</li>
+<li><strong>Índices: RONI (Niño 3.4) e ICEN (Niño 1+2).</strong> El ONI no entra porque comparte casi todos sus eventos con el RONI: sus pruebas no serían independientes de las del RONI y Niño 3.4 contaría dos veces.</li>
+</ul>
+<p>Valores observados (ERSSTv5): RONI, 35 eventos (30.5 por siglo) con duración media de 11.1 meses; ICEN, 41 eventos (35.7 por siglo) con duración media de 8.5 meses.</p>
+<p>Son <strong>3 pruebas por índice</strong> (frecuencia, duración y estacionalidad), es decir, <strong>6 pruebas por modelo</strong>.</p>
+
+<h2 id="hipotesis">3. La idea común: H0 y H1</h2>
+<p>En las seis pruebas, los eventos del modelo y los de ERSSTv5 se tratan como <strong>dos muestras</strong>. Los eventos observados de 1900–2014 son una muestra del clima real de El Niño: con otros 115 años habrían salido eventos algo distintos. Los del modelo son una muestra del clima de El Niño del modelo. La pregunta es si ambas muestras pueden venir del mismo "clima de eventos".</p>
+<ul>
+<li><strong>H0 (hipótesis nula):</strong> el modelo y la realidad generan eventos con la <strong>misma distribución</strong> de esa propiedad. Las diferencias que se ven se deben solo a que cada uno es una muestra finita.</li>
+<li><strong>H1 (hipótesis alternativa):</strong> la generan con distribuciones <strong>distintas</strong>. Es bilateral: cuenta igual tener más o menos eventos, o eventos más largos o más cortos.</li>
+</ul>
+<p>La observación no se trata como un valor exacto: también es una muestra, con su propio ruido. Por eso se comparan dos muestras y no el modelo contra un número fijo.</p>
+
+<h2 id="pruebas">4. Las tres pruebas</h2>
+
+<h3>4.1 Frecuencia – razón de verosimilitud de dos tasas de Poisson</h3>
+<ul>
+<li><strong>H0:</strong> el modelo y ERSSTv5 tienen la misma tasa de eventos por siglo (λ<sub>modelo</sub> = λ<sub>obs</sub>).</li>
+<li><strong>H1:</strong> las tasas son distintas (λ<sub>modelo</sub> ≠ λ<sub>obs</sub>).</li>
+<li><strong>Dato:</strong> el número de eventos <em>n</em> de cada dataset y la longitud de su registro <em>T</em> en siglos.</li>
+</ul>
+<p>Se supone que los eventos llegan como un proceso de Poisson: al azar en el tiempo, con una tasa media λ. Bajo H0 hay una sola tasa, y su mejor estimación junta los eventos de ambos:</p>
+<div class="eq">λ<sub>0</sub> = (n<sub>m</sub> + n<sub>o</sub>) / (T<sub>m</sub> + T<sub>o</sub>)</div>
+<p>Bajo H1 cada dataset tiene la suya, λ<sub>k</sub> = n<sub>k</sub> / T<sub>k</sub>. La prueba compara qué tan bien explica los datos cada hipótesis: el estadístico es dos veces el logaritmo del cociente de sus verosimilitudes. Con la verosimilitud de Poisson, L = ∏ (λT)<sup>n</sup> e<sup>−λT</sup> / n!, los términos e<sup>−λT</sup> se cancelan y queda</p>
+<div class="eq">G = 2 · Σ<sub>k</sub> n<sub>k</sub> · ln( n<sub>k</sub> / (T<sub>k</sub> · λ<sub>0</sub>) ), &nbsp;&nbsp; k = modelo, obs</div>
+<p>Si las dos tasas son parecidas, cada n<sub>k</sub> se acerca a lo que predice λ<sub>0</sub>, los logaritmos se acercan a 0 y G es pequeño. Por el teorema de Wilks, bajo H0, G sigue una χ² con 1 grado de libertad (2 parámetros bajo H1 menos 1 bajo H0), y de ahí sale el valor p.</p>
+<p><strong>Ejemplo:</strong> M22 tiene 34 eventos de RONI frente a 35 de ERSSTv5, en el mismo registro. Esa diferencia es lo esperable por azar: p = 0.90.</p>
+<p><strong>Por qué no Anderson-Darling:</strong> la frecuencia es un solo número por dataset (un conteo), no una muestra de valores cuya distribución se pueda comparar.</p>
+<p><strong>Potencia baja:</strong> un proceso de Poisson varía naturalmente en ±√n; con 35 eventos son unos ±6. La prueba solo detecta diferencias grandes (del orden de 20 frente a 35 eventos por siglo), por eso rechaza a muy pocos modelos.</p>
+
+<h3>4.2 Duración – Anderson-Darling de dos muestras</h3>
+<ul>
+<li><strong>H0:</strong> las duraciones de los eventos del modelo y las observadas vienen de la misma distribución. No solo la misma media: también la misma dispersión, la misma proporción de eventos cortos y largos y la misma cola.</li>
+<li><strong>H1:</strong> las distribuciones de duración son distintas en cualquier aspecto.</li>
+<li><strong>Dato:</strong> la lista completa de duraciones de cada dataset, por ejemplo [7, 6, 12, 9, …] meses.</li>
+</ul>
+<p>La prueba de Scholz y Stephens (1987) junta las dos muestras (N = n<sub>m</sub> + n<sub>o</sub> eventos) y compara, en cada valor de duración, la distribución acumulada de cada muestra con la de las dos juntas:</p>
+<div class="eq">A² = (1/N) · Σ<sub>i</sub> (1/n<sub>i</sub>) · Σ<sub>j</sub> ( N·F<sub>ij</sub> − n<sub>i</sub>·H<sub>j</sub> )² / ( H<sub>j</sub> · (N − H<sub>j</sub>) )</div>
+<p>F<sub>ij</sub> es cuántos eventos de la muestra <em>i</em> (modelo u obs) duran como máximo el j-ésimo valor, y H<sub>j</sub> lo mismo para las dos muestras juntas. El numerador mide cuánto se aparta cada muestra de la curva conjunta; el divisor H(N − H) es pequeño en los extremos, así que las diferencias en las colas pesan más. Eso importa aquí, porque los modelos fallan sobre todo en la cola de eventos largos.</p>
+<p><strong>Valor p por permutación:</strong> si H0 es cierta, la etiqueta "modelo" u "obs" de cada evento es intercambiable. Se mezclan todos los eventos, se reparten al azar en dos grupos del tamaño original 9999 veces, y se calcula A² en cada reparto. El valor p es la fracción de repartos con un A² igual o mayor que el real. Así no se depende de la aproximación teórica, que falla con duraciones enteras con muchos empates (por eso también se usa la versión de rangos medios).</p>
+<p><strong>Ejemplo de rechazo:</strong> M08 en el RONI produce más eventos largos (más de 19 meses) que los observados: la forma de su distribución de duraciones es otra, aunque la media no difiera tanto.</p>
+
+<h3>4.3 Estacionalidad – prueba G sobre el mes del pico</h3>
+<ul>
+<li><strong>H0:</strong> el modelo y ERSSTv5 reparten los picos de sus eventos entre los 12 meses con las mismas probabilidades: la misma preferencia estacional.</li>
+<li><strong>H1:</strong> las probabilidades por mes son distintas (los picos se concentran en otros meses, o se reparten de forma más uniforme o más concentrada).</li>
+<li><strong>Dato:</strong> el histograma de meses del pico de cada dataset. Por ejemplo, en el ICEN observado el 51 % de los picos cae entre mayo y julio.</li>
+</ul>
+<p>Se arma una tabla de 2 filas (modelo, obs) × 12 columnas (meses) con los conteos observados O. Si H0 fuera cierta, cada fila repartiría sus eventos con la proporción de la tabla completa, y la frecuencia esperada de cada celda sería</p>
+<div class="eq">E<sub>ij</sub> = (total de la fila i) × (total de la columna j) / N</div>
+<p>El estadístico es la razón de verosimilitud multinomial (la versión logarítmica de la χ² de Pearson):</p>
+<div class="eq">G = 2 · Σ<sub>ij</sub> O<sub>ij</sub> · ln( O<sub>ij</sub> / E<sub>ij</sub> )</div>
+<p>Si el modelo reparte los picos como la observación, O ≈ E en todas las celdas y G ≈ 0. En teoría G sigue una χ² con 11 grados de libertad, pero con 35–41 eventos observados muchas celdas esperan menos de 5 eventos y esa aproximación no es fiable. Por eso el valor p también sale de 9999 permutaciones de los meses entre las dos muestras, que conservan los totales.</p>
+<p><strong>Por qué no Anderson-Darling:</strong> trata el mes como una escala lineal de 1 a 12, de modo que diciembre y enero quedarían en extremos opuestos, cuando son meses vecinos. Para los picos del ONI y el RONI, que caen alrededor de diciembre–enero, eso distorsiona la comparación.</p>
+<p><strong>Ejemplo:</strong> M21 en el ICEN pone sus picos en otros meses que los observados (p = 0.0003): una diferencia casi imposible por azar.</p>
+
+<h2 id="p">5. Cómo se lee el valor p</h2>
+<p>El valor p responde: <em>si H0 fuera cierta, ¿qué tan probable sería ver una diferencia igual o mayor que la observada, solo por el muestreo?</em></p>
+<ul>
+<li><strong>p pequeño</strong> (menor que el umbral): la diferencia es demasiado grande para ser azar. Se <strong>rechaza H0</strong> y el modelo se considera distinto de la observación en esa propiedad.</li>
+<li><strong>p grande:</strong> la diferencia cabe dentro del azar. <strong>No se rechaza H0.</strong> Esto significa "no distinguible con esta muestra", <strong>no</strong> "igual". Con 35–41 eventos observados, diferencias moderadas pueden pasar sin detectarse.</li>
+</ul>
+
+<h2 id="holm">6. Comparaciones múltiples: la corrección de Holm</h2>
+<h3>El problema</h3>
+<p>Con un umbral de 0.05, cada prueba tiene un 5 % de probabilidad de rechazar por azar aunque el modelo sea igual a la observación. Con 6 pruebas por modelo, la probabilidad de que al menos una salga mal por azar es</p>
+<div class="eq">1 − 0.95<sup>6</sup> ≈ 0.26</div>
+<p>Uno de cada cuatro modelos perfectos quedaría eliminado sin motivo real. Sin corrección, solo 6 de los 40 modelos pasan las seis pruebas.</p>
+<h3>Qué hace Holm</h3>
+<p>La corrección de Holm (1979) ajusta los umbrales para que la probabilidad de eliminar un modelo bueno por azar vuelva a ser del 5 % en total, no del 5 % por prueba:</p>
+<ol>
+<li>Se ordenan los 6 valores p del modelo de menor a mayor: p<sub>(1)</sub> ≤ p<sub>(2)</sub> ≤ … ≤ p<sub>(6)</sub>.</li>
+<li>El menor se compara con 0.05/6 = 0.0083; el segundo, con 0.05/5 = 0.010; el tercero, con 0.05/4 = 0.0125; y así hasta el último, con 0.05/1.</li>
+<li>Se avanza mientras cada valor p sea menor o igual que su umbral (ese se rechaza). En cuanto uno no lo es, se para: ni ese ni los siguientes se rechazan.</li>
+</ol>
+<p>La lógica: el valor p más pequeño de seis es el que más fácilmente podría haber salido bajo por azar, así que se le exige más. Si ese no se rechaza, tampoco los mayores. Holm no supone que las pruebas sean independientes y es siempre al menos tan potente como Bonferroni (que exigiría 0.05/6 a todas).</p>
+<p><strong>Valores p ajustados</strong> (columnas <code>pholm_*</code> del CSV): expresan lo mismo de forma que basta compararlos con 0.05. Cada valor p se multiplica por el número de pruebas que quedaban al compararlo, y se toma el máximo acumulado para respetar el orden:</p>
+<div class="eq">p<sub>holm(j)</sub> = max<sub>l ≤ j</sub> min( 1, (6 − l + 1) · p<sub>(l)</sub> )</div>
+<p>Un modelo <strong>pasa el filtro</strong> si todos sus p<sub>holm</sub> son ≥ 0.05, lo que equivale a p<sub>(1)</sub> ≥ 0.05/6.</p>
+
+<h3>Ejemplo 1 – M26: pasa con Holm, no sin corregir</h3>
+<table>
+<thead><tr><th>Orden</th><th>Prueba</th><th>p</th><th>Umbral de Holm</th><th>¿Se rechaza?</th><th>p ajustado</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>estacionalidad ICEN</td><td>0.0110</td><td>0.05/6 = 0.0083</td><td>No → se para aquí</td><td>6 × 0.0110 = 0.066</td></tr>
+<tr><td>2</td><td>duración RONI</td><td>0.0582</td><td>0.05/5 = 0.010</td><td>No</td><td>5 × 0.0582 = 0.291</td></tr>
+<tr><td>3</td><td>estacionalidad RONI</td><td>0.1903</td><td>0.05/4 = 0.0125</td><td>No</td><td>4 × 0.1903 = 0.761</td></tr>
+<tr><td>4–6</td><td>frecuencia ICEN, frecuencia RONI, duración ICEN</td><td>0.52–0.74</td><td>—</td><td>No</td><td>1.000</td></tr>
+</tbody>
+</table>
+<p>Sin corregir, M26 quedaría eliminado (0.011 &lt; 0.05). Con Holm, 0.011 no basta: es una diferencia moderada, y entre seis pruebas es esperable que una sola dé eso por azar.</p>
+
+<h3>Ejemplo 2 – M21: eliminado también con Holm</h3>
+<p>Su estacionalidad del ICEN da p = 0.0003, menor que 0.0083: se rechaza (p ajustado = 6 × 0.0003 = 0.002). Una diferencia tan fuerte no se explica por haber hecho seis pruebas. Sus otras cinco pruebas dan p entre 0.21 y 0.91.</p>
+
+<h2 id="lectura">7. Cómo leer el resultado de un modelo</h2>
+<table>
+<thead><tr><th>Situación</th><th>Lectura</th></tr></thead>
+<tbody>
+<tr><td>Todos los p<sub>holm</sub> ≥ 0.05 (pasa el filtro)</td><td>Con 115 años de eventos no se puede distinguir su régimen del observado en ninguna de las seis propiedades.</td></tr>
+<tr><td>Algún p<sub>holm</sub> &lt; 0.05 (no pasa)</td><td>Al menos una propiedad es distinta de la observada, con una diferencia que no se explica por el azar del muestreo. La columna <code>rechazadas</code> dice cuál.</td></tr>
+<tr><td>p sin corregir &lt; 0.05 pero p<sub>holm</sub> ≥ 0.05</td><td>Diferencia moderada: sugiere un defecto, pero no es concluyente entre seis pruebas. Conviene mencionarlo como debilidad del modelo aunque pase.</td></tr>
+<tr><td>p grande en frecuencia</td><td>No implica que el modelo acierte la frecuencia: la prueba tiene poca potencia.</td></tr>
+</tbody>
+</table>
+
+<h2 id="resultados">8. Resultados</h2>
+<p><strong>Rechazos sin corregir</strong>: en cuántos de los 40 modelos cada prueba, mirada por separado, da p &lt; 0.05.</p>
+<table>
+<thead><tr><th>Índice</th><th>Frecuencia</th><th>Duración</th><th>Estacionalidad</th></tr></thead>
+<tbody>
+<tr><td>RONI</td><td>4</td><td>15</td><td>18</td></tr>
+<tr><td>ICEN</td><td>3</td><td>12</td><td>14</td></tr>
+</tbody>
+</table>
+<ul>
+<li>La estacionalidad y la duración son las propiedades que más separan a los modelos; la frecuencia casi no discrimina.</li>
+<li><strong>Sin corregir pasan 6 modelos; con Holm pasan 15</strong>: M02, M03, M06, M07, M11, M12, M13, M17, M22, M26, M30, M34, M35, M37, M40.</li>
+<li>De los 10 seleccionados con el criterio anterior (solo S_final), pasan M02, M03, M17, M22 y M26. No pasan M01 (estacionalidad del RONI), M04 (duración y estacionalidad del RONI), M08 (duración del RONI), y M18 y M21 (estacionalidad del ICEN).</li>
+</ul>
+
+<h2 id="tabla">9. Tabla por modelo</h2>
+<p>En cada celda, arriba el valor p y abajo el p ajustado por Holm. <span style="background:var(--rech);padding:0 4px">Rojo</span>: rechazada con Holm (p<sub>holm</sub> &lt; 0.05). <span style="background:var(--raw);padding:0 4px">Amarillo</span>: p &lt; 0.05 sin corregir pero no con Holm.</p>
+<table>
+<thead><tr><th>Código</th><th>Modelo</th><th>Frec. RONI</th><th>Dur. RONI</th><th>Est. RONI</th><th>Frec. ICEN</th><th>Dur. ICEN</th><th>Est. ICEN</th><th>Pasa</th></tr></thead>
+<tbody>
+<tr><td>M01</td><td>ACCESS-CM2</td><td>0.906<br><span class="small">1.000</span></td><td class="raw">0.016<br><span class="small">0.081</span></td><td class="rech">0.000<br><span class="small">0.001</span></td><td>0.419<br><span class="small">1.000</span></td><td>0.498<br><span class="small">1.000</span></td><td>0.124<br><span class="small">0.497</span></td><td>no</td></tr>
+<tr><td>M02</td><td>ACCESS-ESM1-5</td><td>0.535<br><span class="small">1.000</span></td><td>0.892<br><span class="small">1.000</span></td><td>0.359<br><span class="small">1.000</span></td><td>0.666<br><span class="small">1.000</span></td><td>0.670<br><span class="small">1.000</span></td><td>0.864<br><span class="small">1.000</span></td><td><strong>sí</strong></td></tr>
+<tr><td>M03</td><td>AWI-CM-1-1-MR</td><td>0.906<br><span class="small">1.000</span></td><td>0.867<br><span class="small">1.000</span></td><td>0.067<br><span class="small">0.401</span></td><td>0.592<br><span class="small">1.000</span></td><td>0.279<br><span class="small">1.000</span></td><td>0.245<br><span class="small">1.000</span></td><td><strong>sí</strong></td></tr>
+<tr><td>M04</td><td>BCC-CSM2-MR</td><td>0.153<br><span class="small">0.458</span></td><td class="rech">0.006<br><span class="small">0.032</span></td><td class="rech">0.000<br><span class="small">0.001</span></td><td>0.592<br><span class="small">0.592</span></td><td>0.155<br><span class="small">0.458</span></td><td class="raw">0.019<br><span class="small">0.075</span></td><td>no</td></tr>
+<tr><td>M05</td><td>CAMS-CSM1-0</td><td>0.906<br><span class="small">1.000</span></td><td>0.594<br><span class="small">1.000</span></td><td class="rech">0.001<br><span class="small">0.004</span></td><td>0.823<br><span class="small">1.000</span></td><td>0.179<br><span class="small">0.718</span></td><td>0.112<br><span class="small">0.561</span></td><td>no</td></tr>
+<tr><td>M06</td><td>CAS-ESM2-0</td><td>0.263<br><span class="small">1.000</span></td><td>0.190<br><span class="small">0.952</span></td><td>0.275<br><span class="small">1.000</span></td><td>0.913<br><span class="small">1.000</span></td><td>0.451<br><span class="small">1.000</span></td><td class="raw">0.013<br><span class="small">0.078</span></td><td><strong>sí</strong></td></tr>
+<tr><td>M07</td><td>CESM2</td><td>1.000<br><span class="small">1.000</span></td><td>0.105<br><span class="small">0.527</span></td><td>0.378<br><span class="small">1.000</span></td><td>0.912<br><span class="small">1.000</span></td><td>0.558<br><span class="small">1.000</span></td><td class="raw">0.012<br><span class="small">0.070</span></td><td><strong>sí</strong></td></tr>
+<tr><td>M08</td><td>CESM2-WACCM</td><td>1.000<br><span class="small">1.000</span></td><td class="rech">0.000<br><span class="small">0.001</span></td><td class="raw">0.047<br><span class="small">0.186</span></td><td>0.569<br><span class="small">1.000</span></td><td>0.518<br><span class="small">1.000</span></td><td class="raw">0.027<br><span class="small">0.137</span></td><td>no</td></tr>
+<tr><td>M09</td><td>CMCC-CM2-SR5</td><td class="raw">0.028<br><span class="small">0.113</span></td><td class="rech">0.000<br><span class="small">0.001</span></td><td class="rech">0.000<br><span class="small">0.002</span></td><td>0.651<br><span class="small">1.000</span></td><td>0.807<br><span class="small">1.000</span></td><td>0.282<br><span class="small">0.846</span></td><td>no</td></tr>
+<tr><td>M10</td><td>CMCC-ESM2</td><td>0.151<br><span class="small">0.755</span></td><td class="rech">0.001<br><span class="small">0.004</span></td><td>0.174<br><span class="small">0.755</span></td><td>0.352<br><span class="small">1.000</span></td><td>0.372<br><span class="small">1.000</span></td><td>0.523<br><span class="small">1.000</span></td><td>no</td></tr>
+<tr><td>M11</td><td>CNRM-CM6-1</td><td>0.564<br><span class="small">1.000</span></td><td>0.557<br><span class="small">1.000</span></td><td>0.876<br><span class="small">1.000</span></td><td>0.913<br><span class="small">1.000</span></td><td>0.117<br><span class="small">0.704</span></td><td>0.120<br><span class="small">0.704</span></td><td><strong>sí</strong></td></tr>
+<tr><td>M12</td><td>CNRM-CM6-1-HR</td><td class="raw">0.028<br><span class="small">0.117</span></td><td class="raw">0.024<br><span class="small">0.117</span></td><td>0.379<br><span class="small">0.758</span></td><td>0.736<br><span class="small">0.758</span></td><td class="raw">0.016<br><span class="small">0.098</span></td><td>0.188<br><span class="small">0.564</span></td><td><strong>sí</strong></td></tr>
+<tr><td>M13</td><td>CNRM-ESM2-1</td><td>0.642<br><span class="small">1.000</span></td><td>0.112<br><span class="small">0.559</span></td><td>0.383<br><span class="small">1.000</span></td><td>0.491<br><span class="small">1.000</span></td><td class="raw">0.031<br><span class="small">0.185</span></td><td>0.231<br><span class="small">0.924</span></td><td><strong>sí</strong></td></tr>
+<tr><td>M14</td><td>CanESM5</td><td>0.377<br><span class="small">1.000</span></td><td>0.659<br><span class="small">1.000</span></td><td class="rech">0.001<br><span class="small">0.004</span></td><td>0.238<br><span class="small">0.951</span></td><td>0.871<br><span class="small">1.000</span></td><td class="raw">0.042<br><span class="small">0.211</span></td><td>no</td></tr>
+<tr><td>M15</td><td>CanESM5-1</td><td>0.535<br><span class="small">1.000</span></td><td>0.448<br><span class="small">1.000</span></td><td class="rech">0.005<br><span class="small">0.028</span></td><td>0.491<br><span class="small">1.000</span></td><td class="raw">0.030<br><span class="small">0.150</span></td><td>0.138<br><span class="small">0.552</span></td><td>no</td></tr>
+<tr><td>M16</td><td>CanESM5-CanOE</td><td>0.309<br><span class="small">1.000</span></td><td>0.987<br><span class="small">1.000</span></td><td class="rech">0.002<br><span class="small">0.010</span></td><td>0.352<br><span class="small">1.000</span></td><td>0.226<br><span class="small">1.000</span></td><td>0.301<br><span class="small">1.000</span></td><td>no</td></tr>
+<tr><td>M17</td><td>EC-Earth3</td><td>0.060<br><span class="small">0.300</span></td><td>0.842<br><span class="small">1.000</span></td><td class="raw">0.025<br><span class="small">0.151</span></td><td>0.419<br><span class="small">1.000</span></td><td>0.239<br><span class="small">0.955</span></td><td>0.533<br><span class="small">1.000</span></td><td><strong>sí</strong></td></tr>
+<tr><td>M18</td><td>EC-Earth3-Veg</td><td>0.248<br><span class="small">0.993</span></td><td>0.878<br><span class="small">0.993</span></td><td>0.283<br><span class="small">0.993</span></td><td>0.491<br><span class="small">0.993</span></td><td>0.110<br><span class="small">0.548</span></td><td class="rech">0.004<br><span class="small">0.025</span></td><td>no</td></tr>
+<tr><td>M19</td><td>EC-Earth3-Veg-LR</td><td>0.309<br><span class="small">1.000</span></td><td>0.773<br><span class="small">1.000</span></td><td>0.448<br><span class="small">1.000</span></td><td>0.352<br><span class="small">1.000</span></td><td class="raw">0.013<br><span class="small">0.064</span></td><td class="rech">0.002<br><span class="small">0.013</span></td><td>no</td></tr>
+<tr><td>M20</td><td>FGOALS-f3-L</td><td>0.906<br><span class="small">1.000</span></td><td class="rech">0.001<br><span class="small">0.007</span></td><td>0.168<br><span class="small">0.505</span></td><td>0.736<br><span class="small">1.000</span></td><td class="raw">0.034<br><span class="small">0.170</span></td><td>0.083<br><span class="small">0.332</span></td><td>no</td></tr>
+<tr><td>M21</td><td>FGOALS-g3</td><td>0.906<br><span class="small">1.000</span></td><td>0.213<br><span class="small">1.000</span></td><td>0.337<br><span class="small">1.000</span></td><td>0.912<br><span class="small">1.000</span></td><td>0.513<br><span class="small">1.000</span></td><td class="rech">0.000<br><span class="small">0.002</span></td><td>no</td></tr>
+<tr><td>M22</td><td>GFDL-ESM4</td><td>0.904<br><span class="small">1.000</span></td><td>0.721<br><span class="small">1.000</span></td><td class="raw">0.028<br><span class="small">0.140</span></td><td>1.000<br><span class="small">1.000</span></td><td>0.329<br><span class="small">1.000</span></td><td class="raw">0.017<br><span class="small">0.100</span></td><td><strong>sí</strong></td></tr>
+<tr><td>M23</td><td>GISS-E2-1-G</td><td>0.248<br><span class="small">0.745</span></td><td class="rech">0.000<br><span class="small">0.001</span></td><td class="rech">0.000<br><span class="small">0.001</span></td><td>0.292<br><span class="small">0.745</span></td><td class="rech">0.000<br><span class="small">0.001</span></td><td>0.887<br><span class="small">0.887</span></td><td>no</td></tr>
+<tr><td>M24</td><td>GISS-E2-1-H</td><td>0.151<br><span class="small">0.151</span></td><td class="raw">0.027<br><span class="small">0.087</span></td><td class="rech">0.000<br><span class="small">0.002</span></td><td class="rech">0.001<br><span class="small">0.007</span></td><td class="raw">0.022<br><span class="small">0.087</span></td><td class="raw">0.027<br><span class="small">0.087</span></td><td>no</td></tr>
+<tr><td>M25</td><td>GISS-E2-2-G</td><td>0.114<br><span class="small">0.263</span></td><td class="rech">0.001<br><span class="small">0.006</span></td><td>0.078<br><span class="small">0.263</span></td><td>0.066<br><span class="small">0.263</span></td><td class="raw">0.013<br><span class="small">0.063</span></td><td>0.221<br><span class="small">0.263</span></td><td>no</td></tr>
+<tr><td>M26</td><td>IITM-ESM</td><td>0.564<br><span class="small">1.000</span></td><td>0.058<br><span class="small">0.291</span></td><td>0.190<br><span class="small">0.761</span></td><td>0.522<br><span class="small">1.000</span></td><td>0.741<br><span class="small">1.000</span></td><td class="raw">0.011<br><span class="small">0.066</span></td><td><strong>sí</strong></td></tr>
+<tr><td>M27</td><td>INM-CM4-8</td><td class="rech">0.002<br><span class="small">0.011</span></td><td class="raw">0.033<br><span class="small">0.098</span></td><td>0.083<br><span class="small">0.167</span></td><td class="rech">0.007<br><span class="small">0.026</span></td><td class="rech">0.000<br><span class="small">0.001</span></td><td>0.376<br><span class="small">0.376</span></td><td>no</td></tr>
+<tr><td>M28</td><td>INM-CM5-0</td><td class="rech">0.001<br><span class="small">0.007</span></td><td>0.168<br><span class="small">0.337</span></td><td>0.060<br><span class="small">0.179</span></td><td class="rech">0.002<br><span class="small">0.012</span></td><td class="rech">0.003<br><span class="small">0.012</span></td><td>0.176<br><span class="small">0.337</span></td><td>no</td></tr>
+<tr><td>M29</td><td>IPSL-CM6A-LR</td><td>0.453<br><span class="small">1.000</span></td><td>0.277<br><span class="small">1.000</span></td><td class="rech">0.007<br><span class="small">0.042</span></td><td>0.913<br><span class="small">1.000</span></td><td>0.799<br><span class="small">1.000</span></td><td>0.525<br><span class="small">1.000</span></td><td>no</td></tr>
+<tr><td>M30</td><td>KACE-1-0-G</td><td>0.309<br><span class="small">1.000</span></td><td>0.099<br><span class="small">0.592</span></td><td>0.342<br><span class="small">1.000</span></td><td>0.191<br><span class="small">0.954</span></td><td>0.463<br><span class="small">1.000</span></td><td>0.995<br><span class="small">1.000</span></td><td><strong>sí</strong></td></tr>
+<tr><td>M31</td><td>MCM-UA-1-0</td><td>0.114<br><span class="small">0.569</span></td><td>0.699<br><span class="small">1.000</span></td><td class="rech">0.008<br><span class="small">0.046</span></td><td>0.238<br><span class="small">0.951</span></td><td>0.315<br><span class="small">0.951</span></td><td>0.692<br><span class="small">1.000</span></td><td>no</td></tr>
+<tr><td>M32</td><td>MIROC-ES2L</td><td>0.151<br><span class="small">0.453</span></td><td class="rech">0.000<br><span class="small">0.001</span></td><td>0.348<br><span class="small">0.696</span></td><td>0.419<br><span class="small">0.696</span></td><td>0.069<br><span class="small">0.274</span></td><td class="rech">0.000<br><span class="small">0.001</span></td><td>no</td></tr>
+<tr><td>M33</td><td>MIROC6</td><td>0.151<br><span class="small">0.346</span></td><td class="rech">0.001<br><span class="small">0.003</span></td><td class="rech">0.004<br><span class="small">0.014</span></td><td>0.150<br><span class="small">0.346</span></td><td>0.115<br><span class="small">0.346</span></td><td class="rech">0.002<br><span class="small">0.009</span></td><td>no</td></tr>
+<tr><td>M34</td><td>MPI-ESM1-2-HR</td><td>0.151<br><span class="small">0.702</span></td><td>0.381<br><span class="small">0.939</span></td><td class="raw">0.020<br><span class="small">0.122</span></td><td>0.352<br><span class="small">0.939</span></td><td>0.140<br><span class="small">0.702</span></td><td>0.313<br><span class="small">0.939</span></td><td><strong>sí</strong></td></tr>
+<tr><td>M35</td><td>MPI-ESM1-2-LR</td><td>0.196<br><span class="small">0.978</span></td><td>0.322<br><span class="small">0.978</span></td><td>0.074<br><span class="small">0.444</span></td><td>0.736<br><span class="small">1.000</span></td><td>0.240<br><span class="small">0.978</span></td><td>0.826<br><span class="small">1.000</span></td><td><strong>sí</strong></td></tr>
+<tr><td>M36</td><td>MRI-ESM2-0</td><td>0.714<br><span class="small">0.807</span></td><td>0.308<br><span class="small">0.807</span></td><td class="rech">0.002<br><span class="small">0.011</span></td><td>0.150<br><span class="small">0.602</span></td><td class="raw">0.019<br><span class="small">0.094</span></td><td>0.269<br><span class="small">0.807</span></td><td>no</td></tr>
+<tr><td>M37</td><td>NorESM2-LM</td><td>0.564<br><span class="small">1.000</span></td><td class="raw">0.018<br><span class="small">0.107</span></td><td>0.091<br><span class="small">0.458</span></td><td>0.352<br><span class="small">1.000</span></td><td>0.698<br><span class="small">1.000</span></td><td>0.233<br><span class="small">0.933</span></td><td><strong>sí</strong></td></tr>
+<tr><td>M38</td><td>NorESM2-MM</td><td>0.248<br><span class="small">0.573</span></td><td class="rech">0.000<br><span class="small">0.001</span></td><td>0.265<br><span class="small">0.573</span></td><td>0.191<br><span class="small">0.573</span></td><td class="rech">0.010<br><span class="small">0.050</span></td><td>0.110<br><span class="small">0.440</span></td><td>no</td></tr>
+<tr><td>M39</td><td>TaiESM1</td><td>0.904<br><span class="small">1.000</span></td><td>0.066<br><span class="small">0.262</span></td><td class="rech">0.001<br><span class="small">0.005</span></td><td>0.569<br><span class="small">1.000</span></td><td>0.300<br><span class="small">0.901</span></td><td class="raw">0.015<br><span class="small">0.076</span></td><td>no</td></tr>
+<tr><td>M40</td><td>UKESM1-0-LL</td><td>0.808<br><span class="small">1.000</span></td><td>0.093<br><span class="small">0.561</span></td><td>0.226<br><span class="small">0.904</span></td><td>0.419<br><span class="small">1.000</span></td><td>0.418<br><span class="small">1.000</span></td><td>0.169<br><span class="small">0.845</span></td><td><strong>sí</strong></td></tr>
+</tbody>
+</table>
+<p class="nota">Los valores p por permutación tienen un mínimo de 1/10000 = 0.0001. Con la semilla fija (<code>SEED = 0</code>), el resultado es idéntico en cada corrida.</p>
+
+<h2 id="limites">10. Límites y cautelas</h2>
+<ul>
+<li><strong>La observación también es una muestra.</strong> ERSSTv5 es una realización de 115 años, no la verdad exacta; por eso las pruebas comparan dos muestras.</li>
+<li><strong>Un solo miembro por modelo.</strong> Un rechazo puede deberse en parte a la variabilidad interna de esa corrida, no solo a la física del modelo.</li>
+<li><strong>Eventos tratados como independientes.</strong> Están separados por meses neutros, pero el ENOS tiene memoria interanual; la independencia es una aproximación.</li>
+<li><strong>Potencia baja.</strong> Con 35–41 eventos observados, "pasa el filtro" significa "no distinguible con esta muestra". El filtro elimina a los modelos claramente distintos, no certifica que los demás sean correctos.</li>
+<li><strong>Las pruebas no miden la magnitud.</strong> La amplitud de los eventos ya la mide S_final a través de σ̂ del compuesto; incluirla aquí la contaría dos veces.</li>
+</ul>
+
+<h2 id="decisiones">11. Decisiones tomadas</h2>
+<ul>
+<li>Usar <strong>pruebas estadísticas</strong> en lugar de un margen de ±1 desviación estándar de ERSSTv5: el margen dependía mucho de cómo se calculara esa desviación y dejaba 0 o 1 modelo con los nueve criterios.</li>
+<li>Usar <strong>RONI e ICEN</strong>, sin ONI, para no duplicar Niño 3.4.</li>
+<li>Una prueba distinta por propiedad, según el tipo de dato: conteo (Poisson), distribución continua (Anderson-Darling) y categorías circulares (prueba G).</li>
+<li><strong>Corrección de Holm por modelo</strong>, con α = 0.05 para la familia de seis pruebas.</li>
+<li>Pendiente: el corte de la selección entre los modelos que pasan el filtro, y si S_final pasa a pesar 0.5 el ICEN y 0.25 cada uno el ONI y el RONI.</li>
+</ul>
+
+<p class="nota">Referencias: Scholz, F. W., &amp; Stephens, M. A. (1987). K-sample Anderson-Darling tests. <em>JASA</em>, 82(399), 918–924. · Holm, S. (1979). A simple sequentially rejective multiple test procedure. <em>Scandinavian Journal of Statistics</em>, 6(2), 65–70. · Wilks, S. S. (1938). The large-sample distribution of the likelihood ratio for testing composite hypotheses. <em>Annals of Mathematical Statistics</em>, 9(1), 60–62.</p>
+</main></body>
+</html>
