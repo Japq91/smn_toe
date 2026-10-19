@@ -22,7 +22,7 @@ def main():
     lim_r = np.round(np.arange(-0.6, 0.61, 0.1), 2)
     lim_p = np.arange(0, 101, 10)
     im = mapa(axs[0], corr.mean("number"), *discreta("RdBu_r", lim_r),
-              "r medio multimodelo -- punteado: ≥50% de modelos con p<0.05", punteado=frac >= 0.5, letra="a")
+              "r medio multimodelo -- cruces: ≥50% de modelos con p<0.05", punteado=frac >= 0.5, letra="a")
     barra(fig, im, axs[0], "r", lim_r, extend="both", pad=.01, alto=0.8, cada=2)
     im = mapa(axs[1], frac * 100, *discreta("viridis", lim_p), "Modelos con correlación significativa (p<0.05) [%]", letra="b")
     barra(fig, im, axs[1], "[%]", lim_p, pad=.01, alto=0.8, cada=2)

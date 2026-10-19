@@ -23,7 +23,7 @@ def main():
     lim_a = np.arange(-3, 3.01, 0.5)
     lim_b = np.arange(0, 2.51, 0.25)
     im = mapa(axs[0], media, *discreta("RdBu_r", lim_a),
-              "Sesgo medio multimodelo -- punteado: ≥80% de modelos con el mismo signo", punteado=acuerdo, letra="a")
+              "Sesgo medio multimodelo -- cruces: ≥80% de modelos con el mismo signo", punteado=acuerdo, letra="a")
     barra(fig, im, axs[0], "[°C]", lim_a, extend="both", pad=.01, alto=0.8, cada=2)
     im = mapa(axs[1], bias.std("number"), *discreta("managua", lim_b), "Desviación estándar entre modelos", letra="b")
     barra(fig, im, axs[1], "[°C]", lim_b, extend="max", pad=.01, alto=0.8, cada=2)

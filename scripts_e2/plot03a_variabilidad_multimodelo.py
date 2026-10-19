@@ -22,7 +22,7 @@ def main():
     med = dvar.median("number")
     acuerdo_v = np.maximum((dvar > 0).mean("number"), (dvar < 0).mean("number")) >= 0.8
     fig, axs = plt.subplots(2, 1, figsize=(12, 4.4), sharex=True, layout="constrained")
-    im = mapa(axs[0], med, *discreta("PuOr_r", lim_d), "Δσ mediana multimodelo -- punteado: ≥80% de modelos con el mismo signo", punteado=acuerdo_v, letra="a")
+    im = mapa(axs[0], med, *discreta("PuOr_r", lim_d), "Δσ mediana multimodelo -- cruces: ≥80% de modelos con el mismo signo", punteado=acuerdo_v, letra="a")
     barra(fig, im, axs[0], "[%]", lim_d, extend="both", pad=.01, alto=0.8)
     iqr = dvar.quantile(0.75, "number") - dvar.quantile(0.25, "number")
     im = mapa(axs[1], iqr, *discreta("magma_r", lim_iqr), "Rango intercuartil entre modelos", letra="b")
