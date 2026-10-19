@@ -1,6 +1,17 @@
-# Pipeline de datos SST — CMIP6 + ERSSTv5 (Niño 1+2 / Niño 3.4)
+# smn_toe — Influencia del cambio climático en El Niño (CMIP6 + ERSSTv5, Niño 1+2 / Niño 3.4)
 
-Pipeline de datos para calcular el *Time of Emergence* (TOE) de la temperatura superficial del mar en las regiones Niño 1+2 y Niño 3.4. Cubre la adquisición de los modelos CMIP6 y del dato observado de referencia (ERSSTv5), su homogeneización y su control de calidad, hasta un producto final listo para el análisis.
+Código del servicio de asistencia en investigación para SENAMHI sobre la influencia del cambio climático en el ENOS y sus impactos en el Perú. El objetivo final es el *Time of Emergence* (TOE) de la temperatura superficial del mar (TSM) en las regiones Niño 1+2 y Niño 3.4, a partir de los modelos CMIP6 y de la referencia observacional ERSSTv5.
+
+## Entregables
+
+| Entregable | Contenido | Código | Informe | Estado |
+|---|---|---|---|---|
+| E1 | Descarga, homogeneización (grilla, calendario, unidades, máscara) y control de calidad de los modelos CMIP6 y de ERSSTv5 | `run.sh`, `scripts/` | `e1_informe/` | Completo |
+| E2 | Evaluación histórica de los 40 modelos (estado medio, ciclo anual, variabilidad, índices ONI/RONI/ICEN, eventos cálidos) y selección de los que mejor representan el ENOS | `rune2.sh`, `rune2plot.sh`, `scripts_e2/` | `e2_informe/` | Completo |
+| E3 | Proyecciones bajo los escenarios SSP | — | — | Pendiente |
+| E4 | Partición de incertidumbre y TOE | — | — | Pendiente |
+
+El E2 solo lee lo que deja el E1 (`data/processed/masked/`): hay que correr primero `./run.sh`. Las secciones de Instalación a "Informe" describen el E1; el E2 está en la sección [Entregable 2](#entregable-2--evaluación-histórica-y-selección-de-modelos).
 
 ## Instalación
 
@@ -81,7 +92,9 @@ data/interim/ocean_mask.nc                         # 05: máscara 1=océano
 data/processed/masked/tos_<modelo>_<exp>.nc        # 05: dato final, listo para el cálculo de TOE
 data/processed/qc_report.csv                       # 06
 data/processed/models_inventory_final.csv          # 07: modelos selected=True (los que se grafican)
-figures/e1/                                         # scripts/plot_*.py (automatico, run.sh); figures/e2/ = rune2.sh
+figures/e1/                                         # scripts/plot_*.py (automatico, run.sh)
+data/processed/e2/                                  # E2: rune2.sh (p01-p09)
+figures/e2/                                         # E2: rune2plot.sh (scripts_e2/plot*.py)
 ```
 
 `data/interim/processed/` es un paso intermedio (regrillado, todavía sin máscara); `data/processed/masked/` es el dato final. `run.sh` genera los PNG de `figures/e1/` el mismo (`scripts/plot_*.py`, al final de cada corrida).
@@ -171,8 +184,57 @@ rm e1_informe/model_availability_report.csv e1_informe/model_availability_report
 python3 scripts/check_model_availability.py
 ```
 
-### Informe (`e1_informe/informe_e1_smnv3.tex`)
+### Informe del E1 (`e1_informe/informe_e1_smnv3.tex`)
 El `.tex` referencia sus figuras como `figuras/<archivo>.png` (carpeta en español, convención propia del informe). `e1_informe/figuras/` es un directorio versionado con **symlinks** a solo los archivos de `figures/e1/` que el `.tex` realmente usa -- no un symlink a toda `figures/e1/` (eso expondría las figuras de los 102 modelos sin necesidad). La única excepción es `cmip6_contribution.png`, una imagen manual/externa (no generada por `run.sh`) que vive como archivo real directamente en `e1_informe/figuras/`, no como symlink. Si se agrega una figura nueva al `.tex`, hay que agregar a mano el symlink correspondiente en `e1_informe/figuras/` (`ln -sf ../../figures/e1/<archivo>.png e1_informe/figuras/<archivo>.png`). Para compilar: `cd e1_informe && pdflatex informe_e1_smnv3.tex` (requiere `run.sh` ya corrido, para que `figures/e1/` tenga las imágenes reales).
+
+## Entregable 2 — Evaluación histórica y selección de modelos
+
+Evalúa los 40 modelos que el E1 dejó aprobados (experimento `historical`) frente a ERSSTv5: estado medio, ciclo anual y variabilidad en 1981–2014; índices ONI y RONI (Niño 3.4) e ICEN (Niño 1+2), eventos cálidos y su evento típico (análisis compuesto) en 1900–2014. El *skill score* de Taylor (2001) sobre los compuestos selecciona **10 modelos** (S_final ≥ percentil 75). Métodos, resultados y limitaciones: `e2_informe/informe_e2.tex`.
+
+### Ejecución
+
+```
+./rune2.sh [desde] [hasta]          # cálculo: pasos p01..p09 (ej. ./rune2.sh p07 p09)
+bash rune2plot.sh [desde] [hasta]   # figuras por código (ej. bash rune2plot.sh 07, o 07c)
+```
+
+Usan el mismo entorno conda que `run.sh` y lo activan solos. Logs en `logs/`.
+
+| Paso | Calcula | Salida en `data/processed/e2/` |
+|---|---|---|
+| p01 | ONI, RONI e ICEN de cada modelo, 1900-02 a 2014-11 | `indices_enso_1900-2014.csv` |
+| p02 | Climatología mensual por caja | `climatologia_<caja>_1981-2014.csv` |
+| p03 | Mapa de sesgo por modelo | `sesgo_tsm_ref1981-2014.nc` |
+| p04 | Mapa de diferencia de σ por modelo | `variabilidad_tsm_ref1981-2014.nc` |
+| p05 | Métricas de Taylor de la serie completa por caja | `taylor_<caja>_ref1981-2014.csv` |
+| p06 | Correlación punto a punto y su significancia | `correlacion_tsm_ref1981-2014.nc` |
+| p07 | Eventos cálidos y su clasificación oficial y relativa | `eventos_<indice>_1900-2014.csv` |
+| p08 | Evento compuesto (±12, 15 y 18 meses) y sus métricas de Taylor | `taylor_compuesto_<indice>_vent<V>m_1900-2014.csv` |
+| p09 | *Skill score*, *gap statistic* y selección | `skill_score_vent<V>m_1900-2014.csv` |
+
+p02–p06 solo leen `masked/` y son independientes entre sí. p07 → p08 → p09 es una cadena: p07 necesita p01, p08 necesita p01 y p07, y p09 necesita p05 y p08. El detalle de columnas y convenciones (numeración M01–M40, bases de los índices, ventana común) está en `data/processed/e2/README.md`; el contrato de entrada, en `scripts_e2/README.md`.
+
+Cada figura sale de un script con su código: `scripts_e2/plot07c_magnitud_eventos.py` → `figures/e2/e2_07c_magnitud_eventos.png`. Las funciones comunes de cálculo están en `scripts_e2/common_e2.py` y las de gráficos en `scripts_e2/plot00_comun.py`.
+
+### Estructura
+
+```
+scripts_e2/                     # pXX_*.py (cálculo), plotXX_*.py (figuras), common_e2.py, plot00_comun.py
+data/processed/e2/              # salidas de p01-p09 (solo README.md y model_registry_e2.csv se versionan)
+figures/e2/                     # PNG de rune2plot.sh (no se versiona)
+e2_informe/informe_e2.tex       # informe técnico del E2
+e2_informe/references.bib
+e2_informe/figuras/             # symlinks a las figuras de figures/e2/ que usa el .tex
+e2_informe/info/e2_ppt.html     # presentación (HTML autocontenido, se abre en el navegador)
+e2_informe/info/fichas_figuras_e2.html   # ficha de cada figura: qué muestra, cálculo, lectura y destino
+```
+
+### Informe y presentación
+
+- Compilar: `cd e2_informe && latexmk -pdf informe_e2.tex` (requiere `rune2plot.sh` ya corrido, para que los symlinks de `figuras/` apunten a imágenes reales). El PDF y los auxiliares no se versionan.
+- Figura nueva en el `.tex`: `ln -sf ../../figures/e2/<archivo>.png e2_informe/figuras/<archivo>.png`.
+- La presentación lleva las imágenes incrustadas en base64 para abrirse sin depender de `figures/e2/`: al regenerar una figura hay que volver a incrustarla en `e2_ppt.html`.
+- `scripts_e2/plots_e2.ipynb` es el notebook del que salieron los `plot*.py`; es un prototipo local y no se versiona (`*.ipynb` está en `.gitignore`). Los scripts son la versión vigente.
 
 ## Convenciones
 

@@ -2,7 +2,7 @@
 
 Symlinks curados a `figures/e2/*.png`, mismo criterio que
 `e1_informe/figuras/` para el Entregable 1: solo los archivos que el
-futuro `e2_informe/informe_e2.tex` referencie de verdad (`figuras/<archivo>.png`
+`e2_informe/informe_e2.tex` referencia de verdad (`figuras/<archivo>.png`
 en el `.tex`), no todo `figures/e2/`. Agregar un symlink nuevo con:
 
 ```

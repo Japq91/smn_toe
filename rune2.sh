@@ -21,7 +21,7 @@
 #   p09 skill_score_vent<N>m_<y0>-<y1>.csv  <- p05 + p08  (N = 12, 15, 18)
 # p02-p06 son independientes entre sí; p07-p09 son una cadena y deben
 # correr en ese orden después de p01/p05. Todo lo que generan es lo que
-# leen después los gráficos de E2 (scripts_e2/plots_e2.ipynb, figures/e2/).
+# leen después los gráficos de E2 (rune2plot.sh -> figures/e2/).
 #
 # Este script NO descarga ni reprocesa nada de CMIP6/ERSSTv5 -- lee
 # únicamente lo que el Entregable 1 ya dejó en data/processed/masked/

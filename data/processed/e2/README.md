@@ -12,10 +12,11 @@ lectura del Entregable 1 (`run.sh`) y nunca se escriben desde acá.
 ## Scripts que generan estos archivos: `scripts_e2/pXX_*.py`
 
 Un script por paso de cálculo (ver el listado numerado del marco
-teórico/cálculos de E2), cada uno **ejecutable por separado**
-(`python3 scripts_e2/pXX_*.py`, no depende de que otro `pXX` haya
-corrido antes -- todos leen directo de `data/processed/masked/` y
-`model_registry_e2.csv`). Comparten helpers en `scripts_e2/common_e2.py`
+teórico/cálculos de E2), ejecutables con `./rune2.sh [desde] [hasta]` o sueltos
+(`python3 scripts_e2/pXX_*.py`). p01–p06 leen directo de
+`data/processed/masked/` y `model_registry_e2.csv` y no dependen
+entre sí; p07 → p08 → p09 son una cadena (p07 lee los índices de p01,
+p08 lee p01 y p07, y p09 lee p05 y p08). Comparten helpers en `scripts_e2/common_e2.py`
 (mismo patrón que `scripts/plot_common.py` en E1), pero eso no los
 acopla entre sí, solo evita duplicar `box_series`/climatología/etc.
 
@@ -53,14 +54,14 @@ solo, en la próxima corrida.
 Los 40 modelos seleccionados (`data/processed/models_inventory_final.csv`,
 `selected=True`), en orden alfabético, con numeración propia de E2:
 columna `number` = `M01`...`M40` -- **deliberadamente distinta** del
-`M001`...`M102` de `informe/model_registry.csv` (E1), que numera el
+`M001`...`M102` de `e1_informe/model_registry.csv` (E1), que numera el
 universo completo de 102 candidatos. Esta numeración `M01..M40` es el
 identificador canónico para todo archivo/gráfico de E2 de acá en
 adelante, no el nombre completo del modelo.
 
 Columnas: `number, model, institution, country, member_id,
 resolution_km` -- las últimas 4 reusadas tal cual de
-`informe/model_registry.csv` (join por nombre de modelo), no
+`e1_informe/model_registry.csv` (join por nombre de modelo), no
 recalculadas.
 
 ## `indices_enso_<periodo>.csv`
@@ -73,8 +74,8 @@ su `number`: `M01_ONI, M01_RONI, M01_ICEN, M02_ONI, ...` hasta
 
 **Sin `ref` en el nombre, a propósito**: los índices **no** usan el
 período de referencia 1981-2014 del resto de E2. Cada uno sigue la
-convención operativa de su índice (ver `scripts_e2/common_e2.py` y
-`scripts_e2/actualizacion_manual.txt`):
+convención operativa de su índice (ver `scripts_e2/common_e2.py` y la
+Sección 3.3 de `e2_informe/informe_e2.tex`):
 - **ONI**: anomalía con bases móviles de 30 años del CPC (cambian cada
   5 años; 1996-2000 usa 1981-2010, etc.), media móvil de 3 meses.
 - **ICEN**: anomalía con bases de 30 años por quinquenio del ENFEN,
@@ -386,7 +387,8 @@ es "correcto" (decisión del usuario, ver nota de arriba):
 - `V=15` (31 puntos) y `V=18` (37 puntos) -- **pruebas de
   sensibilidad**: confirman si el resultado depende fuertemente del
   ancho elegido. No alimentan el score final, se reportan solo como
-  comparación (`scripts_e2/plots_e2.ipynb`, secciones 8d/8e).
+  comparación (figura `e2_08d_sensibilidad_ventana.png`,
+`scripts_e2/plot08d_sensibilidad_ventana.py`).
 
 Generado por `scripts_e2/p08_taylor_compuesto.py` (constante
 `VENTANA_MESES`, editable, arma el nombre de archivo sola -- mismo

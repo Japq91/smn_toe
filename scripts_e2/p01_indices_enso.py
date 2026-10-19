@@ -5,7 +5,7 @@ Ejecutable de forma independiente (no depende de que otro pXX haya
 corrido antes): lee directamente data/processed/masked/ y
 data/processed/e2/model_registry_e2.csv.
 
-Anomalias (ver common_e2.py y scripts_e2/actualizacion_manual.txt):
+Anomalias (ver common_e2.py y e2_informe/informe_e2.tex, Seccion 3.3):
   - ONI: bases moviles de 30 anios del CPC (cambian cada 5 anios).
   - ICEN: bases de 30 anios por quinquenio del ENFEN.
   - RONI: base fija (ultimos 30 anios disponibles, 1985-2014 con estos
