@@ -34,7 +34,7 @@ ul,ol{padding-left:1.3em}
 <nav><a href="#proposito">Propósito</a><a href="#datos">Datos</a><a href="#hipotesis">H0 y H1</a><a href="#pruebas">Las tres pruebas</a><a href="#p">Valor p</a><a href="#holm">Holm</a><a href="#lectura">Cómo leer un modelo</a><a href="#resultados">Resultados</a><a href="#tabla">Tabla por modelo</a><a href="#limites">Límites</a><a href="#decisiones">Decisiones</a></nav>
 
 <h2 id="proposito">1. Propósito</h2>
-<p>El <em>skill score</em> S_final (p09) mide sobre todo la amplitud del evento cálido típico. No dice si el modelo produce eventos con la frecuencia, la duración y la estacionalidad observadas, que son justamente lo que pide el TdR al hablar de "eventos cálidos extremos". Este paso agrega un <strong>filtro previo</strong>: primero se descartan los modelos cuyo régimen de eventos es estadísticamente distinto del observado, y solo los que pasan se ordenan después por S_final. El corte final de la selección todavía no está definido.</p>
+<p>El <em>skill score</em> S_final (p09) mide sobre todo la amplitud del evento cálido típico. No dice si el modelo produce eventos con la frecuencia, la duración y la estacionalidad observadas, que son justamente lo que pide el TdR al hablar de "eventos cálidos extremos". Este paso agrega un <strong>filtro previo</strong>: primero se descartan los modelos cuyo régimen de eventos es estadísticamente distinto del observado, y a los que pasan se les aplica el umbral S_final ≥ 0.9 y S_ICEN ≥ 0.9 (sección 11).</p>
 
 <h2 id="datos">2. Qué datos se usan</h2>
 <ul>
@@ -225,7 +225,8 @@ ul,ol{padding-left:1.3em}
 <li>Usar <strong>RONI e ICEN</strong>, sin ONI, para no duplicar Niño 3.4.</li>
 <li>Una prueba distinta por propiedad, según el tipo de dato: conteo (Poisson), distribución continua (Anderson-Darling) y categorías circulares (prueba G).</li>
 <li><strong>Corrección de Holm por modelo</strong>, con α = 0.05 para la familia de seis pruebas.</li>
-<li>Pendiente: el corte de la selección entre los modelos que pasan el filtro, y si S_final pasa a pesar 0.5 el ICEN y 0.25 cada uno el ONI y el RONI.</li>
+<li><strong>Corte (2026-10-20):</strong> entre los 15 modelos que pasan el filtro se seleccionan los que tienen <strong>S_final ≥ 0.9 y S_ICEN ≥ 0.9</strong> (paso <code>p11_seleccion.py</code>). Con r ≈ 1, S ≥ 0.9 equivale a 0.72 ≤ σ̂ ≤ 1.39: un evento típico hasta un 28 % más débil o un 39 % más intenso que el observado. La condición sobre S_ICEN impide entrar solo por Niño 3.4; con ella, S_final se mantiene como promedio simple y no hace falta ponderar el ICEN.</li>
+<li><strong>Resultado:</strong> 7 modelos, M03, M02, M17, M26, M22, M37 y M07. Cuatro (M02, M03, M17 y M26) siguen seleccionados con las ventanas de ±15 y ±18 meses; M22, M37 y M07 están cerca del umbral y dependen de la ventana. M13, M11, M40 y M30 pasan el filtro y tienen S_final ≥ 0.9, pero quedan fuera por su ICEN (S_ICEN entre 0.83 y 0.89).</li>
 </ul>
 
 <p class="nota">Referencias: Scholz, F. W., &amp; Stephens, M. A. (1987). K-sample Anderson-Darling tests. <em>JASA</em>, 82(399), 918–924. · Holm, S. (1979). A simple sequentially rejective multiple test procedure. <em>Scandinavian Journal of Statistics</em>, 6(2), 65–70. · Wilks, S. S. (1938). The large-sample distribution of the likelihood ratio for testing composite hypotheses. <em>Annals of Mathematical Statistics</em>, 9(1), 60–62.</p>

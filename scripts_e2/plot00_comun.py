@@ -415,6 +415,12 @@ def cargar_skv():
 
 
 @lru_cache(maxsize=None)
+def cargar_sel():
+    """Seleccion final de p11 (filtro de eventos + S_final >= 0.9 + S_ICEN >= 0.9)."""
+    return pd.read_csv(E2 / f"seleccion_{PER}.csv", index_col="number")
+
+
+@lru_cache(maxsize=None)
 def cargar_tcv():
     """Taylor del compuesto por ventana e indice (p08)."""
     return {v: {i: pd.read_csv(E2 / f"taylor_compuesto_{i}_vent{v}m_{PER}.csv", index_col="number") for i in INDICES}

@@ -48,12 +48,13 @@ pipeline de E1.
 
 ## Scripts
 
-`p01`...`p09` -- ver `data/processed/e2/README.md` para el listado
+`p01`...`p11` -- ver `data/processed/e2/README.md` para el listado
 completo con el punto del cálculo que cubre cada uno y el detalle de
-su archivo de salida. `p09_skill_score.py` es el último de la cadena:
-score de habilidad (Taylor, 2001) y selección final de modelos;
-consume directamente las salidas de `p05_taylor.py` y
-`p08_taylor_compuesto.py`. Se corren con `./rune2.sh [desde] [hasta]`.
+su archivo de salida. `p09_skill_score.py` calcula el score de habilidad (Taylor, 2001)
+a partir de `p05_taylor.py` y `p08_taylor_compuesto.py`;
+`p10_pruebas_eventos.py` hace el filtro estadístico de eventos y
+`p11_seleccion.py` cierra la cadena con la selección final (filtro +
+`S_final` ≥ 0.9 + `S_ICEN` ≥ 0.9). Se corren con `./rune2.sh [desde] [hasta]`.
 
 `plot<codigo>_<nombre>.py` -- un script por figura, que genera
 `figures/e2/e2_<codigo>_<nombre>.png` a partir de lo que dejó

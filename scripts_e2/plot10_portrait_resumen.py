@@ -21,7 +21,7 @@ def main():
     clim, clim_obs = cargar_clim()
     est, ev, siglos = cargar_est(), cargar_eventos(), cargar_siglos()
     tcv, skv, o = cargar_tcv(), cargar_skv(), orden_s_final()
-    sel = skv[VENTANA]["seleccionado"]
+    sel = cargar_sel()["seleccionado"]
 
     frec = {}
     for i in INDICES:
