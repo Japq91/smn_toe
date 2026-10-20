@@ -11,8 +11,8 @@ lectura del Entregable 1 (`run.sh`) y nunca se escriben desde acá.
 
 ## Scripts que generan estos archivos: `scripts_e2/pXX_*.py`
 
-Un script por paso de cálculo (ver el listado numerado del marco
-teórico/cálculos de E2), ejecutables con `./rune2.sh [desde] [hasta]` o sueltos
+Un script por paso de cálculo (p01–p11; el método de cada uno está en la
+Sección 3 de `e2_informe/informe_e2.tex`), ejecutables con `./rune2.sh [desde] [hasta]` o sueltos
 (`python3 scripts_e2/pXX_*.py`). p01–p06 leen directo de
 `data/processed/masked/` y `model_registry_e2.csv` y no dependen
 entre sí; p07 → p08 → p09 son una cadena (p07 lee los índices de p01,
@@ -37,17 +37,17 @@ solo, en la próxima corrida.
   abajo).
 - `p04_variabilidad.py` -- sesgo de variabilidad por punto de grid
   (ver `variabilidad_tsm_*.nc` abajo).
-- `p05_taylor.py` -- input del diagrama de Taylor, consolidando los
-  pasos (5.)-(8.) del cálculo (ver `taylor_*.csv` abajo).
+- `p05_taylor.py` -- input del diagrama de Taylor: variabilidad, RMSE
+  centrado, correlación y σ normalizada en un solo archivo (ver `taylor_*.csv` abajo).
 - `p06_correlacion.py` -- correlación y significancia por punto de
-  grid, punto (13.), propuesta del usuario (ver `correlacion_tsm_*.nc`
+  grid, propuesta del usuario (ver `correlacion_tsm_*.nc`
   abajo).
-- `p07_eventos.py` -- clasificación de eventos cálidos extremos, punto
-  (11.) (ver `eventos_*.csv` abajo).
+- `p07_eventos.py` -- detección y clasificación de eventos cálidos
+  (ver `eventos_*.csv` abajo).
 - `p08_taylor_compuesto.py` -- diagrama de Taylor sobre el evento
-  compuesto, punto (12.) (ver `taylor_compuesto_*.csv` abajo).
+  compuesto (ver `taylor_compuesto_*.csv` abajo).
 - `p09_skill_score.py` -- score de habilidad S (Taylor, 2001),
-  ranking y gap statistic de los 40 modelos, punto (14.) (ver
+  ranking y gap statistic de los 40 modelos (ver
   `skill_score_*.csv` abajo). La selección final la hace p11.
 - `p10_pruebas_eventos.py` -- pruebas estadísticas de frecuencia,
   duración y estacionalidad de los eventos de RONI e ICEN frente a
@@ -273,21 +273,19 @@ calcularla por posición, no por fecha -- ver `lag1_autocorr()` en
 > of a time-varying field. *Journal of Climate*, 12(7), 1990-2009.
 
 Generado por `scripts_e2/p06_correlacion.py`. Sin corrección Linear
-Scaling (mismo criterio que el resto de E2). Es la propuesta del
-usuario, listada como punto (13.) del cálculo, no del listado original
-de 12 puntos.
+Scaling (mismo criterio que el resto de E2). Es un
+diagnóstico propuesto por el usuario, adicional a los que pide el TdR.
 
 ## `eventos_<INDICE>_<y0>-<y1>.csv`
 
-Tres archivos, uno por índice (`ONI`, `RONI`, `ICEN`) -- punto (11.)
-del cálculo. A diferencia de todos los archivos anteriores, formato
+Tres archivos, uno por índice (`ONI`, `RONI`, `ICEN`). A diferencia de todos los archivos anteriores, formato
 **largo**: una fila **por evento detectado**, no una fila por modelo
 (un modelo puede tener 0 o varios eventos en el período). Columnas:
 `number, inicio, fin, fecha_pico, duracion_meses, magnitud_pico,
 categoria_oficial, categoria_relativa`. `fecha_pico` (fecha del valor
 máximo dentro del evento) la usa directamente
-`p08_taylor_compuesto.py` para centrar la ventana del compuesto --
-punto (12.), ver abajo. Incluye `OBS` (ERSSTv5) -- a diferencia de
+`p08_taylor_compuesto.py` para centrar la ventana del compuesto (ver
+abajo). Incluye `OBS` (ERSSTv5) -- a diferencia de
 `indices_enso_*.csv`, acá sí hace falta para poder comparar; se
 recalcula vía `common_e2.load_all_indices()` (combina el CSV de
 `p01_indices_enso.py`, que deliberadamente excluye OBS, con los
@@ -334,15 +332,14 @@ continuo cae en huecos entre categorías (ej. 1.4179 no es ni
 "moderado", 1.0-1.4, ni "fuerte", 1.5-1.9) -- bug real detectado y
 corregido durante la construcción de este script.
 
-Generado por `scripts_e2/p07_eventos.py`. Insumo directo del punto
-(12.) (`p08_taylor_compuesto.py`, ver abajo) -- no independientes.
+Generado por `scripts_e2/p07_eventos.py`. Insumo directo de
+`p08_taylor_compuesto.py` (ver abajo) y de `p10_pruebas_eventos.py`.
 
 ## `taylor_compuesto_<INDICE>_vent<V>m_<y0>-<y1>.csv`
 
 Nueve archivos, uno por índice (`ONI`, `RONI`, `ICEN`) × ancho de
-ventana (`V=12`, `V=15`, `V=18`) -- punto (12.) del cálculo, **no
-independiente**: consume directamente `eventos_<INDICE>_<y0>-<y1>.csv`
-(punto 11., arriba). Mismo formato de 4 columnas que
+ventana (`V=12`, `V=15`, `V=18`), **no independientes**: consumen
+directamente `eventos_<INDICE>_<y0>-<y1>.csv` (arriba). Mismo formato de 4 columnas que
 `taylor_<caja>_ref<ref>.csv` (fila 1 = `OBS`, filas 2-41 =
 `M01`...`M40`, columnas `sigma, r, rmse_centrado, sigma_norm`, mismas
 fórmulas y misma identidad de Taylor) -- pero calculado sobre la
@@ -392,7 +389,7 @@ del modelo se compara contra la curva compuesta de OBS con las mismas
 Se corre con **tres anchos de ventana**, sin que ningún paper fije cuál
 es "correcto" (decisión del usuario, ver nota de arriba):
 - `V=12` (25 puntos) -- **resultado principal**, el que alimenta
-  `skill_score_vent12m_<y0>-<y1>.csv` (punto 14., abajo).
+  `skill_score_vent12m_<y0>-<y1>.csv` (abajo).
 - `V=15` (31 puntos) y `V=18` (37 puntos) -- **pruebas de
   sensibilidad**: confirman si el resultado depende fuertemente del
   ancho elegido. No alimentan el score final: se reportan como
@@ -410,7 +407,7 @@ dataset (mismos índices ONI/RONI/ICEN de
 
 ## `skill_score_vent12m_<y0>-<y1>.csv`
 
-Punto (14.) del cálculo -- base de la selección que pide la actividad
+Base de la selección que pide la actividad
 (b) del TdR ("seleccionar los modelos con mejor capacidad de
 representación"), que no fija un número ni un umbral; la selección la
 completa p11 con el filtro de eventos. Una fila por modelo (`M01`...`M40`,
