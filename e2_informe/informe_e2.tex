@@ -454,27 +454,13 @@ La Figura~\ref{fig:curvas} muestra el evento típico de cada modelo. En ONI y RO
 \label{fig:curvas}
 \end{figure}
 
-Cuando los eventos se alinean por su propio pico, los modelos sí se separan (Figura~\ref{fig:compuesto}; con $\pm15$ y $\pm18$ meses, Figuras~\ref{fig:compuesto15} y~\ref{fig:compuesto18}). La forma del evento típico se parece a la observada en todos ellos: la mediana de $r$ es 0.98 en ONI y 0.97 en RONI e ICEN, con un mínimo de 0.80. Lo que distingue a los modelos es la amplitud. En ONI, $\hat\sigma$ va de 0.46 (INM-CM4-8, un ENOS muy débil) a 1.71 (FGOALS-f3-L, demasiado intenso), con mediana 1.11. En el ICEN va de 0.39 (MPI-ESM1-2-HR) a 1.48, con mediana 0.82: el evento típico del ICEN es demasiado débil en la mayoría de los modelos.
+Cuando los eventos se alinean por su propio pico, los modelos sí se separan (Figura~\ref{fig:compuesto}, ventana de $\pm12$ meses; con $\pm15$ y $\pm18$ meses el resultado es similar, Figura~\ref{fig:sensibilidad}). La forma del evento típico se parece a la observada en todos ellos: la mediana de $r$ es 0.98 en ONI y 0.97 en RONI e ICEN, con un mínimo de 0.80. Lo que distingue a los modelos es la amplitud. En ONI, $\hat\sigma$ va de 0.46 (INM-CM4-8, un ENOS muy débil) a 1.71 (FGOALS-f3-L, demasiado intenso), con mediana 1.11. En el ICEN va de 0.39 (MPI-ESM1-2-HR) a 1.48, con mediana 0.82: el evento típico del ICEN es demasiado débil en la mayoría de los modelos.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figuras/e2_08c_compuesto_r_sigma_12m.png}
 \caption[Correlación y amplitud del evento compuesto por índice, ventana de $\pm12$ meses.]{Correlación ($r$, eje horizontal) y amplitud normalizada ($\hat\sigma$, eje vertical) del evento compuesto de cada modelo frente al de ERSSTv5 (rombo en $(1,1)$), para ONI (a), RONI (b) e ICEN (c). Ventana principal de $\pm12$ meses. Color: \emph{skill score} $S$ del índice (Ec.~\ref{eq:skill}). Números: código M01--M40.}
 \label{fig:compuesto}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\textwidth]{figuras/e2_08c_compuesto_r_sigma_15m.png}
-\caption[Correlación y amplitud del evento compuesto por índice, ventana de $\pm15$ meses.]{Correlación ($r$, eje horizontal) y amplitud normalizada ($\hat\sigma$, eje vertical) del evento compuesto de cada modelo frente al de ERSSTv5 (rombo en $(1,1)$), para ONI (a), RONI (b) e ICEN (c). Ventana de $\pm15$ meses; ejes y colores como en la Figura~\ref{fig:compuesto}.}
-\label{fig:compuesto15}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\textwidth]{figuras/e2_08c_compuesto_r_sigma_18m.png}
-\caption[Correlación y amplitud del evento compuesto por índice, ventana de $\pm18$ meses.]{Correlación ($r$, eje horizontal) y amplitud normalizada ($\hat\sigma$, eje vertical) del evento compuesto de cada modelo frente al de ERSSTv5 (rombo en $(1,1)$), para ONI (a), RONI (b) e ICEN (c). Ventana de $\pm18$ meses; ejes y colores como en la Figura~\ref{fig:compuesto}.}
-\label{fig:compuesto18}
 \end{figure}
 
 Un promedio de eventos alineados por su pico tiene, por construcción, forma de campana, de modo que $r$ discrimina poco, y el $S$ del compuesto queda determinado sobre todo por $\hat\sigma$: la correlación de Spearman entre $S$ y $|\log\hat\sigma|$ va de $-0.87$ a $-0.98$ según el índice, y la de $S$ con $r$, de 0.22 a 0.53. Así, el \emph{skill score} mide sobre todo si la amplitud del evento cálido típico es la observada, y en segundo término su evolución antes y después del pico.

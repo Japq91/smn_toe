@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """plot08a -- figura e2_08a_curvas_compuestas.png (seccion 8a de scripts_e2/plots_e2.ipynb).
 
-Curvas compuestas (evento tipico) centradas en el pico, una fila por indice,
+Curvas compuestas (evento tipico) centradas en el pico, un panel por indice,
 con la ventana de ±18 meses; lineas verticales en -/+12, 15 y 18 meses.
 
 Entrada: eventos_<INDICE>_<y0>-<y1>.csv (p07), indices_enso_<y0>-<y1>.csv (p01)
@@ -20,8 +20,8 @@ def main():
     curvas, _ = cargar_curvas()
     v = max(VENTANAS)  # la de 18 meses contiene a las otras dos
     t = np.arange(-v, v + 1)
-    fig, axs = plt.subplots(len(INDICES), 1, figsize=(10, 9), sharex=True)
-    for fila, (ax, i) in enumerate(zip(axs, INDICES)):
+    fig, axs = plt.subplots(1, len(INDICES), figsize=(12, 3.6), sharey="row", layout="constrained")
+    for col, (ax, i) in enumerate(zip(axs, INDICES)):
         M = np.vstack([curvas[v][i][n] for n in numbers if n in curvas[v][i]])
         for w in VENTANAS:  # limites de las tres ventanas
             for x in (-w, w):
@@ -35,11 +35,10 @@ def main():
         ax.axvline(0, color="0.4", lw=0.6)
         ax.axhline(0, color="0.4", lw=0.6)
         ax.set_xlim(-v, v)
-        titulo_panel(ax, LETRAS[fila], f"{i}: ventanas")
-        ax.set_ylabel(f"{i} [°C]")
-    axs[-1].set_xlabel("tiempo relativo al pico [meses]")
+        titulo_panel(ax, LETRAS[col], f"{i}: ventanas")
+        ax.set_xlabel("tiempo relativo al pico [meses]")
+    axs[0].set_ylabel("índice [°C]")
     axs[0].legend(frameon=False, fontsize=8, loc="upper right")
-    plt.tight_layout()
     guardar(fig, "08a_curvas_compuestas")
 
 if __name__ == "__main__":
