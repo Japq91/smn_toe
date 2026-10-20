@@ -26,17 +26,17 @@ def main():
     cmap = plt.get_cmap("viridis", len(limites) - 1)
     norm = mcolors.BoundaryNorm(limites, cmap.N)
 
-    fig, axs = plt.subplots(1, 2, figsize=(15, 5), layout="constrained")
+    fig, axs = plt.subplots(1, 2, figsize=(10, 5), layout="constrained")
     for ax, letra, (c, t) in zip(axs, "ab", tay.items()):
         sc = taylor(
             ax, t,
-            f"{NOM_CAJA[c]}: anomalía mensual {REF}", letra=letra,
+            f"{NOM_CAJA[c]}\nanomalía mensual {REF}", letra=letra,
             color=skv[v]["S_final"].reindex(t.drop(index="OBS").index),
             semicirculo=True, cmap=cmap, norm=norm,
         )
 
     axs[0].legend(loc="upper left", frameon=False)
-    cax = barra_inset(axs[-1], 0.8, 0.018, 0.04)  # 80% del alto del panel, centrada
+    cax = barra_inset(axs[-1], 0.81, 0.025, 0.04)  # 80% del alto del panel, centrada
     cb = fig.colorbar(sc, cax=cax, label="S_final", ticks=limites[::4])
     cb.ax.tick_params(labelsize=8)
     guardar(fig, "05a_taylor_serie_completa")

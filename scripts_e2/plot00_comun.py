@@ -278,7 +278,7 @@ def taylor(ax, df, titulo, color=None, rmax=None, etiquetar=True, cbar_label=Non
     if etiquetar:
         for n, xi, yi in zip(mod.index, x, y):
             ax.annotate(n[1:], (xi, yi), fontsize=5.5, xytext=(2, 2), textcoords="offset points")
-    ax.scatter([1], [0], marker="D", s=70, c="k", zorder=4, clip_on=False, label="ERSSTv5")
+    ax.scatter([1], [0], marker="D", s=40, c="k", zorder=4, clip_on=False, label="ERSSTv5")
     ax.set_xlim(-rmax if semicirculo else 0, rmax)
     ax.set_ylim(0, rmax)
     if semicirculo:

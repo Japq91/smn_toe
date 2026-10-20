@@ -17,7 +17,7 @@ from plot00_comun import *  # noqa: F401,F403  (config, helpers y cargas comunes
 
 def main():
     ev, siglos = cargar_eventos(), cargar_siglos()
-    fig, axs = plt.subplots(3, 2, figsize=(15, 10), sharex=True, sharey=True)
+    fig, axs = plt.subplots(3, 2, figsize=(10, 6), sharex=True, sharey=True)
     for fila, i in enumerate(INDICES):
         for col, (campo, orden, cmap) in enumerate([("categoria_oficial", ORD_OF, "YlOrRd"), ("categoria_relativa", ORD_REL, "PuRd")]):
             t = ev[i].groupby("number")[campo].value_counts().unstack(fill_value=0).reindex(datasets, fill_value=0)
@@ -26,7 +26,7 @@ def main():
             ax = axs[fila, col]
             t.plot.bar(stacked=True, ax=ax, width=0.85, colormap=cmap, edgecolor="k", lw=0.2, legend=(fila == 0))
             ax.axhline(t.loc["OBS"].sum(), color="k", ls="--", lw=0.9)
-            ax.set_ylabel(f"{i} [eventos/siglo]")
+            ax.set_ylabel(f"[eventos/siglo]")
             titulo_panel(ax, LETRAS[2 * fila + col], f"{i}: {campo.replace('_', ' ')}")
             if fila == 0:
                 ax.legend(fontsize=7, ncol=len(orden), frameon=False, loc="upper right")

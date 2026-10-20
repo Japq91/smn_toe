@@ -27,13 +27,13 @@ def main():
     norm = mcolors.BoundaryNorm(limites, cmap.N)
 
     for v in VENTANAS:
-        fig, axs = plt.subplots(1, len(INDICES), figsize=(17, 6), layout="constrained")
+        fig, axs = plt.subplots(1, len(INDICES), figsize=(12, 4), layout="constrained")
         for ax, letra, i in zip(axs, LETRAS, INDICES):
             mod = tcv[v][i].drop(index="OBS")
             sc = taylor(ax, tcv[v][i], f"{i} (compuesto ±{v} m)", letra=letra,
                         color=skv[v][f"S_{i}"].reindex(mod.index), rmax=rmax_c, cmap=cmap, norm=norm)
         axs[0].legend(loc="upper right", frameon=True)
-        cb = fig.colorbar(sc, cax=barra_inset(axs[-1], 0.8, 0.03, 0.04), label="S (Taylor 2001)", ticks=limites[::3])
+        cb = fig.colorbar(sc, cax=barra_inset(axs[-1], 0.9, 0.045, 0.04), label="S (Taylor 2001)", ticks=limites[::3])
         cb.ax.tick_params(labelsize=8)
         guardar(fig, f"08b_taylor_compuesto_{v}m")
 

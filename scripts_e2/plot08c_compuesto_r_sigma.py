@@ -26,7 +26,7 @@ def main():
     xlim = (todo["r"].min() - 0.01, 1.005)
     ylim = (todo["sigma_norm"].min() - 0.05, todo["sigma_norm"].max() + 0.08)
     for v in VENTANAS:
-        fig, axs = plt.subplots(1, len(INDICES), figsize=(12, 4), sharex=True, sharey=True,
+        fig, axs = plt.subplots(1, len(INDICES), figsize=(10, 4), sharex=True, sharey=True,
                                 layout="constrained")
         for ax, letra, i in zip(axs, LETRAS, INDICES):
             m = tcv[v][i].drop(index="OBS")

@@ -17,7 +17,7 @@ from plot00_comun import *  # noqa: F401,F403  (config, helpers y cargas comunes
 
 def main():
     df = cargar_indices()
-    fig, axs = plt.subplots(1, 3, figsize=(14, 4), sharey=True)
+    fig, axs = plt.subplots(1, 3, figsize=(10, 3), sharey=True)
     for ax, letra, ind in zip(axs, LETRAS, INDICES):
         specs = {}
         for n in numbers + ["OBS"]:

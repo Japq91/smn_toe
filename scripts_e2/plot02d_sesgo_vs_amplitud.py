@@ -17,7 +17,7 @@ from plot00_comun import *  # noqa: F401,F403  (config, helpers y cargas comunes
 
 def main():
     tab_clim = cargar_tab_clim()
-    fig, ax = plt.subplots(figsize=(6, 5))
+    fig, ax = plt.subplots(figsize=(5, 4))
     for caja, mk in zip(CAJAS, ["o", "s"]):
         t = tab_clim[NOM_CAJA[caja]].drop(index="OBS")
         ax.scatter(t["sesgo (°C)"], t["amplitud / OBS"], marker=mk, s=28, edgecolor="k", lw=0.4, label=NOM_CAJA[caja])
