@@ -46,9 +46,9 @@ solo, en la próxima corrida.
   (11.) (ver `eventos_*.csv` abajo).
 - `p08_taylor_compuesto.py` -- diagrama de Taylor sobre el evento
   compuesto, punto (12.) (ver `taylor_compuesto_*.csv` abajo).
-- `p09_skill_score.py` -- score de habilidad S (Taylor, 2001) y
-  ranking/selección final de los 40 modelos, punto (14.) (ver
-  `skill_score_*.csv` abajo).
+- `p09_skill_score.py` -- score de habilidad S (Taylor, 2001),
+  ranking y gap statistic de los 40 modelos, punto (14.) (ver
+  `skill_score_*.csv` abajo). La selección final la hace p11.
 - `p10_pruebas_eventos.py` -- pruebas estadísticas de frecuencia,
   duración y estacionalidad de los eventos de RONI e ICEN frente a
   ERSSTv5, filtro previo a la selección (ver
@@ -94,7 +94,7 @@ Sección 3.3 de `e2_informe/informe_e2.tex`):
   misma base. La resta de la media tropical ya quita la tendencia, por
   eso no hace falta base móvil.
 Antes de 1946-1950 ni CPC ni ENFEN definen bases: el patrón se extiende
-hacia atrás (decisión propia, documentar en el informe). Modelos y OBS
+hacia atrás (decisión propia, declarada en las Limitaciones del informe). Modelos y OBS
 pasan por exactamente las mismas funciones.
 
 Historial: hasta el 2026-10-08 el archivo era
@@ -134,10 +134,9 @@ modelo cambia (ej. al resolver el bug de dos realizaciones mezcladas
 en GISS-E2-1-G/H, ver conversación -- si eso cambia su rango temporal,
 el próximo cálculo lo refleja solo).
 
-**Para el `.tex` de E2**: mencionar explícitamente este recorte y su
-causa (IITM-ESM) al describir el período de análisis -- evitar que
-alguien note la ventana 1900-2014 en una figura y la lea como un error
-o una elección arbitraria.
+El informe menciona este recorte y su causa (IITM-ESM) en la Sección
+3.3 y en el Cuadro de periodos, para que la ventana 1900-2014 no se lea
+como un error o una elección arbitraria.
 
 ## `climatologia_<caja>_<ref>.csv`
 
@@ -306,11 +305,12 @@ completa):
   `std(RONI)` es la del Niño 3.4 suavizado con la base del RONI,
   prácticamente la misma que la del ONI (el reescalado de varianza de
   `common_e2.py::roni_index`), así que la tabla de ONI es
-  directamente aplicable, no una elección arbitraria. ICEN: débil
-  0.4-1.3, moderado 1.3-2.1, fuerte 2.1-3.5, extraordinario >3.5
-  (confianza MEDIA -- fuente secundaria sobre el evento de 2017, no la
-  tabla primaria de ENFEN; verificar antes de citar en el informe
-  final).
+  directamente aplicable, no una elección arbitraria. ICEN: tabla
+  de la Nota Técnica ENFEN 01-2024 (Tabla 2), con el pico a 2 decimales
+  e intervalos (mín, máx]: débil (0.5, 1.3], moderado (1.3, 2.1],
+  fuerte (2.1, 3.5], extraordinario > 3.5; el evento empieza con ICEN
+  > 0.5 durante al menos 3 meses. Verificada contra la fuente primaria
+  (antes se usaba el umbral de inicio de 2012, 0.4).
 - `categoria_relativa` -- umbral proporcional a la propia σ de cada
   dataset (Shin et al., 2022): moderado ≥0.5σ, fuerte ≥1σ, extremo
   ≥2σ, calculada sobre la MISMA serie del índice que se está
@@ -326,9 +326,10 @@ completa):
 > stronger eastern Pacific El Niño in a warmer climate. *npj Climate
 > and Atmospheric Science*, 5, 101. https://doi.org/10.1038/s41612-022-00324-9
 
-Ambas categorías se calculan sobre la magnitud del **pico ya
-redondeada a 1 decimal** -- las tablas oficiales se definieron sobre
-el valor tal como se publica (1 decimal), y sin redondear el valor
+Las categorías se calculan sobre la magnitud del **pico ya
+redondeada** como se publica: 1 decimal para ONI y RONI (y para la
+categoría relativa) y 2 decimales para el ICEN -- las tablas oficiales
+se definieron sobre el valor publicado, y sin redondear el valor
 continuo cae en huecos entre categorías (ej. 1.4179 no es ni
 "moderado", 1.0-1.4, ni "fuerte", 1.5-1.9) -- bug real detectado y
 corregido durante la construcción de este script.
@@ -359,12 +360,13 @@ problema: en vez de "¿pasó el evento el mismo año?", compara "cuando
 el modelo sí genera un evento, ¿tiene la **forma** correcta (arma,
 pico, decaimiento)?" -- pregunta respondible con una corrida libre.
 Confirma la hipótesis en la práctica: con los mismos 40 modelos, $r$
-en `taylor_compuesto_ONI_vent12m_1900-2014.csv` va de ~0.86 a
-~0.99, contra valores cercanos a 0 en `taylor_nino34_ref1981-2014.csv`.
+en `taylor_compuesto_ONI_vent12m_1900-2014.csv` va de 0.88 a 0.998
+(0.80 a 0.998 en los tres índices), contra valores cercanos a 0 en
+`taylor_nino34_ref1981-2014.csv`.
 
 **Sin cita de respaldo para la técnica en sí** -- se buscó un paper que
 describa exactamente esta metodología aplicada a ENOS/CMIP (incluida
-lectura completa de Kaur et al. 2021 y Sardana et al. 2023, los dos
+lectura completa de Kaur et al. 2022 y Sardana et al. 2024, los dos
 candidatos que se habían identificado antes) y ninguno la describe
 (ver `e2_informe/informe_e2.tex`, Sección 3.5, para la
 justificación metodológica). *Superposed epoch analysis* (alinear
@@ -393,9 +395,10 @@ es "correcto" (decisión del usuario, ver nota de arriba):
   `skill_score_vent12m_<y0>-<y1>.csv` (punto 14., abajo).
 - `V=15` (31 puntos) y `V=18` (37 puntos) -- **pruebas de
   sensibilidad**: confirman si el resultado depende fuertemente del
-  ancho elegido. No alimentan el score final, se reportan solo como
+  ancho elegido. No alimentan el score final: se reportan como
   comparación (figura `e2_08d_sensibilidad_ventana.png`,
-`scripts_e2/plot08d_sensibilidad_ventana.py`).
+  `scripts_e2/plot08d_sensibilidad_ventana.py`) y p11 las usa para
+  comprobar si la selección se mantiene con otras ventanas.
 
 Generado por `scripts_e2/p08_taylor_compuesto.py` (constante
 `VENTANA_MESES`, editable, arma el nombre de archivo sola -- mismo
@@ -407,9 +410,10 @@ dataset (mismos índices ONI/RONI/ICEN de
 
 ## `skill_score_vent12m_<y0>-<y1>.csv`
 
-Punto (14.) del cálculo -- responde directamente a la actividad (b) del
-TdR ("seleccionar los modelos con mejor capacidad de representación"),
-que no fija un número ni un umbral. Una fila por modelo (`M01`...`M40`,
+Punto (14.) del cálculo -- base de la selección que pide la actividad
+(b) del TdR ("seleccionar los modelos con mejor capacidad de
+representación"), que no fija un número ni un umbral; la selección la
+completa p11 con el filtro de eventos. Una fila por modelo (`M01`...`M40`,
 sin `OBS` -- $S_{obs}=1$ trivial, no es un modelo a evaluar), ordenada
 descendente por `S_final`. Columnas:
 
@@ -440,15 +444,15 @@ diagnóstico aparte por diseño):
 $$S_n=\frac{4(1+R)^n}{(\hat\sigma+1/\hat\sigma)^2(1+R_0)^n}$$
 
 Con $n=1$, $R_0=1$ -- **exponente verificado**, no supuesto: leído
-directamente de la ecuación (3) de Kaur et al. (2021), que aplica este
+directamente de la ecuación (3) de Kaur et al. (2022), que aplica este
 mismo skill score a evaluación de modelos CMIP para ENOS (ver cita
 abajo; $R_0=1$ sigue siendo default propio, sin estimación de
 incertidumbre observacional de ERSSTv5). Se simplifica a
 $S=2(1+R)/(\hat\sigma+1/\hat\sigma)^2$. Acotado en $[0,1]$, $S=1$ solo
 si $\hat\sigma=1$ y $R=1$.
 
-> Kaur, S., Kumar, P., Min, S.-K., Patra, A., & Wang, X. L. (2021).
-> CMIP5 model evaluation for extreme ocean wave height responses to
+> Kaur, S., Kumar, P., Min, S.-K., Patra, A., & Wang, X. L. (2022;
+> publicado en línea en 2021). CMIP5 model evaluation for extreme ocean wave height responses to
 > ENSO. *Climate Dynamics*, 59, 1323-1337, ecuación (3).
 > https://doi.org/10.1007/s00382-021-06039-6
 
@@ -472,8 +476,8 @@ K=2, K-means) contra la esperada bajo una referencia sin estructura
 (uniforme en el rango de `S_final`, 1000 datasets Monte Carlo,
 semilla fija para reproducibilidad). Se elige K=1 (sin partición)
 salvo que Gap(2) supere a Gap(1) por más que el margen de error de la
-referencia. Con `ref1981-2014` (n=1): Gap(1)=0.568±0.153 vs.
-Gap(2)=0.301±0.149 -- K=1 gana, **no hay separación real
+referencia. Con la ventana de ±12 meses: Gap(1)=0.542±0.153 vs.
+Gap(2)=0.336±0.149 (los mismos valores que el informe) -- K=1 gana, **no hay separación real
 "buenos/malos"**, resultado real (no forzado), reportado tal cual.
 
 > Tibshirani, R., Walther, G., & Hastie, T. (2001). Estimating the
