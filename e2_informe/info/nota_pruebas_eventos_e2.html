@@ -29,7 +29,7 @@ ul,ol{padding-left:1.3em}
 </head>
 <body><main>
 <h1>Pruebas estadísticas del régimen de eventos cálidos – Entregable 2</h1>
-<p class="nota">2026-10-19 · Japq91 · Nota de apoyo al paso <code>p10_pruebas_eventos.py</code> (salida <code>data/processed/e2/pruebas_eventos_1900-2014.csv</code>). Explica qué se prueba, con qué datos, cómo se interpretan los resultados y por qué se eligió cada prueba. El informe resume el método; esta nota guarda el razonamiento completo y los ejemplos.</p>
+<p class="nota">2026-10-19, actualizada el 2026-10-20 con el corte de la selección · Japq91 · Nota de apoyo al paso <code>p10_pruebas_eventos.py</code> (salida <code>data/processed/e2/pruebas_eventos_1900-2014.csv</code>). Explica qué se prueba, con qué datos, cómo se interpretan los resultados y por qué se eligió cada prueba. El informe resume el método; esta nota guarda el razonamiento completo y los ejemplos.</p>
 
 <nav><a href="#proposito">Propósito</a><a href="#datos">Datos</a><a href="#hipotesis">H0 y H1</a><a href="#pruebas">Las tres pruebas</a><a href="#p">Valor p</a><a href="#holm">Holm</a><a href="#lectura">Cómo leer un modelo</a><a href="#resultados">Resultados</a><a href="#tabla">Tabla por modelo</a><a href="#limites">Límites</a><a href="#decisiones">Decisiones</a></nav>
 
@@ -80,7 +80,7 @@ ul,ol{padding-left:1.3em}
 <div class="eq">A² = (1/N) · Σ<sub>i</sub> (1/n<sub>i</sub>) · Σ<sub>j</sub> ( N·F<sub>ij</sub> − n<sub>i</sub>·H<sub>j</sub> )² / ( H<sub>j</sub> · (N − H<sub>j</sub>) )</div>
 <p>F<sub>ij</sub> es cuántos eventos de la muestra <em>i</em> (modelo u obs) duran como máximo el j-ésimo valor, y H<sub>j</sub> lo mismo para las dos muestras juntas. El numerador mide cuánto se aparta cada muestra de la curva conjunta; el divisor H(N − H) es pequeño en los extremos, así que las diferencias en las colas pesan más. Eso importa aquí, porque los modelos fallan sobre todo en la cola de eventos largos.</p>
 <p><strong>Valor p por permutación:</strong> si H0 es cierta, la etiqueta "modelo" u "obs" de cada evento es intercambiable. Se mezclan todos los eventos, se reparten al azar en dos grupos del tamaño original 9999 veces, y se calcula A² en cada reparto. El valor p es la fracción de repartos con un A² igual o mayor que el real. Así no se depende de la aproximación teórica, que falla con duraciones enteras con muchos empates (por eso también se usa la versión de rangos medios).</p>
-<p><strong>Ejemplo de rechazo:</strong> M08 en el RONI produce más eventos largos (más de 19 meses) que los observados: la forma de su distribución de duraciones es otra, aunque la media no difiera tanto.</p>
+<p><strong>Ejemplo de rechazo:</strong> M08 (CESM2-WACCM) produce eventos del RONI mucho más largos que los observados: duración media de 17.7 meses frente a 11.1, y 14 de sus 35 eventos superan los 19 meses, frente a 2 de 35 en ERSSTv5. Toda su distribución de duraciones está desplazada hacia eventos largos.</p>
 
 <h3>4.3 Estacionalidad – prueba G sobre el mes del pico</h3>
 <ul>
