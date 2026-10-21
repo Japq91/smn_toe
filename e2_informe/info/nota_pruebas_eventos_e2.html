@@ -20,6 +20,8 @@ th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-alig
 th{background:var(--code)}
 td.rech{background:var(--rech)}
 td.raw{background:var(--raw)}
+.interp{border-left:3px solid var(--accent);background:var(--code);padding:.4em 1em .6em;margin:1.2em 0;border-radius:0 6px 6px 0}
+.interp h4{font-family:system-ui,sans-serif;font-size:1em;margin:.5em 0 .3em}
 .small{font-size:.82em;color:var(--muted)}
 .nota{font-family:system-ui,sans-serif;font-size:.9em;color:var(--muted)}
 nav{font-family:system-ui,sans-serif;font-size:.9em;background:var(--code);padding:10px 14px;border-radius:6px;margin:1em 0}
@@ -29,7 +31,7 @@ ul,ol{padding-left:1.3em}
 </head>
 <body><main>
 <h1>Pruebas estadísticas del régimen de eventos cálidos – Entregable 2</h1>
-<p class="nota">2026-10-19, actualizada el 2026-10-20 con el corte de la selección · Japq91 · Nota de apoyo al paso <code>p10_pruebas_eventos.py</code> (salida <code>data/processed/e2/pruebas_eventos_1900-2014.csv</code>). Explica qué se prueba, con qué datos, cómo se interpretan los resultados y por qué se eligió cada prueba. El informe resume el método; esta nota guarda el razonamiento completo y los ejemplos.</p>
+<p class="nota">2026-10-19, actualizada el 2026-10-20 con el corte de la selección y un ejemplo de rechazo y otro de no rechazo por prueba · Japq91 · Nota de apoyo al paso <code>p10_pruebas_eventos.py</code> (salida <code>data/processed/e2/pruebas_eventos_1900-2014.csv</code>). Explica qué se prueba, con qué datos, cómo se interpretan los resultados y por qué se eligió cada prueba. El informe resume el método; esta nota guarda el razonamiento completo y los ejemplos.</p>
 
 <nav><a href="#proposito">Propósito</a><a href="#datos">Datos</a><a href="#hipotesis">H0 y H1</a><a href="#pruebas">Las tres pruebas</a><a href="#p">Valor p</a><a href="#holm">Holm</a><a href="#lectura">Cómo leer un modelo</a><a href="#resultados">Resultados</a><a href="#tabla">Tabla por modelo</a><a href="#limites">Límites</a><a href="#decisiones">Decisiones</a></nav>
 
@@ -66,7 +68,26 @@ ul,ol{padding-left:1.3em}
 <p>Bajo H1 cada dataset tiene la suya, λ<sub>k</sub> = n<sub>k</sub> / T<sub>k</sub>. La prueba compara qué tan bien explica los datos cada hipótesis: el estadístico es dos veces el logaritmo del cociente de sus verosimilitudes. Con la verosimilitud de Poisson, L = ∏ (λT)<sup>n</sup> e<sup>−λT</sup> / n!, los términos e<sup>−λT</sup> se cancelan y queda</p>
 <div class="eq">G = 2 · Σ<sub>k</sub> n<sub>k</sub> · ln( n<sub>k</sub> / (T<sub>k</sub> · λ<sub>0</sub>) ), &nbsp;&nbsp; k = modelo, obs</div>
 <p>Si las dos tasas son parecidas, cada n<sub>k</sub> se acerca a lo que predice λ<sub>0</sub>, los logaritmos se acercan a 0 y G es pequeño. Por el teorema de Wilks, bajo H0, G sigue una χ² con 1 grado de libertad (2 parámetros bajo H1 menos 1 bajo H0), y de ahí sale el valor p.</p>
-<p><strong>Ejemplo:</strong> M22 tiene 34 eventos de RONI frente a 35 de ERSSTv5, en el mismo registro. Esa diferencia es lo esperable por azar: p = 0.90.</p>
+<p><strong>Ejemplo en que se rechaza H0:</strong> M28 (INM-CM5-0) tiene 13 eventos de RONI frente a 35 de ERSSTv5, en el mismo registro (11.3 frente a 30.5 por siglo). Bajo H0 se esperarían unos 24 en cada uno, y G = 2 · [13 · ln(13/24) + 35 · ln(35/24)] = 10.5, con p = 0.0012 (p ajustado por Holm = 0.007): un déficit de eventos demasiado grande para ser azar.</p>
+<p><strong>Ejemplo en que no se rechaza H0:</strong> M22 (GFDL-ESM4) tiene 34 eventos de RONI frente a 35. G = 0.01 y p = 0.90: es la diferencia que cabe esperar entre dos muestras del mismo proceso.</p>
+<div class="interp">
+<h4>Qué significa que se rechace H0 para M28</h4>
+<p>Que su número de eventos del RONI es demasiado distinto del observado para explicarse por azar: <strong>M28 produce realmente menos eventos de El Niño en Niño 3.4 que el clima real</strong>.</p>
+<ol>
+<li><strong>H0</strong> dice que M28 y ERSSTv5 generan eventos con la misma tasa por siglo, y que la diferencia entre 13 y 35 se debe solo a que cada uno es una muestra finita de 115 años.</li>
+<li>Si H0 fuera cierta, se esperarían unos 24 eventos en cada serie (48 en total, repartidos entre dos registros de igual longitud), con una variación natural de unos ±5 (√24). 13 y 35 se alejan unos 11 eventos de 24, más o menos el doble de esa variación. Por eso G = 10.5, muy por encima de 3.84, el valor que G supera solo el 5 % de las veces bajo H0.</li>
+<li><strong>p = 0.0012</strong>: si H0 fuera cierta, una diferencia igual o mayor saldría por azar en 1 de cada 800 comparaciones, aproximadamente. Es demasiado improbable, así que se rechaza H0.</li>
+<li><strong>Con Holm:</strong> M28 tiene seis pruebas, así que su p se compara con 0.05/6 = 0.0083. Sigue por debajo (p ajustado = 0.007): el rechazo se mantiene después de corregir por pruebas múltiples.</li>
+</ol>
+<p><strong>En términos físicos:</strong> M28 (INM-CM5-0) produce unos 11 eventos del RONI por siglo, frente a unos 30 observados. Sí tiene eventos de El Niño, pero muchos menos de los que debería. En el ICEN pasa lo mismo: 18 eventos frente a 41 (p ajustado = 0.012). Además falla la prueba de duración del ICEN (p ajustado = 0.012). Por cualquiera de estas razones queda fuera del filtro, sin importar su S_final.</p>
+<p><strong>Lo que no significa:</strong></p>
+<ul>
+<li>No dice cuántos eventos menos tiene: la prueba solo dice que la diferencia es real. El tamaño (11 frente a 30 por siglo) sale de los datos.</li>
+<li>No dice que el modelo sea malo en todo: este resultado es solo sobre la frecuencia.</li>
+<li>Se basa en una sola corrida del modelo. Otro miembro del mismo modelo podría dar un número de eventos algo distinto, aunque es poco probable que una diferencia tan grande se deba solo a la variabilidad interna.</li>
+</ul>
+<p><strong>El caso contrario</strong> es M22, con 34 eventos frente a 35 (p = 0.90): la diferencia cabe dentro del azar, así que no se rechaza H0. Eso no prueba que las tasas sean iguales, solo que con esta muestra no se puede detectar una diferencia.</p>
+</div>
 <p><strong>Por qué no Anderson-Darling:</strong> la frecuencia es un solo número por dataset (un conteo), no una muestra de valores cuya distribución se pueda comparar.</p>
 <p><strong>Potencia baja:</strong> un proceso de Poisson varía naturalmente en ±√n; con 35 eventos son unos ±6. La prueba solo detecta diferencias grandes (del orden de 20 frente a 35 eventos por siglo), por eso rechaza a muy pocos modelos.</p>
 
@@ -80,7 +101,26 @@ ul,ol{padding-left:1.3em}
 <div class="eq">A² = (1/N) · Σ<sub>i</sub> (1/n<sub>i</sub>) · Σ<sub>j</sub> ( N·F<sub>ij</sub> − n<sub>i</sub>·H<sub>j</sub> )² / ( H<sub>j</sub> · (N − H<sub>j</sub>) )</div>
 <p>F<sub>ij</sub> es cuántos eventos de la muestra <em>i</em> (modelo u obs) duran como máximo el j-ésimo valor, y H<sub>j</sub> lo mismo para las dos muestras juntas. El numerador mide cuánto se aparta cada muestra de la curva conjunta; el divisor H(N − H) es pequeño en los extremos, así que las diferencias en las colas pesan más. Eso importa aquí, porque los modelos fallan sobre todo en la cola de eventos largos.</p>
 <p><strong>Valor p por permutación:</strong> si H0 es cierta, la etiqueta "modelo" u "obs" de cada evento es intercambiable. Se mezclan todos los eventos, se reparten al azar en dos grupos del tamaño original 9999 veces, y se calcula A² en cada reparto. El valor p es la fracción de repartos con un A² igual o mayor que el real. Así no se depende de la aproximación teórica, que falla con duraciones enteras con muchos empates (por eso también se usa la versión de rangos medios).</p>
-<p><strong>Ejemplo de rechazo:</strong> M08 (CESM2-WACCM) produce eventos del RONI mucho más largos que los observados: duración media de 17.7 meses frente a 11.1, y 14 de sus 35 eventos superan los 19 meses, frente a 2 de 35 en ERSSTv5. Toda su distribución de duraciones está desplazada hacia eventos largos.</p>
+<p><strong>Ejemplo en que se rechaza H0:</strong> M08 (CESM2-WACCM) produce eventos del RONI mucho más largos que los observados: duración media de 17.7 meses frente a 11.1, y 14 de sus 35 eventos superan los 19 meses, frente a 2 de 35 en ERSSTv5. Toda su distribución de duraciones está desplazada hacia eventos largos: p = 0.0002 (p ajustado = 0.001).</p>
+<p><strong>Ejemplo en que no se rechaza H0:</strong> M02 (ACCESS-ESM1-5) tiene 30 eventos del RONI con duración media de 10.6 meses (mediana 10), frente a 11.1 (mediana 11) en ERSSTv5. También coincide la proporción de eventos cortos (6 de 30 duran 6 meses o menos, frente a 7 de 35) y de largos (2 superan los 19 meses en ambos): p = 0.89.</p>
+<div class="interp">
+<h4>Qué significa que se rechace H0 para M08</h4>
+<p>Que las duraciones de sus eventos del RONI son demasiado distintas de las observadas para explicarse por azar: <strong>los eventos de El Niño de M08 en Niño 3.4 duran realmente más que los del clima real</strong>.</p>
+<ol>
+<li><strong>H0</strong> dice que las duraciones de M08 y de ERSSTv5 vienen de la misma distribución, y que la diferencia (media de 17.7 frente a 11.1 meses, 14 frente a 2 eventos de más de 19 meses) se debe solo a que cada uno es una muestra finita.</li>
+<li>Si H0 fuera cierta, daría igual qué evento lleva la etiqueta "M08" y cuál "obs". Se mezclan los 70 eventos y se reparten al azar en dos grupos de 35, 9999 veces. En esos repartos, A² queda por debajo de 2.1 el 95 % de las veces; el de M08 es 10.2.</li>
+<li><strong>p = 0.0002</strong>: solo 1 de los 9999 repartos dio un A² igual o mayor que el real, es decir, una diferencia así saldría por azar en 1 de cada 5000 comparaciones, aproximadamente. Se rechaza H0.</li>
+<li><strong>Con Holm:</strong> 0.0002 es menor que 0.0083 (p ajustado = 0.001): el rechazo se mantiene.</li>
+</ol>
+<p><strong>En términos físicos:</strong> El Niño de M08 (CESM2-WACCM) en Niño 3.4 persiste demasiado: el 40 % de sus eventos (14 de 35) dura más de 19 meses, es decir, son eventos de varios años, que en la observación son raros (2 de 35). La frecuencia sí es la observada (35 frente a 35 eventos, p = 1.0): el problema es la persistencia, no el número de eventos. Queda fuera del filtro aunque su S_final sea alto.</p>
+<p><strong>Lo que no significa:</strong></p>
+<ul>
+<li>No dice qué parte de la distribución difiere (media, dispersión o cola): eso sale de mirar los datos, y aquí es sobre todo la cola de eventos largos.</li>
+<li>No dice que el modelo sea malo en todo: es su única prueba rechazada. Su estacionalidad del RONI da p = 0.047, sospechosa sin corregir pero no con Holm (p ajustado = 0.19).</li>
+<li>Se basa en una sola corrida del modelo; otro miembro podría tener eventos algo más cortos.</li>
+</ul>
+<p><strong>El caso contrario</strong> es M02 (p = 0.89): el 89 % de los repartos al azar da un A² igual o mayor que el suyo, así que su diferencia con la observación es la típica del muestreo. No se rechaza H0, lo que no prueba que las duraciones sean iguales.</p>
+</div>
 
 <h3>4.3 Estacionalidad – prueba G sobre el mes del pico</h3>
 <ul>
@@ -94,7 +134,26 @@ ul,ol{padding-left:1.3em}
 <div class="eq">G = 2 · Σ<sub>ij</sub> O<sub>ij</sub> · ln( O<sub>ij</sub> / E<sub>ij</sub> )</div>
 <p>Si el modelo reparte los picos como la observación, O ≈ E en todas las celdas y G ≈ 0. En teoría G sigue una χ² con 11 grados de libertad, pero con 35–41 eventos observados muchas celdas esperan menos de 5 eventos y esa aproximación no es fiable. Por eso el valor p también sale de 9999 permutaciones de los meses entre las dos muestras, que conservan los totales.</p>
 <p><strong>Por qué no Anderson-Darling:</strong> trata el mes como una escala lineal de 1 a 12, de modo que diciembre y enero quedarían en extremos opuestos, cuando son meses vecinos. Para los picos del ONI y el RONI, que caen alrededor de diciembre–enero, eso distorsiona la comparación.</p>
-<p><strong>Ejemplo:</strong> M21 en el ICEN pone sus picos en otros meses que los observados (p = 0.0003): una diferencia casi imposible por azar.</p>
+<p><strong>Ejemplo en que se rechaza H0:</strong> M21 (FGOALS-g3) pone los picos del ICEN en el verano austral: el 52 % cae entre diciembre y febrero y solo el 8 % entre mayo y julio, mientras que en ERSSTv5 es al revés (20 % y 51 %). G = 38.3 y p = 0.0003 (p ajustado = 0.002): una diferencia casi imposible por azar.</p>
+<p><strong>Ejemplo en que no se rechaza H0:</strong> M30 (KACE-1-0-G) reparte los picos del ICEN casi como la observación: 43 % entre mayo y julio y 20 % entre diciembre y febrero. G = 2.3 y p = 0.995.</p>
+<div class="interp">
+<h4>Qué significa que se rechace H0 para M21</h4>
+<p>Que los meses en que alcanzan su pico sus eventos del ICEN son demasiado distintos de los observados para explicarse por azar: <strong>los eventos costeros de M21 tienen su máximo en otra época del año que en el clima real</strong>.</p>
+<ol>
+<li><strong>H0</strong> dice que M21 y ERSSTv5 reparten los picos del ICEN entre los 12 meses con las mismas probabilidades, y que las diferencias se deben solo a que cada uno es una muestra finita.</li>
+<li>Si H0 fuera cierta, cada serie tendría más o menos la mitad de los picos de cada estación: de los 24 picos de mayo–julio de las dos series juntas, unos 12 en cada una, y de los 29 de diciembre–febrero, unos 14. En cambio, ERSSTv5 tiene 21 y 8, y M21 tiene 3 y 21. Al repartir los meses al azar entre las dos muestras, G queda por debajo de 22.7 el 95 % de las veces; el de M21 es 38.3. (Ese 22.7 es mayor que el 19.7 de la χ² con 11 grados de libertad: por eso el valor p sale de las permutaciones y no de la χ².)</li>
+<li><strong>p = 0.0003</strong>: solo 2 de los 9999 repartos dieron un G igual o mayor, es decir, una diferencia así saldría por azar en 1 de cada 3300 comparaciones, aproximadamente. Se rechaza H0.</li>
+<li><strong>Con Holm:</strong> 0.0003 es menor que 0.0083 (p ajustado = 0.002): el rechazo se mantiene.</li>
+</ol>
+<p><strong>En términos físicos:</strong> en M21 (FGOALS-g3) el calentamiento de Niño 1+2 alcanza su máximo en el verano austral, como los eventos de Niño 3.4, mientras que los eventos costeros observados lo alcanzan entre mayo y julio. El número de eventos costeros (40 frente a 41, p = 0.91) y su duración (p = 0.51) son los observados; lo que falla es la época del año, que importa para el Perú porque los impactos de un evento costero dependen de la estación en que ocurre. Queda fuera del filtro aunque su S_final sea alto.</p>
+<p><strong>Lo que no significa:</strong></p>
+<ul>
+<li>No dice qué meses difieren: G suma las diferencias de los 12 meses. Que el problema sea diciembre–febrero frente a mayo–julio sale de mirar la tabla.</li>
+<li>No dice que el modelo sea malo en todo: es su única prueba rechazada.</li>
+<li>Se basa en una sola corrida del modelo.</li>
+</ul>
+<p><strong>El caso contrario</strong> es M30 (p = 0.995): casi todos los repartos al azar dan un G igual o mayor que el suyo, así que reparte los picos como lo haría otra muestra del clima observado. No se rechaza H0, lo que no prueba que su estacionalidad sea idéntica.</p>
+</div>
 
 <h2 id="p">5. Cómo se lee el valor p</h2>
 <p>El valor p responde: <em>si H0 fuera cierta, ¿qué tan probable sería ver una diferencia igual o mayor que la observada, solo por el muestreo?</em></p>
@@ -134,6 +193,20 @@ ul,ol{padding-left:1.3em}
 
 <h3>Ejemplo 2 – M21: eliminado también con Holm</h3>
 <p>Su estacionalidad del ICEN da p = 0.0003, menor que 0.0083: se rechaza (p ajustado = 6 × 0.0003 = 0.002). Una diferencia tan fuerte no se explica por haber hecho seis pruebas. Sus otras cinco pruebas dan p entre 0.21 y 0.91.</p>
+<div class="interp">
+<h4>Qué significa que Holm rechace o no rechace</h4>
+<p>Con Holm, la hipótesis que se pone a prueba es la de la familia: <strong>el modelo coincide con la observación en las seis propiedades a la vez</strong>. Holm limita al 5 % la probabilidad de descartar un modelo que en realidad coincide en todas.</p>
+<p><strong>M26: no se rechaza con Holm.</strong></p>
+<ol>
+<li>Sin corregir, su estacionalidad del ICEN da p = 0.011, menor que 0.05: tomada sola, se rechazaría H0.</li>
+<li>Pero se hicieron seis pruebas. Si M26 coincidiera con la observación en las seis, la probabilidad de que al menos una diera p ≤ 0.011 por azar sería de 1 − (1 − 0.011)<sup>6</sup> ≈ 0.064, es decir, un 6 %, casi igual a su p ajustado (0.066). No es lo bastante raro.</li>
+<li>Holm compara 0.011 con 0.0083: lo supera, así que no se rechaza, y tampoco las otras cinco pruebas, que tienen p mayores. <strong>M26 pasa el filtro.</strong></li>
+</ol>
+<p><strong>En términos físicos:</strong> los picos del ICEN de M26 (IITM-ESM) se reparten más que los observados: el 28 % cae entre mayo y julio, frente al 51 % observado, y otro 34 % entre agosto y setiembre. Sugiere que sus eventos costeros alcanzan el máximo algo más tarde, pero la evidencia no es concluyente entre seis pruebas. Conviene mencionarlo como una debilidad del modelo.</p>
+<p><strong>Lo que no significa:</strong> que la estacionalidad del ICEN de M26 sea correcta. Solo significa que la diferencia no basta para descartarlo cuando se miran seis propiedades a la vez.</p>
+<p><strong>El caso contrario</strong> es M21: con p = 0.0003, la probabilidad de que al menos una de seis pruebas diera algo tan extremo por azar es 1 − (1 − 0.0003)<sup>6</sup> ≈ 0.002, igual a su p ajustado. Ni contando las seis pruebas se explica por azar, así que se rechaza y M21 no pasa el filtro.</p>
+<p class="small">El cálculo 1 − (1 − p)<sup>6</sup> supone pruebas independientes y sirve solo para leer el p ajustado; Holm no necesita ese supuesto.</p>
+</div>
 
 <h2 id="lectura">7. Cómo leer el resultado de un modelo</h2>
 <table>

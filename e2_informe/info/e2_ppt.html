@@ -289,9 +289,9 @@ ul.small-list{font-size:clamp(.92rem,1.25vw,1.08rem)!important;}
   <div class="grid2">
     <div class="card"><ul>
       <li>Eventos de <strong>RONI e ICEN</strong>, 1900–2014 (el ONI repetiría los eventos del RONI)</li>
-      <li><strong>Frecuencia</strong>: razón de verosimilitud de dos tasas de Poisson</li>
-      <li><strong>Duración</strong>: Anderson-Darling de dos muestras</li>
-      <li><strong>Estacionalidad</strong>: prueba G sobre el mes del pico</li>
+      <li><strong>Frecuencia</strong>: razón de verosimilitud de dos tasas de Poisson. El dato es un solo conteo por dataset (35 eventos del RONI observados), de eventos raros y separados en el tiempo</li>
+      <li><strong>Duración</strong>: Anderson-Darling de dos muestras. Duraciones enteras y asimétricas (3–22 meses observados, hasta 63 en los modelos): se compara la distribución completa, con peso en la cola de eventos largos</li>
+      <li><strong>Estacionalidad</strong>: prueba G sobre el mes del pico. El mes es categórico y circular: diciembre y enero son vecinos, no extremos</li>
       <li>6 pruebas por modelo, con <strong>corrección de Holm</strong>: sin ella, un modelo igual a la observación fallaría alguna por azar el 26 % de las veces</li>
     </ul></div>
     <div class="card">
@@ -341,6 +341,69 @@ ul.small-list{font-size:clamp(.92rem,1.25vw,1.08rem)!important;}
       <li>Antes de 1946 no hay bases oficiales; el esquema de 30 años se extiende hacia atrás</li><li>Un solo miembro por modelo: parte de las diferencias puede ser variabilidad interna</li>
     </ul></div>
   </div>
+</section>
+<section class="slide " data-section="5">
+<div class="kicker">Selección · p10</div>
+  <h1>Ejemplos de las pruebas estadísticas</h1>
+  <div class="grid3">
+    <div class="card"><strong>Frecuencia · Poisson</strong>
+      <ul class="small-list">
+        <li><strong>Dato</strong>: un conteo por dataset (35 eventos RONI, 41 ICEN observados)</li>
+        <li><strong>Por qué</strong>: un solo número, sin réplicas: no hay distribución que comparar ni varianza para una prueba t. Eventos raros y separados (uno cada ~3 años) → proceso de Poisson</li>
+        <li><span class="badge-bad">Se rechaza H0</span>: M28, 13 eventos RONI frente a 35 (G = 10.5, p = 0.001)</li>
+        <li><span class="badge-good">No se rechaza</span>: M22, 34 frente a 35 (G = 0.01, p = 0.90)</li>
+      </ul></div>
+    <div class="card"><strong>Duración · Anderson-Darling</strong>
+      <ul class="small-list">
+        <li><strong>Dato</strong>: la lista de duraciones de los eventos (meses)</li>
+        <li><strong>Por qué</strong>: enteras y asimétricas (3–22 meses observados, hasta 63 en modelos). La media no basta: los modelos fallan en la cola larga, que AD pondera más que KS</li>
+        <li><span class="badge-bad">Se rechaza H0</span>: M08 RONI, media 17.7 frente a 11.1 meses; 14 de 35 eventos &gt; 19 meses frente a 2 (p = 0.0002)</li>
+        <li><span class="badge-good">No se rechaza</span>: M02 RONI, media 10.6 frente a 11.1, mismos eventos cortos y largos (p = 0.89)</li>
+      </ul></div>
+    <div class="card"><strong>Estacionalidad · prueba G</strong>
+      <ul class="small-list">
+        <li><strong>Dato</strong>: el mes del pico (tabla 2 × 12)</li>
+        <li><strong>Por qué</strong>: categórico y circular. Picos observados: 63 % en dic–feb (RONI), 51 % en may–jul (ICEN). AD o KS pondrían diciembre y enero en extremos</li>
+        <li><span class="badge-bad">Se rechaza H0</span>: M21 ICEN, 52 % de picos en dic–feb y 8 % en may–jul, frente a 20 % y 51 % (p = 0.0003)</li>
+        <li><span class="badge-good">No se rechaza</span>: M30 ICEN, 20 % y 43 % (p = 0.995)</li>
+      </ul></div>
+  </div>
+  <p class="nota-pie"><strong>Permutaciones</strong> (duración y estacionalidad, 9999): los 35 eventos observados del RONI toman solo 17 duraciones distintas y ~80 % de las celdas de la tabla de meses esperan menos de 5 eventos, así que las aproximaciones χ² no son fiables. <strong>Holm</strong>: los 6 valores p de cada modelo se ordenan y el menor se compara con 0.05/6 = 0.0083; los tres rechazos de los ejemplos quedan por debajo de ese umbral (p ajustado de 0.001 a 0.007).</p>
+</section>
+<section class="slide " data-section="5">
+<div class="kicker">Selección · p10</div>
+  <h1>Interpretación de las pruebas estadísticas</h1>
+  <div class="grid2">
+    <div class="card"><strong>Frecuencia · M28 INM-CM5-0 <span class="badge-bad">rechaza</span></strong>
+      <ul class="small-list">
+        <li>Bajo H0: ~24 eventos RONI en cada serie (±5). Hay 13 frente a 35 → G = 10.5 (umbral del 5 %: 3.84)</li>
+        <li>p = 0.0012 (1 en 800); con Holm, &lt; 0.0083 → se mantiene</li>
+        <li><strong>Físico</strong>: ~11 eventos por siglo frente a ~30. Tiene El Niño, pero muy pocos; en el ICEN igual (18 frente a 41)</li>
+        <li><span class="badge-good">No se rechaza</span>: M22, 34 frente a 35 (p = 0.90)</li>
+      </ul></div>
+    <div class="card"><strong>Duración · M08 CESM2-WACCM <span class="badge-bad">rechaza</span></strong>
+      <ul class="small-list">
+        <li>Bajo H0 las etiquetas son intercambiables: en 9999 repartos al azar, A² &lt; 2.1 el 95 % de las veces. El de M08 es 10.2</li>
+        <li>p = 0.0002 (1 reparto lo igualó); con Holm → se mantiene</li>
+        <li><strong>Físico</strong>: El Niño persiste demasiado; el 40 % de sus eventos dura más de 19 meses (obs: 2 de 35). La frecuencia sí es la observada (35 = 35)</li>
+        <li><span class="badge-good">No se rechaza</span>: M02 (p = 0.89)</li>
+      </ul></div>
+    <div class="card"><strong>Estacionalidad · M21 FGOALS-g3 <span class="badge-bad">rechaza</span></strong>
+      <ul class="small-list">
+        <li>Bajo H0: ~12 picos ICEN en may–jul y ~14 en dic–feb en cada serie. ERSSTv5: 21 y 8; M21: 3 y 21 → G = 38.3 (umbral del 5 %: 22.7)</li>
+        <li>p = 0.0003 (2 de 9999 repartos); con Holm → se mantiene</li>
+        <li><strong>Físico</strong>: el pico costero cae en verano austral y no en may–jul; número (40 frente a 41) y duración sí coinciden</li>
+        <li><span class="badge-good">No se rechaza</span>: M30 (p = 0.995)</li>
+      </ul></div>
+    <div class="card"><strong>Holm · M26 IITM-ESM <span class="badge-good">no rechaza</span></strong>
+      <ul class="small-list">
+        <li>Estacionalidad ICEN: p = 0.011 &lt; 0.05; sola, se rechazaría</li>
+        <li>Con 6 pruebas, un modelo perfecto daría al menos un p ≤ 0.011 el ~6 % de las veces (1 − 0.989⁶ ≈ p ajustado 0.066)</li>
+        <li>0.011 &gt; 0.0083 → pasa el filtro. <strong>Físico</strong>: picos ICEN más tardíos (28 % en may–jul frente a 51 %); es una debilidad, no un descarte</li>
+        <li><span class="badge-bad">Se rechaza</span>: M21, 1 − 0.9997⁶ ≈ 0.002 → se rechaza</li>
+      </ul></div>
+  </div>
+  <p class="nota-pie"><strong>Rechazar H0</strong>: la diferencia es demasiado grande para deberse solo a que cada serie es una muestra finita de 115 años. No dice cuán grande es (eso sale de los datos) ni que el modelo falle en las demás propiedades, y se basa en una sola corrida por modelo. <strong>No rechazar</strong> no prueba que sea igual: solo que con esta muestra no se distingue.</p>
 </section>
 <section class="slide title-slide" data-section="5">
 <h1>Gracias</h1>
@@ -418,7 +481,7 @@ ul.small-list{font-size:clamp(.92rem,1.25vw,1.08rem)!important;}
 <div class="section-nav" id="sectionNav"></div>
 <div class="footer">
   <span>Entregable 2 — Evaluación ENOS CMIP6 vs ERSSTv5 — Servicio prestado para el SENAMHI</span>
-  <span id="counter">1 / 36</span>
+  <span id="counter">1 / 38</span>
 </div>
 <script>
 (function(){
