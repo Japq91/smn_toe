@@ -67,6 +67,9 @@ e1_informe/informe_e1_smnv3.pdf
 data/processed/e2/*
 !data/processed/e2/README.md
 !data/processed/e2/model_registry_e2.csv
+# Resultados de E3 (scripts_e3/qXX, rune3.sh): mismo criterio.
+data/processed/e3/*
+!data/processed/e3/README.md
 # Artefactos de compilar e2_informe/informe_e2.tex (mismo criterio que E1).
 e2_informe/informe_e2.aux
 e2_informe/informe_e2.log
@@ -79,6 +82,18 @@ e2_informe/informe_e2.blg
 e2_informe/informe_e2.pdf
 e2_informe/informe_e2.fdb_latexmk
 e2_informe/informe_e2.fls
+# Artefactos de compilar e3_informe/informe_e3.tex (mismo criterio).
+e3_informe/informe_e3.aux
+e3_informe/informe_e3.log
+e3_informe/informe_e3.toc
+e3_informe/informe_e3.lof
+e3_informe/informe_e3.lot
+e3_informe/informe_e3.out
+e3_informe/informe_e3.bbl
+e3_informe/informe_e3.blg
+e3_informe/informe_e3.pdf
+e3_informe/informe_e3.fdb_latexmk
+e3_informe/informe_e3.fls
 # Material de consulta local, no se versiona: papers de referencia (con
 # derechos de autor) y su conversion a Markdown (convertir_pdfs.sh), y el
 # TdR en otros formatos (mismo criterio que /*.pdf).

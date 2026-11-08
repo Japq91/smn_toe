@@ -8,7 +8,7 @@ Código del servicio de asistencia en investigación para SENAMHI sobre la influ
 |---|---|---|---|---|
 | E1 | Descarga, homogeneización (grilla, calendario, unidades, máscara) y control de calidad de los modelos CMIP6 y de ERSSTv5 | `run.sh`, `scripts/` | `e1_informe/` | Completo |
 | E2 | Evaluación histórica de los 40 modelos (estado medio, ciclo anual, variabilidad, índices ONI/RONI/ICEN, eventos cálidos) y selección de los que mejor representan el ENOS | `rune2.sh`, `rune2plot.sh`, `scripts_e2/` | `e2_informe/` | Completo |
-| E3 | Proyecciones bajo los escenarios SSP | — | — | Pendiente |
+| E3 | Proyecciones de la TSM y del ENOS en Niño 3.4 y Niño 1+2 bajo SSP2-4.5, SSP3-7.0 y SSP5-8.5: estado medio, ciclo anual, variabilidad y eventos cálidos (ONI, RONI, ICEN) | `rune3.sh`, `scripts_e3/` | `e3_informe/` | Completo |
 | E4 | Partición de incertidumbre y TOE | — | — | Pendiente |
 
 El E2 solo lee lo que deja el E1 (`data/processed/masked/`): hay que correr primero `./run.sh`. Las secciones de Instalación a "Informe" describen el E1; el E2 está en la sección [Entregable 2](#entregable-2--evaluación-histórica-y-selección-de-modelos).
@@ -95,6 +95,8 @@ data/processed/models_inventory_final.csv          # 07: modelos selected=True (
 figures/e1/                                         # scripts/plot_*.py (automatico, run.sh)
 data/processed/e2/                                  # E2: rune2.sh (p01-p09)
 figures/e2/                                         # E2: rune2plot.sh (scripts_e2/plot*.py)
+data/processed/e3/                                  # E3: rune3.sh (q01-q11)
+figures/e3/                                         # E3: scripts_e3/plots_e3.ipynb
 ```
 
 `data/interim/processed/` es un paso intermedio (regrillado, todavía sin máscara); `data/processed/masked/` es el dato final. `run.sh` genera los PNG de `figures/e1/` el mismo (`scripts/plot_*.py`, al final de cada corrida).
@@ -238,6 +240,42 @@ e2_informe/info/nota_pruebas_eventos_e2.html   # explicación completa del filtr
 - Figura nueva en el `.tex`: `ln -sf ../../figures/e2/<archivo>.png e2_informe/figuras/<archivo>.png`.
 - La presentación lleva las imágenes incrustadas en base64 para abrirse sin depender de `figures/e2/`: al regenerar una figura hay que volver a incrustarla en `e2_ppt.html`.
 - `scripts_e2/plots_e2.ipynb` es el notebook del que salieron los `plot*.py`; es un prototipo local y no se versiona (`*.ipynb` está en `.gitignore`). Los scripts son la versión vigente.
+
+## Entregable 3 — Proyecciones futuras de la TSM y del ENOS
+
+Actividad c) del TdR: cambio del estado medio, del ciclo anual, de la variabilidad y de la ocurrencia de eventos cálidos en Niño 3.4 y Niño 1+2 bajo SSP2-4.5, SSP3-7.0 y SSP5-8.5. Cada modelo se compara consigo mismo: referencia 1985–2014 frente a P1 (2036–2065) y P2 (2071–2100), los periodos de `config/periods.yaml`. Se calcula para los 40 modelos con la marca `seleccionado` (los 15 del E2), de modo que los resultados salen para el conjunto principal (15) y el de contraste (40).
+
+### Ejecución
+
+```
+./rune3.sh [desde] [hasta]          # cálculo: pasos q01..q11 (ej. ./rune3.sh q06 q11)
+```
+
+Las figuras salen de un solo notebook, `scripts_e3/plots_e3.ipynb` (correr desde `scripts_e3/`, kernel del entorno `smn_toe`), que solo lee `data/processed/e3/` y guarda en `figures/e3/e3_<código>.png` (13 figuras del cuerpo del informe, `01a`–`05c`, y 6 del anexo, `A1`–`A6`; la síntesis es una tabla). La variable `GRUPO` de la primera celda cambia el conjunto de modelos que se dibuja (15, 40, 11 o 7) y `ESCS`, los escenarios. La sección 7 del notebook repite a mano las pruebas (Wilcoxon, Holm, Poisson, Anderson-Darling, G) y las compara con las del pipeline. Como el resto de los notebooks, no se versiona (`*.ipynb` en `.gitignore`).
+
+| Paso | Calcula | Salida en `data/processed/e3/` |
+|---|---|---|
+| q01 | Series mensuales por caja (Niño 3.4, Niño 1+2, tropical 20S-20N), historical + SSP | `series_cajas_1850-2100.nc` |
+| q02 | Cambio de la TSM media (absoluto y relativo al trópico) y trayectorias anuales | `estado_medio_ref1985-2014.csv`, `serie_anual_anom_ref1985-2014.csv` |
+| q03 | Mapas de cambio de la media, del patrón y de σ | `cambio_tsm_mapas_ref1985-2014.nc` |
+| q04 | Ciclo anual por periodo y su amplitud | `ciclo_anual_ref1985-2014.csv`, `ciclo_anual_amplitud_ref1985-2014.csv` |
+| q05 | σ, asimetría y curtosis por periodo, σ por mes calendario y σ en ventana móvil de 30 años | `variabilidad_cajas_*.csv`, `variabilidad_estacional_*.csv`, `variabilidad_movil_30a.csv` |
+| q06 | ONI, RONI, ICEN (y ONI/ICEN de base fija) 1850–2100 | `indices_enso_<esc>_1850-2100.csv` |
+| q07 | Eventos cálidos con los umbrales del E2 y su tipo (costero, extendido, central) | `eventos_<esc>_1850-2100.csv` |
+| q08 | Cambio de frecuencia, duración, magnitud, estacionalidad y tipo de eventos, con pruebas por modelo | `cambio_eventos_ref1985-2014.csv` |
+| q09 | Espectro de ONI, RONI e ICEN: periodo dominante y fracción de varianza en 2–7 años | `espectro_indices_*.csv`, `espectro_resumen_*.csv` |
+| q10 | Resumen multimodelo (grupos 15, 40, 11 y 7): mediana, p10–p90, acuerdo de signo, Wilcoxon con corrección de Holm | `resumen_multimodelo_ref1985-2014.csv` |
+| q11 | Curvas y mapas multimodelo por grupo, listos para graficar | `ens_*.csv`, `ens_mapas_ref1985-2014.nc` |
+
+q02, q04, q05 y q06 leen q01; q03 lee `masked/` directamente; q07 → q08 y q09 dependen de q06; q10 y q11 juntan todo lo anterior. Grupos: 15 = selección del E2 (principal), 40 = contraste, 11 = los 15 sin los de ICEN débil (M34, M35, M12, M40), 7 = criterio anterior S ≥ 0.9. Detalle de columnas y decisiones de método en `data/processed/e3/README.md` y `scripts_e3/README.md`. Cada estadístico se explica, en palabras simples y en forma matemática, en el Marco metodológico de `e3_informe/informe_e3.tex`.
+
+### Informe y presentación
+
+```
+e3_informe/informe_e3.tex          # informe (pdflatex + bibtex); figuras en e3_informe/figuras/ (copia de figures/e3/)
+e3_informe/info/e3_ppt.html        # presentación (HTML autocontenido)
+e3_informe/info/gen_e3_ppt.py      # la regenera desde figures/e3/ y resumen_multimodelo
+```
 
 ## Convenciones
 
