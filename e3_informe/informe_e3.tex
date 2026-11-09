@@ -109,7 +109,7 @@ Este informe documenta el Entregable~3 del servicio de asistencia en temas de in
 
 El calentamiento medio es el resultado más firme: todos los modelos lo proyectan en todos los escenarios. En P2, Niño~3.4 se calienta $+1.9$, $+2.6$ y $+3.4$\,°C y Niño~1+2 $+2.3$, $+2.8$ y $+3.6$\,°C bajo SSP2-4.5, SSP3-7.0 y SSP5-8.5. Niño~1+2 se calienta más que el promedio del trópico ($+0.4$ a $+0.7$\,°C de diferencia en P2), un patrón ``tipo El Niño'' permanente frente a la costa norte del Perú. Ese calentamiento es mayor en la estación fría (mayo--noviembre) que en la cálida, por lo que el ciclo anual de Niño~1+2 se aplana ($-0.5$\,°C de amplitud en P2 con SSP5-8.5); en Niño~3.4 el ciclo anual, en cambio, se amplifica.
 
-La variabilidad del ENOS tiende a aumentar en Niño~3.4: la mediana de $\sigma_{3m}$ sube $+11$, $+23$ y $+26$\,\% en P2, pero los modelos discrepan mucho (de $-29$ a $+105$\,\% con SSP5-8.5) y el cambio no es robusto. En Niño~1+2 el cambio de variabilidad es pequeño ($+2$ a $+9$\,\%) y sin acuerdo. La frecuencia de eventos cálidos medida con índices de base móvil sube entre 10 y 45\,\% en la mediana (por ejemplo, de 27 a 37 eventos del ONI por siglo con SSP5-8.5), pero ningún cambio es significativo: con unos 9 eventos por periodo la señal no se distingue del azar. Con los índices de base fija, en cambio, a fin de siglo la TSM pasa más del 88\,\% del tiempo por encima del umbral de El Niño actual: la exposición a temperaturas que hoy serían de Niño se vuelve casi permanente, por el calentamiento medio y no por un ENOS más activo.
+La variabilidad del ENOS tiende a aumentar en Niño~3.4: la mediana de $\sigma_{3m}$ sube $+11$, $+23$ y $+26$\,\% en P2, pero los modelos discrepan mucho (de $-29$ a $+105$\,\% con SSP5-8.5) y el cambio no es robusto. En Niño~1+2 el cambio de variabilidad es pequeño ($+2$ a $+9$\,\%) y sin acuerdo. La frecuencia de eventos cálidos medida con índices de base móvil sube entre 10 y 45\,\% en la mediana (por ejemplo, de 27 a 37 eventos del ONI por siglo con SSP5-8.5), pero casi ningún cambio es significativo: con unos 9 eventos por periodo la señal no se distingue del azar. Los eventos extremos sí aumentan de forma significativa: el número de eventos fuertes o más intensos del ONI y del RONI pasa de 3 a entre 5 y 9 por cada 30 años con SSP3-7.0 y SSP5-8.5. Con los índices de base fija, en cambio, a fin de siglo la TSM pasa más del 88\,\% del tiempo por encima del umbral de El Niño actual: la exposición a temperaturas que hoy serían de Niño se vuelve casi permanente, por el calentamiento medio y no por un ENOS más activo.
 
 % ============================================================
 \section{Alcance}
@@ -150,7 +150,7 @@ ev/siglo & Eventos cálidos por cada 100 años. & Permite comparar periodos de d
 Razón de frecuencias & Frecuencia en P dividida entre la frecuencia en ref, en cada modelo. & 1 = sin cambio; 1.25 = 25\,\% más eventos. Se calcula modelo por modelo, por la misma razón que $\Delta$TSM. \\
 Mediana, p10--p90 & Valor central de los modelos y rango que contiene al 80\,\% central. & No se dejan arrastrar por un modelo extremo, a diferencia del promedio. \\
 Acuerdo de signo & Fracción de modelos que cambian en el mismo sentido que la mediana. & Desde 0.8 el cambio se considera robusto, como en el IPCC. \\
-Significativo ($^{*}$) & El cambio del conjunto no se explica por azar (Wilcoxon con corrección de Holm, $p<0.05$). & Holm evita ``hallazgos'' falsos al hacer muchas pruebas a la vez. \\
+Significativo ($^{*}$) & El cambio del conjunto no se explica por azar (Wilcoxon con corrección de Holm, $p<0.05$). & Holm evita ``hallazgos'' falsos al hacer muchas pruebas a la vez. Solo se prueban las variables que pide el TdR (Sección~\ref{sec:multimodelo}). \\
 Conjuntos de 15, 40, 11 y 7 & Los 15 seleccionados en el Entregable~2; los 40 evaluados; los 15 sin los cuatro de Niño costero más débil; los 7 con mejor evento típico en ambas cajas. & Si la señal es la misma en los cuatro, no depende de qué modelos se elijan. \\
 \bottomrule
 \end{tabular}
@@ -442,11 +442,17 @@ con $H_0$: los $d_i$ son simétricos alrededor de 0, es decir, la mediana del ca
 
 \subsubsection{Corrección de Holm en la tabla multimodelo}
 
-Cada tabla de resultados (un conjunto de modelos, un escenario y un periodo) reúne unas 69 pruebas de Wilcoxon, una por variable y caja o índice. Sin corrección se esperarían unos 3 ``cambios'' falsos por tabla. Se aplica Holm (Sección~\ref{sec:holm}) a las 69 pruebas juntas y un cambio solo se declara significativo si sobrevive a esa corrección.
+\textbf{Qué se prueba:} no todas las variables de la tabla de resultados se someten a prueba. Cada prueba adicional hace más exigente la corrección para las demás, así que la familia se limita a lo que pide la actividad (c) del TdR (estado medio, variabilidad y frecuencia, intensidad y ocurrencia de eventos extremos con ONI e ICEN) más la duración de los eventos, la fracción de Niños costeros, el RONI y los índices de base fija:
+\begin{itemize}[nosep,leftmargin=*]
+\item $\Delta$TSM y $\Delta\sigma_{3m}$ en Niño~3.4 y Niño~1+2 (4 pruebas);
+\item razón de frecuencias, magnitud media, número de eventos fuertes o más intensos, duración media y fracción de meses sobre el umbral, con ONI, RONI, ICEN, ONIfija e ICENfija (25 pruebas);
+\item fracción de Niños costeros (1 prueba).
+\end{itemize}
+Son 30 pruebas por tabla (un conjunto de modelos, un escenario y un periodo). Sin corrección se esperaría 1.5 ``cambios'' falsos por tabla; se aplica Holm (Sección~\ref{sec:holm}) a las 30 juntas y un cambio solo se declara significativo si sobrevive a esa corrección. El resto de las variables (cambio relativo al trópico, amplitud del ciclo anual, $\sigma$ mensual, asimetría, curtosis, extremos relativos, tipos de evento y espectro) se describe con la mediana y el acuerdo de signo, sin asterisco.
 
-\textbf{Consecuencia importante:} con pocos modelos, Wilcoxon no puede dar un $p$ muy pequeño, aunque todos los modelos coincidan. Con 7 modelos el menor $p$ posible es 0.016 y con 11, 0.001; multiplicados por 69 pasan de 0.05. Por eso en los conjuntos de 7 y 11 modelos \emph{ningún} cambio puede salir significativo tras Holm. Esos conjuntos se usan para ver si la mediana y el acuerdo de signo se mantienen al quitar modelos, no para probar significancia. La significancia se lee en los conjuntos de 15 y 40.
+\textbf{Consecuencia importante:} con pocos modelos, Wilcoxon no puede dar un $p$ muy pequeño, aunque todos los modelos coincidan. Con 7 modelos el menor $p$ posible es 0.016, que multiplicado por 30 pasa de 0.05: en ese conjunto \emph{ningún} cambio puede salir significativo tras Holm. Con 11 el menor $p$ es 0.001 (0.03 tras multiplicar por 30), y solo salen significativos los cambios en que coinciden casi todos los modelos. Los conjuntos de 11 y 7 se usan para ver si la mediana y el acuerdo de signo se mantienen al quitar modelos, no para probar significancia. La significancia se lee en los conjuntos de 15 y 40.
 
-\noindent\textbf{Definición formal.} Familia: las $k \approx 69$ pruebas de cada (conjunto, escenario, periodo); ecuación~\eqref{eq:holm}. La prueba pareada de la amplitud del ciclo anual se excluye, porque es idéntica a la de $\Delta\mathcal{A}$. El menor $p$ exacto de Wilcoxon con $n$ observaciones es $2/2^n$ ($6\times10^{-5}$, $0.001$ y $0.016$ para $n = 15$, 11 y 7), y $k \cdot 2/2^n$ vale 0.004, 0.07 y $>1$.
+\noindent\textbf{Definición formal.} Familia: las $k = 30$ pruebas listadas, en cada (conjunto, escenario, periodo); ecuación~\eqref{eq:holm}. Las variables fuera de la familia conservan su $p$ de Wilcoxon sin ajustar en \archivo{resumen\_multimodelo\_ref1985-2014.csv}, solo como referencia. El menor $p$ exacto de Wilcoxon con $n$ observaciones es $2/2^n$ ($6\times10^{-5}$, $0.001$ y $0.016$ para $n = 15$, 11 y 7), y $k \cdot 2/2^n$ vale 0.002, 0.03 y 0.47.
 
 % ------------------------------------------------------------
 \subsection{Productos multimodelo para las figuras}
@@ -454,7 +460,7 @@ Cada tabla de resultados (un conjunto de modelos, un escenario y un periodo) re�
 
 Las figuras de resultados usan tres formatos repetidos:
 \begin{itemize}[nosep,leftmargin=*]
-\item \textbf{Puntos por modelo} (por ejemplo, Figura~\ref{fig:cambio_cajas}): cada punto de color es un modelo del conjunto de 15 y los círculos grises de fondo, los 40. La barra negra es la mediana de los 15. El número sobre cada columna es el acuerdo de signo y el asterisco indica un cambio significativo tras Wilcoxon y Holm.
+\item \textbf{Puntos por modelo} (por ejemplo, Figura~\ref{fig:cambio_cajas}): cada punto de color es un modelo del conjunto de 15 y los círculos grises de fondo, los 40. La barra negra es la mediana de los 15. El número sobre cada columna es el acuerdo de signo y el asterisco indica un cambio significativo tras Wilcoxon y Holm; las variables que no se someten a prueba (Sección~\ref{sec:multimodelo}) llevan solo el acuerdo.
 \item \textbf{Cajas} (por ejemplo, Figura~\ref{fig:ciclo}): la caja abarca la mitad central de los modelos (percentiles 25 a 75), la línea interior es la mediana y los bigotes llegan a los percentiles 10 y 90; los puntos sueltos son modelos fuera de ese rango. La caja gris es la referencia y las de color, los escenarios.
 \item \textbf{Mapas}: mediana de los 15 modelos en cada punto; el tramado marca los puntos donde menos del 80\,\% de los modelos coincide en el signo del cambio, es decir, donde el resultado no es robusto.
 \end{itemize}
@@ -562,12 +568,12 @@ La Figura~\ref{fig:mapas_rel} resta a cada punto el calentamiento medio del tró
 \label{fig:mapas_rel}
 \end{figure}
 
-La Figura~\ref{fig:cambio_cajas} lleva estos cambios a las dos cajas, modelo por modelo. En P2, Niño~1+2 se calienta $+2.25$, $+2.79$ y $+3.64$\,°C y Niño~3.4 $+1.91$, $+2.63$ y $+3.36$\,°C con los tres escenarios; los 15 modelos coinciden en el signo y el cambio es significativo en todos los casos. La dispersión entre modelos es grande: con SSP5-8.5, Niño~1+2 va de $+2.6$ a $+5.5$\,°C. Lo que más distingue a las dos cajas es el cambio relativo (paneles c y d): Niño~1+2 se calienta entre 0.4 y 0.7\,°C más que el trópico en P2, con acuerdo de 15 de 15 modelos; en Niño~3.4 la diferencia es la mitad (0.2--0.4\,°C) y menos segura.
+La Figura~\ref{fig:cambio_cajas} lleva estos cambios a las dos cajas, modelo por modelo. En P2, Niño~1+2 se calienta $+2.25$, $+2.79$ y $+3.64$\,°C y Niño~3.4 $+1.91$, $+2.63$ y $+3.36$\,°C con los tres escenarios; los 15 modelos coinciden en el signo y el cambio es significativo en todos los casos. La dispersión entre modelos es grande: con SSP5-8.5, Niño~1+2 va de $+2.6$ a $+5.5$\,°C. Lo que más distingue a las dos cajas es el cambio relativo (paneles c y d): Niño~1+2 se calienta entre 0.4 y 0.7\,°C más que el trópico en P2, con acuerdo de 15 de 15 modelos; en Niño~3.4 la diferencia es la mitad (0.2--0.4\,°C) y menos segura (acuerdo de 0.87 a 0.93). El cambio relativo no se somete a prueba formal: su robustez se lee en el acuerdo de signo.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figuras/e3_01d_cambio_cajas_por_modelo.png}
-\caption[Cambio de la TSM media en las cajas, por modelo.]{Cambio de la TSM media en Niño~3.4 y Niño~1+2, por modelo. (a, b) Cambio total; (c, d) cambio relativo al trópico. Puntos de color: los 15 modelos; círculos grises: los 40; barra negra: mediana de los 15. Número superior: acuerdo de signo; $^{*}$: significativo con Wilcoxon y Holm. Cada fila comparte la escala vertical.}
+\caption[Cambio de la TSM media en las cajas, por modelo.]{Cambio de la TSM media en Niño~3.4 y Niño~1+2, por modelo. (a, b) Cambio total; (c, d) cambio relativo al trópico. Puntos de color: los 15 modelos; círculos grises: los 40; barra negra: mediana de los 15. Número superior: acuerdo de signo; $^{*}$: significativo con Wilcoxon y Holm (solo a y b; el cambio relativo no se prueba). Cada fila comparte la escala vertical.}
 \label{fig:cambio_cajas}
 \end{figure}
 
@@ -589,7 +595,7 @@ La Figura~\ref{fig:amplitud} resume ese efecto con la amplitud (mes más cálido
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figuras/e3_02b_cambio_amplitud_por_modelo.png}
-\caption[Cambio de la amplitud del ciclo anual, por modelo.]{Cambio de la amplitud del ciclo anual (máximo menos mínimo de la climatología mensual) en Niño~3.4 (a) y Niño~1+2 (b), por modelo. Formato como en la Figura~\ref{fig:cambio_cajas}.}
+\caption[Cambio de la amplitud del ciclo anual, por modelo.]{Cambio de la amplitud del ciclo anual (máximo menos mínimo de la climatología mensual) en Niño~3.4 (a) y Niño~1+2 (b), por modelo. Formato como en la Figura~\ref{fig:cambio_cajas}; esta variable no se somete a prueba, por lo que no lleva asterisco.}
 \label{fig:amplitud}
 \end{figure}
 
@@ -606,7 +612,7 @@ La Figura~\ref{fig:amplitud} resume ese efecto con la amplitud (mes más cálido
 \label{fig:mapas_sigma}
 \end{figure}
 
-En la caja Niño~3.4 (Figura~\ref{fig:sigma}a), la mediana de $\sigma_{3m}$ sube $+11$, $+23$ y $+26$\,\% en P2. El ejemplo de la Sección~\ref{sec:multimodelo} muestra el porqué de la cautela: con SSP5-8.5, 13 de los 15 modelos proyectan aumento, pero los cambios van de $-29$ a $+105$\,\%, y tras la corrección por pruebas múltiples el resultado no es significativo. Solo P1 con SSP5-8.5 ($+12$\,\%) pasa la prueba. En Niño~1+2 (Figura~\ref{fig:sigma}b) la mediana queda entre $-0.5$ y $+10$\,\%, con acuerdo de 8 a 12 modelos: no hay un cambio claro en la intensidad de los eventos costeros.
+En la caja Niño~3.4 (Figura~\ref{fig:sigma}a), la mediana de $\sigma_{3m}$ sube $+11$, $+23$ y $+26$\,\% en P2. El ejemplo de la Sección~\ref{sec:multimodelo} muestra el porqué de la cautela: con SSP5-8.5, 13 de los 15 modelos proyectan aumento, pero los cambios van de $-29$ a $+105$\,\%, y tras la corrección por pruebas múltiples el resultado no es significativo. Solo P1 con SSP3-7.0 ($+15$\,\%) y con SSP5-8.5 ($+12$\,\%) pasan la prueba. En Niño~1+2 (Figura~\ref{fig:sigma}b) la mediana queda entre $-0.5$ y $+10$\,\%, con acuerdo de 8 a 12 modelos: no hay un cambio claro en la intensidad de los eventos costeros.
 
 \begin{figure}[htbp]
 \centering
@@ -641,7 +647,7 @@ La Figura~\ref{fig:sigma_movil} muestra cómo evoluciona $\sigma_{3m}$ con venta
 \subsection{Eventos cálidos}
 \label{sec:res_eventos}
 
-\textbf{Más eventos en la mediana, pero sin significancia.} La Figura~\ref{fig:frecuencia} compara la frecuencia de eventos de cada periodo futuro con la de ref, modelo por modelo. La mediana de la razón está por encima de 1 en casi todos los casos: en P2 los eventos del ONI aumentan 25\,\% con los tres escenarios, los del RONI entre 22 y 44\,\% y los del ICEN entre 11 y 20\,\%. En valores absolutos, el ONI pasa de 27 eventos por siglo en ref a 33--37 en P2, y el RONI de 30 a 37--43. Sin embargo, ningún cambio es significativo y el acuerdo de signo no pasa de 0.87: entre 2 y 6 de los 15 modelos no proyectan aumento. Con unos 9 eventos por periodo, duplicar la frecuencia en un solo modelo apenas sería detectable (Sección~\ref{sec:pruebas_modelo}), así que esta falta de significancia indica una señal débil frente al azar, no ausencia de cambio. Como referencia, ERSSTv5 registra 26 (ONI), 30 (RONI) y 36 (ICEN) eventos por siglo en 1900--2014.
+\textbf{Más eventos en la mediana, pero casi sin significancia.} La Figura~\ref{fig:frecuencia} compara la frecuencia de eventos de cada periodo futuro con la de ref, modelo por modelo. La mediana de la razón está por encima de 1 en casi todos los casos: en P2 los eventos del ONI aumentan 25\,\% con los tres escenarios, los del RONI entre 22 y 44\,\% y los del ICEN entre 11 y 20\,\%. En valores absolutos, el ONI pasa de 27 eventos por siglo en ref a 33--37 en P2, y el RONI de 30 a 37--43. Sin embargo, solo un cambio es significativo, el del RONI con SSP2-4.5 en P2 ($+30$\,\%), y el acuerdo de signo no pasa de 0.87: entre 2 y 6 de los 15 modelos no proyectan aumento. Con unos 9 eventos por periodo, duplicar la frecuencia en un solo modelo apenas sería detectable (Sección~\ref{sec:pruebas_modelo}), así que esta falta de significancia indica una señal débil frente al azar, no ausencia de cambio. Como referencia, ERSSTv5 registra 26 (ONI), 30 (RONI) y 36 (ICEN) eventos por siglo en 1900--2014.
 
 \begin{figure}[htbp]
 \centering
@@ -650,7 +656,7 @@ La Figura~\ref{fig:sigma_movil} muestra cómo evoluciona $\sigma_{3m}$ con venta
 \label{fig:frecuencia}
 \end{figure}
 
-\textbf{Los eventos tienden a ser más intensos.} La Figura~\ref{fig:caracteristicas} compara otras características de los eventos entre periodos. Los cambios más claros son dos: los eventos del ICEN duran más con SSP5-8.5 (de 8.0 a 10.1 y 11.0 meses en P1 y P2, significativo), y el pico medio de los eventos del RONI sube con SSP3-7.0 (de 1.38 a 1.71 y 1.93\,°C, significativo). El número de eventos fuertes o más intensos, según la escala oficial, también sube en la mediana: con SSP5-8.5, de 3 a 7 por cada 30 años en el ONI y de 3 a 9 en el RONI. Los eventos que superan dos veces la $\sigma$ de la referencia (extremos relativos) pasan, con SSP5-8.5, de 1 a 5 por cada 30 años en ONI y RONI. Estos dos últimos aumentos no son significativos, por la misma razón que la frecuencia, pero son coherentes con el aumento de variabilidad de Niño~3.4.
+\textbf{Los eventos tienden a ser más intensos.} La Figura~\ref{fig:caracteristicas} compara otras características de los eventos entre periodos. El cambio más claro es el de los \textbf{eventos extremos}: el número de eventos fuertes o más intensos, según la escala oficial, sube de 3 a 5--7 por cada 30 años en el ONI y de 3 a 5--9 en el RONI, y el aumento es significativo con SSP3-7.0 y SSP5-8.5 en ambos periodos (en el RONI, también con SSP2-4.5 en P2). En el ICEN, que parte de casi ningún evento fuerte en ref, el aumento (a 1--2) no es significativo. Además, los eventos del ICEN duran más (de 8.0 a 10.1 y 11.0 meses en P1 y P2 con SSP5-8.5, y a 9.2 con SSP3-7.0 en P2, significativo), y el pico medio de los eventos del RONI sube con SSP3-7.0 y SSP5-8.5 (de 1.38 a 1.7--2.0\,°C, significativo). Los eventos que superan dos veces la $\sigma$ de la referencia (extremos relativos, sin prueba formal) pasan, con SSP5-8.5, de 1 a 5 por cada 30 años en ONI y RONI. Todo esto es coherente con el aumento de variabilidad de Niño~3.4.
 
 \begin{figure}[htbp]
 \centering
@@ -672,10 +678,10 @@ La Figura~\ref{fig:sigma_movil} muestra cómo evoluciona $\sigma_{3m}$ con venta
 \subsection{Síntesis}
 \label{sec:res_sintesis}
 
-El Cuadro~\ref{tab:sintesis} reúne la mediana del cambio de las variables principales en los seis casos (tres escenarios por dos periodos). Se lee por filas: el calentamiento medio (dos primeras filas) es robusto y significativo en todos los casos y crece con el escenario; el patrón (cambio relativo) y el ciclo anual son robustos en la mayoría; la variabilidad y la frecuencia de eventos con base móvil tienen medianas positivas, pero rara vez robustas y casi nunca significativas. La frecuencia con base fija \emph{baja} en P2, no porque haya menos calor, sino porque el índice queda sobre el umbral casi todo el tiempo y los eventos se funden en uno o dos episodios muy largos (Sección~\ref{sec:eventos}); para esos índices la medida correcta es el tiempo sobre el umbral (Figura~\ref{fig:umbral}). El Anexo (Figura~\ref{fig:a_sensibilidad}) muestra que estas medianas casi no cambian al usar 40, 11 o 7 modelos en lugar de 15.
+El Cuadro~\ref{tab:sintesis} reúne la mediana del cambio de las variables principales en los seis casos (tres escenarios por dos periodos). Se lee por filas: el calentamiento medio (dos primeras filas) es robusto y significativo en todos los casos y crece con el escenario; el patrón (cambio relativo) y el ciclo anual son robustos en la mayoría, aunque no se someten a prueba formal; la variabilidad y la frecuencia de eventos con base móvil tienen medianas positivas, pero rara vez robustas y casi nunca significativas. La frecuencia con base fija \emph{baja} en P2, no porque haya menos calor, sino porque el índice queda sobre el umbral casi todo el tiempo y los eventos se funden en uno o dos episodios muy largos (Sección~\ref{sec:eventos}); para esos índices la medida correcta es el tiempo sobre el umbral (Figura~\ref{fig:umbral}). El Anexo (Figura~\ref{fig:a_sensibilidad}) muestra que estas medianas casi no cambian al usar 40, 11 o 7 modelos en lugar de 15.
 
 \begin{table}[htbp]
-\caption[Síntesis del cambio proyectado (15 modelos).]{Síntesis del cambio proyectado: mediana de los 15 modelos. En negrita, cambios robustos (acuerdo de signo $\geq 0.8$); $^{*}$: significativo con Wilcoxon y corrección de Holm ($p<0.05$). Las razones de frecuencia se comparan con 1 (sin cambio); el resto, con 0.}
+\caption[Síntesis del cambio proyectado (15 modelos).]{Síntesis del cambio proyectado: mediana de los 15 modelos. En negrita, cambios robustos (acuerdo de signo $\geq 0.8$); $^{*}$: significativo con Wilcoxon y corrección de Holm ($p<0.05$). El cambio relativo y la amplitud del ciclo anual no se someten a prueba (Sección~\ref{sec:multimodelo}). Las razones de frecuencia se comparan con 1 (sin cambio); el resto, con 0.}
 \label{tab:sintesis}
 \centering
 \footnotesize
@@ -688,19 +694,19 @@ El Cuadro~\ref{tab:sintesis} reúne la mediana del cambio de las variables princ
 \midrule
 $\Delta$TSM Niño~3.4 [°C] & \textbf{+1.10}$^{*}$ & \textbf{+1.91}$^{*}$ & \textbf{+1.25}$^{*}$ & \textbf{+2.63}$^{*}$ & \textbf{+1.48}$^{*}$ & \textbf{+3.36}$^{*}$ \\
 $\Delta$TSM Niño~1+2 [°C] & \textbf{+1.30}$^{*}$ & \textbf{+2.25}$^{*}$ & \textbf{+1.36}$^{*}$ & \textbf{+2.79}$^{*}$ & \textbf{+1.69}$^{*}$ & \textbf{+3.64}$^{*}$ \\
-$\Delta$TSM rel. Niño~3.4 [°C] & +0.11 & \textbf{+0.19}$^{*}$ & \textbf{+0.07} & \textbf{+0.23} & \textbf{+0.09} & \textbf{+0.36}$^{*}$ \\
-$\Delta$TSM rel. Niño~1+2 [°C] & \textbf{+0.22}$^{*}$ & \textbf{+0.42}$^{*}$ & \textbf{+0.29}$^{*}$ & \textbf{+0.51}$^{*}$ & \textbf{+0.36}$^{*}$ & \textbf{+0.70}$^{*}$ \\
+$\Delta$TSM rel. Niño~3.4 [°C] & +0.11 & \textbf{+0.19} & \textbf{+0.07} & \textbf{+0.23} & \textbf{+0.09} & \textbf{+0.36} \\
+$\Delta$TSM rel. Niño~1+2 [°C] & \textbf{+0.22} & \textbf{+0.42} & \textbf{+0.29} & \textbf{+0.51} & \textbf{+0.36} & \textbf{+0.70} \\
 \midrule
-$\Delta$ amplitud Niño~3.4 [°C] & \textbf{+0.19}$^{*}$ & \textbf{+0.13} & \textbf{+0.10}$^{*}$ & \textbf{+0.26}$^{*}$ & \textbf{+0.26}$^{*}$ & \textbf{+0.40}$^{*}$ \\
-$\Delta$ amplitud Niño~1+2 [°C] & \textbf{$-$0.27}$^{*}$ & \textbf{$-$0.36}$^{*}$ & \textbf{$-$0.23} & \textbf{$-$0.37} & \textbf{$-$0.28}$^{*}$ & \textbf{$-$0.49}$^{*}$ \\
+$\Delta$ amplitud Niño~3.4 [°C] & \textbf{+0.19} & \textbf{+0.13} & \textbf{+0.10} & \textbf{+0.26} & \textbf{+0.26} & \textbf{+0.40} \\
+$\Delta$ amplitud Niño~1+2 [°C] & \textbf{$-$0.27} & \textbf{$-$0.36} & \textbf{$-$0.23} & \textbf{$-$0.37} & \textbf{$-$0.28} & \textbf{$-$0.49} \\
 \midrule
-$\Delta\sigma_{3m}$ Niño~3.4 [\%] & +9 & +11 & \textbf{+15} & +23 & \textbf{+12}$^{*}$ & \textbf{+26} \\
+$\Delta\sigma_{3m}$ Niño~3.4 [\%] & +9 & +11 & \textbf{+15}$^{*}$ & +23 & \textbf{+12}$^{*}$ & \textbf{+26} \\
 $\Delta\sigma_{3m}$ Niño~1+2 [\%] & +4 & +2 & +10 & +8 & 0 & \textbf{+9} \\
 \midrule
 Frecuencia P/ref, ONI & 1.22 & 1.25 & 1.12 & 1.25 & 1.12 & 1.25 \\
-Frecuencia P/ref, RONI & 1.20 & \textbf{1.30} & 1.20 & 1.22 & 1.11 & 1.44 \\
+Frecuencia P/ref, RONI & 1.20 & \textbf{1.30}$^{*}$ & 1.20 & 1.22 & 1.11 & 1.44 \\
 Frecuencia P/ref, ICEN & 1.00 & 1.11 & 1.17 & 1.18 & 1.00 & 1.20 \\
-Frecuencia P/ref, ONIfija & 1.22 & 1.00 & 1.00 & \textbf{0.56} & 0.89 & \textbf{0.25}$^{*}$ \\
+Frecuencia P/ref, ONIfija & 1.22 & 1.00 & 1.00 & \textbf{0.56}$^{*}$ & 0.89 & \textbf{0.25}$^{*}$ \\
 Frecuencia P/ref, ICENfija & 0.92 & \textbf{0.29}$^{*}$ & 0.89 & \textbf{0.11}$^{*}$ & 0.62 & \textbf{0.11}$^{*}$ \\
 \bottomrule
 \end{tabular}
@@ -713,7 +719,7 @@ Frecuencia P/ref, ICENfija & 0.92 & \textbf{0.29}$^{*}$ & 0.89 & \textbf{0.11}$^
 
 \begin{itemize}[nosep]
 \item \textbf{Un miembro por modelo.} Cada modelo aporta una sola realización. En 30 años, la variabilidad interna de esa corrida puede producir o borrar diferencias de frecuencia y de $\sigma$ sin que cambie la física del modelo. Separar ese efecto es parte del Entregable~4.
-\item \textbf{Pocos eventos por periodo.} Con unos 9 eventos por periodo de 30 años, las pruebas por modelo detectan solo cambios muy grandes (Sección~\ref{sec:pruebas_modelo}), y la conclusión sobre eventos descansa en la mediana del conjunto, que tampoco alcanza significancia. Los cambios de eventos deben leerse como tendencias probables, no como hechos establecidos.
+\item \textbf{Pocos eventos por periodo.} Con unos 9 eventos por periodo de 30 años, las pruebas por modelo detectan solo cambios muy grandes (Sección~\ref{sec:pruebas_modelo}), y la conclusión sobre eventos descansa en la mediana del conjunto, que en la frecuencia rara vez alcanza significancia. Salvo el aumento de eventos fuertes, los cambios de eventos deben leerse como tendencias probables, no como hechos establecidos.
 \item \textbf{Modelos no independientes.} Modelos de un mismo centro comparten componentes (por ejemplo, CNRM-CM6-1, CNRM-CM6-1-HR y CNRM-ESM2-1), por lo que la prueba de Wilcoxon es optimista y el acuerdo de signo puede sobrestimar la robustez.
 \item \textbf{Sesgos que no se cancelan.} Comparar cada modelo consigo mismo cancela su error fijo, pero no los errores que dependen del estado del océano. El Entregable~2 mostró un ciclo anual demasiado plano y una variabilidad débil en Niño~1+2; esos errores pueden afectar también al cambio proyectado en esa caja.
 \item \textbf{Asimetría de los Niños costeros.} Los modelos no reproducen la asimetría del ICEN observado (Entregable~2), es decir, los Niños costeros extraordinarios como 1982--1983 y 1997--1998. Las proyecciones de eventos intensos en Niño~1+2 heredan esa limitación (Anexo, Figura~\ref{fig:a_asimetria}).
@@ -730,7 +736,7 @@ El Entregable~3, en cumplimiento de la actividad~(c) del TdR (Sección~\ref{sec:
 \item El calentamiento medio es el cambio más seguro: todos los modelos lo proyectan, en ambas cajas y en los tres escenarios. Hacia 2071--2100, Niño~1+2 se calienta $+2.3$, $+2.8$ y $+3.6$\,°C bajo SSP2-4.5, SSP3-7.0 y SSP5-8.5. Hasta mediados de siglo los escenarios casi no se distinguen; a fin de siglo la emisión decide entre $+2$ y $+4$\,°C.
 \item Niño~1+2 se calienta más que el trópico ($+0.4$ a $+0.7$\,°C en P2, con acuerdo total), un patrón ``tipo El Niño'' permanente frente a la costa norte del Perú. El calentamiento es mayor en la estación fría que en la cálida, por lo que el ciclo anual de Niño~1+2 se aplana; en Niño~3.4 se amplifica levemente.
 \item La variabilidad del ENOS tiende a aumentar en Niño~3.4 (mediana de $+11$ a $+26$\,\% en P2), con un desacuerdo grande entre modelos que impide considerarlo robusto. En Niño~1+2 no se proyecta un cambio claro de variabilidad.
-\item La frecuencia de eventos cálidos, medida con índices de base móvil, aumenta entre 10 y 45\,\% en la mediana en P2, y los eventos tienden a ser más largos e intensos; ninguno de estos cambios es significativo con el número de eventos disponible. Los Niños extendidos son los que más aumentan; los costeros se mantienen en torno a 5 por siglo.
+\item La frecuencia de eventos cálidos, medida con índices de base móvil, aumenta entre 10 y 45\,\% en la mediana en P2, y los eventos tienden a ser más largos e intensos; el aumento de la frecuencia casi nunca es significativo con el número de eventos disponible. Los eventos extremos sí aumentan de forma significativa: los eventos fuertes o más intensos del ONI y del RONI pasan de 3 a entre 5 y 9 por cada 30 años con SSP3-7.0 y SSP5-8.5. Los Niños extendidos son los que más aumentan; los costeros se mantienen en torno a 5 por siglo.
 \item Medido contra el clima actual (base fija), el océano frente al Perú pasará casi todo el tiempo por encima del umbral de El Niño a fin de siglo. Ese resultado refleja el calentamiento medio, no un ENOS más activo, y es el que interesa para los impactos que dependen de la temperatura absoluta.
 \end{enumerate}
 
@@ -806,7 +812,7 @@ Estas figuras detallan o ilustran resultados del cuerpo del informe.
 \label{fig:a_espectro}
 \end{figure}
 
-\textbf{Sensibilidad al conjunto de modelos (Figura~\ref{fig:a_sensibilidad}).} Repite las medianas del Cuadro~\ref{tab:sintesis} para P2 con los cuatro conjuntos. Las medianas cambian poco al pasar de 15 a 40, 11 o 7 modelos: por ejemplo, el calentamiento de Niño~1+2 con SSP5-8.5 es de $+3.6$\,°C con 15, 40 y 11 modelos y de $+3.2$\,°C con 7. La selección del Entregable~2 no altera la señal proyectada; su valor está en descartar modelos que no representan bien los eventos actuales. Con 11 y 7 modelos ningún cambio puede salir significativo tras Holm (Sección~\ref{sec:multimodelo}), por eso sus marcadores están vacíos.
+\textbf{Sensibilidad al conjunto de modelos (Figura~\ref{fig:a_sensibilidad}).} Repite las medianas del Cuadro~\ref{tab:sintesis} para P2 con los cuatro conjuntos. Las medianas cambian poco al pasar de 15 a 40, 11 o 7 modelos: por ejemplo, el calentamiento de Niño~1+2 con SSP5-8.5 es de $+3.6$\,°C con 15, 40 y 11 modelos y de $+3.2$\,°C con 7. La selección del Entregable~2 no altera la señal proyectada; su valor está en descartar modelos que no representan bien los eventos actuales. Con 7 modelos ningún cambio puede salir significativo tras Holm, por eso sus marcadores están vacíos; con 11 solo lo son los cambios en que coinciden casi todos los modelos (Sección~\ref{sec:multimodelo}).
 
 \begin{figure}[htbp]
 \centering

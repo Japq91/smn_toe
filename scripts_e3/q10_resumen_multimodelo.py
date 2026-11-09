@@ -19,16 +19,17 @@ Por (grupo, escenario, periodo, variable, caja o indice):
                 difieren de ref, pareando cada modelo consigo mismo. Es
                 la significancia del cambio multimodelo: complementa a
                 las pruebas por modelo de q08, que tienen poca potencia
-  pholm_wilcoxon p_wilcoxon ajustado por Holm (1979). La familia es cada
-                tabla (grupo, escenario, periodo): todas las variables y
-                cajas o indices que se leen juntas en un mismo cuadro
-                (~70 pruebas). Controla la probabilidad de al menos un
-                falso positivo en la tabla (FWER) en ALFA. Limite: el p
-                exacto minimo de Wilcoxon con n modelos es 2/2^n (0.016
-                con 7, 0.001 con 11), que por ~70 supera ALFA; en los
-                grupos 7 y 11 ninguna prueba puede ser significativa
-                tras Holm, y su lectura es por mediana y acuerdo_signo
-  signif        pholm_wilcoxon < ALFA
+  pholm_wilcoxon p_wilcoxon ajustado por Holm (1979). La familia es, en
+                cada tabla (grupo, escenario, periodo), el subconjunto
+                FAMILIA_HOLM (30 pruebas: las que pide el TdR mas
+                duracion, fraccion costera, RONI e indices fijos); fuera
+                de ella queda NaN. Controla la probabilidad de al menos
+                un falso positivo en la familia (FWER) en ALFA. Limite:
+                el p exacto minimo de Wilcoxon con n modelos es 2/2^n
+                (0.016 con 7, 0.001 con 11): por 30 da 0.47 y 0.03, asi
+                que en el grupo 7 ninguna prueba puede ser significativa
+                y en el 11 solo las de p minimo
+  signif        pholm_wilcoxon < ALFA (False fuera de FAMILIA_HOLM)
 
 Es la tabla que alimenta los cuadros del informe; las figuras pueden
 leer directo los CSV de cada paso si necesitan los valores por modelo.
@@ -72,6 +73,20 @@ NEUTRO = {"delta": 0, "delta_relativo": 0, "delta_amplitud": 0, "delta_sigma_pct
 # variable de cambio (amplitud P - ref es exactamente delta_amplitud) e
 # inflarian la familia de Holm.
 SIN_PRUEBA = {"amplitud"}
+# Familia de Holm: solo las pruebas que responden la actividad (c) del TdR
+# (estado medio, variabilidad, frecuencia, intensidad y ocurrencia de
+# eventos extremos en Nino 3.4 y Nino 1+2 con ONI e ICEN), mas duracion,
+# fraccion costera, RONI y los indices de base fija. El resto conserva
+# p_wilcoxon como referencia, pero sin Holm ni signif: se lee por mediana
+# y acuerdo_signo. Una familia mas chica hace la correccion menos severa.
+_INDICES = {"ONI", "RONI", "ICEN", "ONIfija", "ICENfija"}
+FAMILIA_HOLM = {
+    "delta": {"nino34", "nino12"},
+    "delta_sigma_3m_pct": {"nino34", "nino12"},
+    **{v: _INDICES for v in ("razon_frec", "mag_media", "n_fuerte_mas", "dur_media",
+                             "frac_meses_umbral")},
+    "frac_costero": {"ICEN"},
+}
 
 
 def wilcoxon(x, y=None):
@@ -130,7 +145,8 @@ def main():
 
     out = pd.DataFrame(filas)
     out["pholm_wilcoxon"] = np.nan
-    for _, g in out.groupby(["grupo", "escenario", "periodo"]):
+    en_familia = [c in FAMILIA_HOLM.get(v, ()) for v, c in zip(out.variable, out.caja_indice)]
+    for _, g in out[en_familia].groupby(["grupo", "escenario", "periodo"]):
         g = g["p_wilcoxon"].dropna()
         if len(g):
             out.loc[g.index, "pholm_wilcoxon"] = p10.holm(g.to_numpy())
