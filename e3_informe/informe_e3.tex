@@ -20,13 +20,7 @@
 \usepackage{natbib}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage[most]{tcolorbox}
 
-% Recuadro de la explicacion basica de cada estadistico (Marco metodologico)
-\newtcolorbox{basico}{breakable, enhanced, colback=blue!3!white, colframe=blue!35!black,
-  boxrule=0.5pt, arc=1.5mm, left=5pt, right=5pt, top=4pt, bottom=4pt,
-  before upper={\setlength{\parskip}{0.45em}\setlength{\parindent}{0pt}},
-  fonttitle=\bfseries\small, coltitle=white, title={En palabras simples}}
 
 \hypersetup{
   colorlinks=true,
@@ -133,11 +127,7 @@ El insumo son los productos de los entregables anteriores: la TSM de los 40 mode
 \label{sec:metodo}
 % ============================================================
 
-Esta sección define cada métrica y cada prueba estadística del Entregable~3 tal como se implementaron en \archivo{scripts_e3/} (pasos q01--q11). Cada estadístico se presenta en dos niveles:
-\begin{itemize}[nosep]
-\item un recuadro \textbf{En palabras simples}, para lectores que no usan estadística: qué dato entra, qué se hace con él y por qué se hace de esa forma;
-\item una \textbf{Definición formal}, breve, con la ecuación tal como está implementada y sus supuestos.
-\end{itemize}
+Esta sección define cada métrica y cada prueba estadística del Entregable~3 tal como se implementaron en \archivo{scripts_e3/} (pasos q01--q11). Cada estadístico se presenta en dos niveles: primero, en lenguaje simple, qué dato entra, qué se hace con él y por qué se hace de esa forma; después, una \textbf{Definición formal}, breve, con la ecuación tal como está implementada y sus supuestos.
 Los ejemplos numéricos usan AWI-CM-1-1-MR (M03), el primer modelo de la selección del Entregable~2, bajo SSP5-8.5. El Cuadro~\ref{tab:glosario} reúne los términos que se repiten en todo el informe.
 
 \begin{table}[htbp]
@@ -161,7 +151,7 @@ Razón de frecuencias & Frecuencia en P dividida entre la frecuencia en ref, en 
 Mediana, p10--p90 & Valor central de los modelos y rango que contiene al 80\,\% central. & No se dejan arrastrar por un modelo extremo, a diferencia del promedio. \\
 Acuerdo de signo & Fracción de modelos que cambian en el mismo sentido que la mediana. & Desde 0.8 el cambio se considera robusto, como en el IPCC. \\
 Significativo ($^{*}$) & El cambio del conjunto no se explica por azar (Wilcoxon con corrección de Holm, $p<0.05$). & Holm evita ``hallazgos'' falsos al hacer muchas pruebas a la vez. \\
-Conjunto de 15 / 40 & Los 15 modelos seleccionados en el Entregable~2 / los 40 evaluados. & Los 15 son el conjunto principal; los 40, el contraste. \\
+Conjuntos de 15, 40, 11 y 7 & Los 15 seleccionados en el Entregable~2; los 40 evaluados; los 15 sin los cuatro de Niño costero más débil; los 7 con mejor evento típico en ambas cajas. & Si la señal es la misma en los cuatro, no depende de qué modelos se elijan. \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -170,13 +160,11 @@ Conjunto de 15 / 40 & Los 15 modelos seleccionados en el Entregable~2 / los 40 e
 \subsection{Conceptos básicos de las pruebas estadísticas}
 \label{sec:conceptos}
 
-\begin{basico}
 Una prueba estadística responde si una diferencia observada es \emph{real} o podría deberse al azar. Por ejemplo, si un modelo produce 8 Niños en 1985--2014 y 12 en 2036--2065, ¿aumentaron los Niños o fue la suerte de esos 30 años? Aun sin ningún cambio en el clima, dos periodos de 30 años nunca dan exactamente el mismo número de eventos, igual que lanzar una moneda 30 veces no da siempre 15 caras.
 
 La prueba parte de suponer que \emph{no hay cambio} (la ``hipótesis nula'') y calcula qué tan raro sería, bajo ese supuesto, ver una diferencia tan grande como la observada. Esa probabilidad es el \textbf{valor $p$}. Si es muy pequeña (por convención, menor que 5\,\%, es decir, $p < 0.05$), la diferencia es difícil de explicar por azar y se dice que el cambio es \textbf{estadísticamente significativo}. Si $p$ es grande, no se puede descartar el azar, lo que \emph{no} es lo mismo que demostrar que no hubo cambio: puede que los datos sean muy pocos para verlo. La capacidad de una prueba para detectar un cambio que sí existe se llama \textbf{potencia}, y crece con la cantidad de datos.
 
 Significativo tampoco quiere decir grande o importante: un cambio de 0.1\,°C puede ser significativo con muchos datos, y uno de 30\,\% puede no serlo con pocos. Por eso este informe reporta siempre la magnitud del cambio junto a su significancia.
-\end{basico}
 
 \noindent\textbf{Definición formal.} Una prueba contrasta una hipótesis nula $H_0$ con una alternativa $H_1$ (aquí siempre bilateral) mediante un estadístico $T$ cuya distribución bajo $H_0$ es conocida, exacta, asintótica o por permutación. El valor $p$ es $\Pr(|T| \ge |t_{\mathrm{obs}}| \mid H_0)$. Se rechaza $H_0$ si $p < \alpha$, con $\alpha = 0.05$, lo que acota en $\alpha$ la probabilidad de un falso positivo (error de tipo I). La potencia es $1-\beta$, con $\beta$ la probabilidad de no rechazar $H_0$ cuando es falsa (error de tipo II). Cuando se hacen $k$ pruebas, la probabilidad de al menos un falso positivo crece hasta $1-(1-\alpha)^k$ si son independientes; se corrige con el método de Holm (Sección~\ref{sec:holm}).
 
@@ -186,19 +174,24 @@ Significativo tampoco quiere decir grande o importante: un cambio de 0.1\,°C pu
 
 Se comparan tres periodos de 30 años: la referencia 1985--2014 (en adelante, ref), el futuro cercano P1 = 2036--2065 y el futuro lejano P2 = 2071--2100, bajo tres escenarios de emisiones: SSP2-4.5 (intermedio), SSP3-7.0 (alto) y SSP5-8.5 (muy alto). Cada serie mensual concatena el experimento \texttt{historical} (hasta 2014-12) con el escenario (desde 2015-01). La referencia tiene 30 años, y no los 34 de la climatología del Entregable~2 (1981--2014), para que las desviaciones estándar, los conteos de eventos y los espectros de los tres periodos se estimen con muestras del mismo largo; 1985--2014 es además la base fija del RONI en el Entregable~2. Dos modelos terminan sus escenarios en 2099-12 (CAMS-CSM1-0 e IITM-ESM; en SSP3-7.0, IITM-ESM termina en 2098-12): su P2 tiene 29 años (28 en ese caso), y todas las métricas se calculan con los meses disponibles.
 
-Todos los resultados se resumen para cuatro conjuntos de modelos: los 15 seleccionados en el Entregable~2 (conjunto principal); los 40 (contraste); los 11 que quedan al quitar de los 15 los cuatro de menor $S_{\mathrm{ICEN}}$ (M34, M35, M12 y M40); y los 7 que además cumplen $S_{\mathrm{final}} \geq 0.9$ y $S_{\mathrm{ICEN}} \geq 0.9$. Los dos últimos son las pruebas de sensibilidad que recomienda el informe del Entregable~2.
+Todos los resultados se calculan para cuatro conjuntos de modelos. Los cuatro responden a una misma pregunta: ¿la señal proyectada depende de qué modelos se usen?
+\begin{itemize}[nosep]
+\item \textbf{15 modelos} (conjunto principal): los que pasaron el filtro de eventos del Entregable~2, es decir, cuya frecuencia, duración y estacionalidad de eventos cálidos no se distinguen de las observadas.
+\item \textbf{40 modelos} (contraste): todos los evaluados. Responde: ¿cambia el resultado si no se selecciona ningún modelo?
+\item \textbf{11 modelos}: los 15 sin los cuatro que simulan el Niño costero más débil. En el Entregable~2, $S_{\mathrm{ICEN}}$ mide cuánto se parece el evento cálido típico del ICEN de un modelo al observado: vale 1 si tiene la misma forma y amplitud, y baja cuanto más débil o más fuerte es. Los cuatro con menor valor son MPI-ESM1-2-HR (M34, 0.45; su Niño costero típico tiene menos de la mitad de la amplitud observada), CNRM-CM6-1-HR (M12, 0.79), MPI-ESM1-2-LR (M35, 0.81) y UKESM1-0-LL (M40, 0.83). Responde: ¿cambia la señal en Niño~1+2 si se quitan los modelos con Niños costeros demasiado débiles?
+\item \textbf{7 modelos}: los que, además de pasar el filtro, tienen $S_{\mathrm{final}} \geq 0.9$ y $S_{\mathrm{ICEN}} \geq 0.9$, es decir, un evento típico bien representado tanto en Niño~3.4 como en Niño~1+2 (amplitud entre 28\,\% menor y 39\,\% mayor que la observada). Son AWI-CM-1-1-MR, ACCESS-ESM1-5, EC-Earth3, IITM-ESM, GFDL-ESM4, NorESM2-LM y CESM2. Responde: ¿cambia la señal si solo se usan los mejores?
+\end{itemize}
+Los conjuntos de 11 y 7 son las pruebas de sensibilidad que recomienda el informe del Entregable~2. Si la mediana y el acuerdo de signo se mantienen en los cuatro, la conclusión no depende de la selección (Anexo, Figura~\ref{fig:a_sensibilidad}).
 
 % ------------------------------------------------------------
 \subsection{Cambio del estado medio}
 \label{sec:delta}
 
-\begin{basico}
 \textbf{Dato:} la TSM mensual de cada modelo, promediada en la caja Niño~3.4 o Niño~1+2. \textbf{Qué se hace:} se promedian los 360 meses de la referencia y los 360 del periodo futuro, y se restan. En M03, Niño~3.4 pasa de 25.61\,°C a 28.30\,°C en P2: un cambio de $+2.69$\,°C.
 
 \textbf{Por qué así:} el Entregable~2 mostró que los modelos tienen errores fijos; casi todos son demasiado cálidos en Niño~1+2. Si se comparara el futuro de un modelo con la observación actual, ese error se confundiría con calentamiento. Comparando cada modelo \emph{con su propio pasado}, el error se resta y queda solo el cambio.
 
 \textbf{Cambio relativo:} como todo el océano tropical se calienta, también se calcula cuánto \emph{más} (o menos) se calienta la caja que el promedio tropical. En M03, el trópico sube $+2.41$\,°C y Niño~1+2 $+3.22$\,°C: el cambio relativo de Niño~1+2 es $+0.81$\,°C. Un valor positivo significa que la costa norte del Perú se calienta más que el resto del trópico, un patrón ``tipo El Niño'' permanente.
-\end{basico}
 
 \noindent\textbf{Definición formal.} Para el modelo $i$ y el periodo $P \in \{\mathrm{P1}, \mathrm{P2}\}$,
 \begin{equation}
@@ -208,15 +201,15 @@ Todos los resultados se resumen para cuatro conjuntos de modelos: los 15 selecci
 \end{equation}
 con la barra como media temporal del periodo y $X_{\mathrm{trop}}$ la media de 20°S--20°N ponderada por $\cos\phi$. El supuesto es que el sesgo de cada modelo es aproximadamente constante en el tiempo, el supuesto estándar de las proyecciones sin corrección de sesgo. $\Delta X^{\mathrm{rel}}$ mide el patrón del calentamiento \citep{xie2010}, con la misma idea con la que el RONI retira el calentamiento de fondo. En los mapas ambas cantidades se calculan punto a punto.
 
+\textbf{Por qué el cambio relativo.} El cambio total de la TSM mezcla dos componentes: un calentamiento casi uniforme del trópico, cuya magnitud depende sobre todo de la sensibilidad climática de cada modelo, y un patrón espacial que se aparta de ese promedio. Siguiendo a \citet{xie2010} y \citet{ma2013}, el segundo se separa restando a cada punto el cambio medio de 20°S--20°N del mismo modelo. Este patrón relativo es el que controla los cambios de la convección y de la circulación \citep{johnson2010}, y por eso es el más relevante para el ENOS y para la costa peruana.
+
 % ------------------------------------------------------------
 \subsection{Ciclo anual}
 \label{sec:ciclo}
 
-\begin{basico}
 \textbf{Dato:} la TSM mensual de cada periodo. \textbf{Qué se hace:} se promedian todos los eneros, todos los febreros, etc., de los 30 años; esos 12 valores son el \textbf{ciclo anual} o climatología. Su \textbf{amplitud} es la diferencia entre el mes más cálido y el más frío. En M03, la amplitud de Niño~3.4 crece 1.0\,°C en P2.
 
 \textbf{Por qué:} en Niño~1+2 el ciclo anual (verano cálido en marzo, invierno frío en septiembre) es tan grande como un Niño fuerte. Un cambio en su amplitud cambia qué tan cálidos son los veranos ``normales'' frente a la costa, aunque no cambie el ENOS. También se registra en qué mes ocurren el máximo y el mínimo, para ver si las estaciones se adelantan o se atrasan.
-\end{basico}
 
 \noindent\textbf{Definición formal.} Con $X(a,m)$ la TSM del año $a$ y el mes $m$, y $N_a = 30$ años,
 \begin{equation}
@@ -231,11 +224,9 @@ y además $\arg\max_m C_m$ y $\arg\min_m C_m$.
 
 \subsubsection{Anomalía sin tendencia}
 
-\begin{basico}
 \textbf{Dato:} la TSM mensual de un periodo de 30 años. \textbf{Qué se hace:} primero se le quita el ciclo anual del mismo periodo, para que el verano no cuente como ``anomalía cálida''. Luego se ajusta una recta a la serie y también se le resta.
 
 \textbf{Por qué la recta:} en SSP5-8.5 el océano se calienta cerca de 1\,°C \emph{dentro} de los 30 años de P2. Sin quitar esa subida, los primeros años quedarían por debajo del promedio y los últimos por encima, y esa diferencia se contaría como variabilidad del ENOS sin serlo. Al quitar la recta, lo que queda son las subidas y bajadas de un año a otro: los Niños y las Niñas.
-\end{basico}
 
 \noindent\textbf{Definición formal.} En cada periodo, y en cada caja o punto de grilla,
 \begin{equation}
@@ -246,13 +237,11 @@ donde $\hat a$ y $\hat b$ son los coeficientes de mínimos cuadrados de la regre
 
 \subsubsection{Desviación estándar y su cambio}
 
-\begin{basico}
 \textbf{Dato:} la anomalía sin tendencia. \textbf{Qué se hace:} la \textbf{desviación estándar} $\sigma$ mide qué tanto se aleja, en promedio, la anomalía de cero. Un $\sigma$ grande significa Niños y Niñas más intensos. Se calcula sobre la anomalía mensual ($\sigma$) y sobre su promedio móvil de 3 meses ($\sigma_{3m}$), que es la escala del ONI y del ICEN. En M03, $\sigma_{3m}$ de Niño~3.4 pasa de 0.86\,°C a 0.95\,°C en P2.
 
 \textbf{Por qué en porcentaje:} el cambio se expresa como porcentaje del valor de referencia del mismo modelo ($+10$\,\% en M03). Así un modelo con un ENOS naturalmente débil y otro con uno fuerte pesan igual al comparar cuánto cambian.
 
 Además, $\sigma_{3m}$ se calcula por estación (por ejemplo, solo con los diciembre--febrero) para ver en qué época del año se concentra el cambio, y en ventanas de 30 años que avanzan de un año en un año desde 1850 hasta 2100, para ver cómo evoluciona.
-\end{basico}
 
 \noindent\textbf{Definición formal.} Con $N$ meses y la desviación estándar muestral $\sigma = \big[\tfrac{1}{N-1}\sum_t (A'_t - \overline{A'})^2\big]^{1/2}$,
 \begin{equation}
@@ -263,13 +252,11 @@ $\sigma_{3m}$ se calcula sobre la media móvil centrada de 3 meses de $A'$. La $
 
 \subsubsection{Asimetría y curtosis}
 
-\begin{basico}
 \textbf{Dato:} la anomalía mensual sin tendencia. \textbf{Qué miden:} la \textbf{asimetría} indica si las anomalías cálidas llegan más lejos que las frías. Es positiva cuando hay pocos Niños muy intensos y muchas Niñas moderadas, como en la costa del Perú: en el ICEN observado vale 1.06, por los Niños extraordinarios de 1983 y 1998. La \textbf{curtosis} indica si hay más valores extremos, en ambos sentidos, de los que tendría una distribución ``normal'' (en forma de campana).
 
 \textbf{Por qué:} el riesgo para el Perú no está en el Niño promedio, sino en los extraordinarios. Si la asimetría del futuro crece, la cola de Niños muy intensos se alarga aunque $\sigma$ no cambie. En M03, la asimetría de Niño~3.4 pasa de $-0.18$ a $+0.83$ en P2.
 
 \textbf{Cuidado:} con 360 meses ambos valores son poco precisos para un solo modelo; solo se interpreta la mediana del conjunto.
-\end{basico}
 
 \noindent\textbf{Definición formal.} Con los momentos centrales muestrales $m_k = \tfrac{1}{N}\sum_t \big(A'_t-\overline{A'}\big)^k$,
 \begin{equation}
@@ -282,7 +269,6 @@ los mismos estimadores (sesgados) del Entregable~2. Ambos son 0 en una normal. L
 \subsection{Índices ENOS hasta 2100}
 \label{sec:indices}
 
-\begin{basico}
 \textbf{Dato:} la TSM de Niño~3.4, Niño~1+2 y del trópico, de 1850 a 2100. \textbf{El problema:} un índice ENOS es la anomalía respecto de lo ``normal''. Si el océano se calienta 3\,°C, ¿lo normal sigue siendo el clima de hoy o pasa a ser el nuevo clima más cálido? Las dos respuestas son válidas y dicen cosas distintas, por eso se calculan ambas.
 
 \begin{itemize}[nosep,leftmargin=*]
@@ -291,7 +277,6 @@ los mismos estimadores (sesgados) del Entregable~2. Ambos son 0 en una normal. L
 \item \textbf{ONI fijo e ICEN fijo}: lo normal es siempre 1985--2014. Responden ``¿cuánto tiempo se superan los umbrales de hoy?'', lo que interesa para la exposición, pero mezcla calentamiento y ENOS.
 \end{itemize}
 Si un aumento de eventos aparece solo con los índices fijos, se debe al calentamiento medio y no a un ENOS más activo.
-\end{basico}
 
 \noindent\textbf{Definición formal.} Las cinco variantes se calculan sobre la serie 1850--2100 de cada modelo y escenario. Se parte de 1850 porque así lo hace el paso p01 del Entregable~2; con eso, el ONI y el ICEN coinciden con los suyos hasta 1979.
 \begin{itemize}
@@ -305,7 +290,6 @@ Si un aumento de eventos aparece solo con los índices fijos, se debe al calenta
 \subsection{Eventos cálidos}
 \label{sec:eventos}
 
-\begin{basico}
 \textbf{Qué es un evento:} el índice pasa un umbral y se queda arriba un tiempo mínimo. Para el ONI y el RONI, al menos 0.5\,°C durante 5 meses seguidos (criterio de NOAA); para el ICEN, más de 0.5\,°C durante 3 meses seguidos (criterio del ENFEN). Son los mismos criterios del Entregable~2. De cada evento se guarda su inicio, fin, duración, mes del pico y valor del pico. Cada evento se asigna al periodo en que cae su pico.
 
 \textbf{Frecuencia:} número de eventos por siglo, para comparar periodos de distinto largo. M03 tiene 8 eventos del ONI en ref (27 por siglo) y 10 en P2 (33 por siglo). La \textbf{razón de frecuencias} es el cociente: $33/27 = 1.25$, un 25\,\% más.
@@ -315,7 +299,6 @@ Si un aumento de eventos aparece solo con los índices fijos, se debe al calenta
 \textbf{Tipo de evento:} se cruzan los eventos del ICEN y del ONI del mismo modelo. Un Niño solo en la costa (ICEN sin ONI) es \emph{costero}, como el de 2017; uno en ambas cajas, \emph{extendido}, como el de 1997--1998; uno solo en el Pacífico central (ONI sin ICEN), \emph{central}.
 
 \textbf{Tiempo sobre el umbral:} con los índices fijos, en P2 el índice puede quedar sobre 0.5\,°C casi todo el tiempo. Los eventos se funden en uno o dos muy largos y su \emph{número} baja aunque haga más calor. Para esos índices se usa la fracción de meses sobre el umbral, que no tiene ese problema.
-\end{basico}
 
 \noindent\textbf{Definición formal.} Umbrales y categorías importados de \archivo{scripts_e2/p07_eventos.py} (Sección~3.4 del informe del Entregable~2). Con $n_P$ eventos en $T_P$ siglos, $\mathrm{frec}_P = n_P/T_P$ y la razón es $\mathrm{frec}_P/\mathrm{frec}_{\mathrm{ref}}$. $T_P$ es el número de meses del periodo con TSM en la caja dividido entre 1200 (0.3 para 30 años completos); se cuentan los meses con TSM y no los meses con índice, porque la media móvil centrada deja sin valor el último mes de 2100 sin que falte ningún dato. La escala relativa \citep{shin2022} usa $\sigma_{\mathrm{ref}}$ del índice del mismo modelo. Dos eventos de índices distintos son el mismo episodio si sus intervalos [inicio, fin] se superponen al menos un mes. La fracción costera es $f_c = n_{\mathrm{costero}}/n_{\mathrm{ICEN}}$; la clasificación sigue, en su forma operativa más simple, la distinción entre los regímenes de calentamiento del Pacífico oriental y central \citep{takahashi2011}. La fracción de meses sobre el umbral es $\tfrac{1}{N}\sum_t \mathbf{1}[I_t \ge u]$, sin la condición de duración.
 
@@ -327,11 +310,9 @@ Para ONI, RONI e ICEN se aplican, en cada modelo, las tres pruebas del filtro de
 
 \subsubsection{Frecuencia: razón de verosimilitud de Poisson}
 
-\begin{basico}
 \textbf{Dato:} dos números por modelo: cuántos eventos hubo en ref y cuántos en el periodo futuro (en M03, ONI: 8 y 10). \textbf{Qué hace:} los Niños son raros e independientes entre sí, como los goles en un partido de fútbol. Para ese tipo de conteos, el azar sigue una ley conocida (la ley de Poisson), que dice cuánto pueden variar dos conteos sin que cambie la tasa real. La prueba compara dos explicaciones: ``ambos periodos tienen la misma tasa de eventos'' frente a ``cada periodo tiene la suya'', y mide cuánto mejor explica los datos la segunda.
 
 \textbf{Por qué esta prueba:} con un solo número por periodo no hay forma de calcular una varianza ni de usar una prueba $t$. La ley de Poisson aporta esa varianza. En M03, 8 frente a 10 da $p = 0.63$: la diferencia se explica fácilmente por azar.
-\end{basico}
 
 \noindent\textbf{Definición formal.} Con $n_k$ eventos en $T_k$ siglos ($k \in \{P, \mathrm{ref}\}$, $T_P = T_{\mathrm{ref}} = 0.3$) y $\hat\lambda_0 = (n_P + n_{\mathrm{ref}})/(T_P + T_{\mathrm{ref}})$ la tasa común bajo $H_0$,
 \begin{equation}
@@ -342,11 +323,9 @@ G = 2\sum_{k} n_k \ln\frac{n_k}{T_k\,\hat\lambda_0} \;\sim\; \chi^2_1 \quad \tex
 
 \subsubsection{Duración: Anderson-Darling de dos muestras}
 
-\begin{basico}
 \textbf{Dato:} la lista de duraciones, en meses, de los eventos de cada periodo; por ejemplo, 7, 9, 12, 14\ldots\ \textbf{Qué hace:} ordena juntas las duraciones de ambos periodos y revisa si las de un periodo tienden a quedar arriba o abajo de las del otro en cualquier parte de la lista, también en los extremos.
 
 \textbf{Por qué esta prueba y no comparar promedios:} las duraciones no tienen forma de campana: la mayoría de los eventos son cortos y unos pocos muy largos. Una prueba de promedios ($t$) supone forma de campana y no ve un cambio en la cola de eventos muy largos, que es justamente lo que interesa. Anderson-Darling compara la distribución completa y da más peso a los extremos que su alternativa más conocida, Kolmogorov-Smirnov.
-\end{basico}
 
 \noindent\textbf{Definición formal.} Para dos muestras de tamaños $n_1, n_2$ ($N = n_1 + n_2$), con $M_{ij}$ el número de observaciones de la muestra $i$ menores o iguales que el $j$-ésimo valor de la muestra combinada ordenada,
 \begin{equation}
@@ -357,11 +336,9 @@ A^2 = \frac{1}{N}\sum_{i=1}^{2}\frac{1}{n_i}\sum_{j=1}^{N-1}\frac{(N M_{ij} - j\
 
 \subsubsection{Estacionalidad: prueba $G$ del mes del pico}
 
-\begin{basico}
 \textbf{Dato:} el mes en que cada evento alcanza su pico. Con eso se arma una tabla de 2 filas (ref y futuro) por 12 columnas (enero a diciembre) que cuenta cuántos picos cayeron en cada mes. \textbf{Qué hace:} calcula cuántos picos ``deberían'' caer en cada casilla si la época del año de los picos no hubiera cambiado, y mide cuánto se alejan los conteos reales de esa expectativa.
 
 \textbf{Por qué esta prueba:} el mes es una categoría que da la vuelta: diciembre está junto a enero. Una prueba para números ordinarios trataría diciembre (12) y enero (1) como extremos opuestos y partiría en dos el máximo de los Niños, que ocurre justamente entre diciembre y febrero. La prueba $G$ trata cada mes como una categoría.
-\end{basico}
 
 \noindent\textbf{Definición formal.} Con $O_{rc}$ los conteos observados y $E_{rc} = O_{r\cdot}\,O_{\cdot c}/O_{\cdot\cdot}$ los esperados bajo independencia entre periodo y mes,
 \begin{equation}
@@ -373,11 +350,9 @@ sumando solo las celdas con $O_{rc} > 0$. Con casi todas las $E_{rc} < 5$, la ap
 \subsubsection{Valores $p$ por permutación}
 \label{sec:permutaciones}
 
-\begin{basico}
 \textbf{Qué hace:} si de verdad no hubo cambio, da igual qué evento se etiquetó como ``ref'' y cuál como ``futuro''. Entonces se mezclan todos los eventos, se reparten al azar en dos grupos del mismo tamaño que los originales y se recalcula el estadístico, 1999 veces. El valor $p$ es la fracción de esos repartos al azar que dan una diferencia igual o mayor que la real.
 
 \textbf{Por qué:} con 6 a 15 eventos por periodo, las fórmulas de los libros, que suponen muestras grandes, fallan. La permutación no necesita ese supuesto: construye la ``diferencia típica por azar'' con los mismos datos.
-\end{basico}
 
 \noindent\textbf{Definición formal.} Con $B = 1999$ permutaciones de las etiquetas y $T^{*}_b$ el estadístico de la permutación $b$,
 \begin{equation}
@@ -389,13 +364,11 @@ Su resolución es $1/2000 = 0.0005$, muy por debajo del menor umbral de Holm con
 \subsubsection{Corrección de Holm}
 \label{sec:holm}
 
-\begin{basico}
 \textbf{El problema:} si se hacen muchas pruebas, alguna saldrá ``significativa'' por pura suerte. Con 20 pruebas sin ningún cambio real se espera, en promedio, un falso positivo, porque $p < 0.05$ ocurre por azar una vez de cada 20.
 
 \textbf{Qué hace Holm:} ordena los valores $p$ de menor a mayor y exige más al primero (debe ser menor que $0.05$ dividido entre el número de pruebas), un poco menos al segundo, y así sucesivamente. De forma equivalente, multiplica cada $p$ por un factor y compara el resultado con 0.05. Así se mantiene en 5\,\% la probabilidad de declarar \emph{algún} cambio falso en todo el grupo de pruebas.
 
 \textbf{Aquí:} las tres pruebas de un modelo e índice (frecuencia, duración y estacionalidad) forman un grupo de 3. En M03, ICEN, P2, el menor $p$ es 0.066 (duración); multiplicado por 3 da 0.20, y no hay cambio significativo.
-\end{basico}
 
 \noindent\textbf{Definición formal.} Ordenados los $k$ valores $p$ de la familia, $p_{(1)} \le \dots \le p_{(k)}$,
 \begin{equation}
@@ -406,15 +379,12 @@ y se rechaza $H_{0,(j)}$ si $\tilde p_{(j)} < \alpha$ \citep{holm1979}. Controla
 
 \subsubsection{Potencia de las pruebas por modelo}
 
-\begin{basico}
 Con unos 30 eventos por siglo, cada periodo de 30 años tiene unos 9 eventos, muy pocos para que un solo modelo muestre un cambio significativo. Por ejemplo, si un modelo pasara de 9 a 18 eventos, el doble, la prueba de Poisson daría $p = 0.08$: no significativo. Haría falta llegar a unos 20. Por eso que un modelo ``no tenga cambio significativo'' no quiere decir que no cambie, y la conclusión sobre los eventos no se saca contando modelos significativos, sino del conjunto de modelos (Sección~\ref{sec:multimodelo}).
-\end{basico}
 
 % ------------------------------------------------------------
 \subsection{Espectro de potencia}
 \label{sec:espectro}
 
-\begin{basico}
 \textbf{Dato:} la serie mensual de un índice (ONI, RONI o ICEN) en un periodo de 30 años. \textbf{Qué hace:} descompone la serie en oscilaciones de distinta duración (cada 2 años, cada 3, cada 5\ldots) y mide cuánta de la variabilidad aporta cada una, igual que un ecualizador de música separa graves y agudos. El resultado es una curva con un pico en el ritmo dominante; en el ENOS observado está entre 3 y 5 años.
 
 \textbf{Por qué:} $\sigma$ dice qué tan intensos son los eventos, pero no cada cuánto ocurren. Si el pico se mueve hacia periodos más cortos, los Niños se harían más seguidos.
@@ -422,7 +392,6 @@ Con unos 30 eventos por siglo, cada periodo de 30 años tiene unos 9 eventos, mu
 \textbf{Cómo se hace (método de Welch):} un espectro calculado con una sola serie es muy ruidoso. Por eso el periodo se corta en 3 tramos de 15 años que se solapan a la mitad, se calcula el espectro de cada uno y se promedian. Aun así, el espectro de un solo modelo sigue siendo ruidoso, y solo se interpreta el del conjunto.
 
 \textbf{Dos resúmenes:} el \emph{periodo del pico} (la oscilación más fuerte entre 1.5 y 10 años) y la \emph{fracción de la variabilidad en la banda del ENOS} (2 a 7 años).
-\end{basico}
 
 \noindent\textbf{Definición formal.} Método de \citet{welch1967}: la serie $x$ se divide en $K$ segmentos $x_k$ de $L$ meses con 50\,\% de solapamiento; a cada uno se le retira su tendencia lineal y se le aplica una ventana de Hann $w$, y
 \begin{equation}
@@ -437,21 +406,17 @@ Con $L = 180$ meses se obtienen $K = 3$ segmentos que cubren los 360 meses. Los 
 
 \subsubsection{Mediana y percentiles}
 
-\begin{basico}
 \textbf{Dato:} el cambio de cada modelo; por ejemplo, los 15 valores de $\Delta\sigma_{3m}$ de Niño~3.4 en P2, ordenados de menor a mayor: $-29, -27, 6, 7, 8, 10, 16, 26, 28, 33, 33, 36, 48, 63, 105$\,\%. \textbf{Qué se reporta:} la \textbf{mediana} es el valor del medio de la lista (26\,\%): la mitad de los modelos proyecta más y la otra mitad menos. Los \textbf{percentiles 10 y 90} marcan el rango donde cae el 80\,\% central de los modelos, dejando fuera el 10\,\% más extremo de cada lado.
 
 \textbf{Por qué la mediana y no el promedio:} un solo modelo extremo (aquí, $+105$\,\%) arrastra el promedio, pero no mueve la mediana. Con 15 modelos eso importa.
-\end{basico}
 
 \noindent\textbf{Definición formal.} Para los $n$ valores del conjunto se reportan la mediana, la media, el mínimo, el máximo y los cuantiles empíricos 0.1 y 0.9, con interpolación lineal entre estadísticos de orden (método 7 de Hyndman y Fan, el de \texttt{pandas}).
 
 \subsubsection{Acuerdo de signo}
 
-\begin{basico}
 \textbf{Qué mide:} de todos los modelos, qué fracción proyecta un cambio en la misma dirección que la mediana. En la lista anterior, 13 de 15 modelos proyectan aumento: acuerdo de $13/15 = 0.87$.
 
 \textbf{Por qué:} si los modelos no coinciden ni en si algo sube o baja, la mediana no es confiable aunque sea grande. El IPCC considera robusto un cambio cuando al menos el 80\,\% de los modelos coincide en el signo. En los mapas se calcula en cada punto de grilla.
-\end{basico}
 
 \noindent\textbf{Definición formal.} Con $x_0$ el valor neutro (0 para las diferencias, 1 para la razón de frecuencias),
 \begin{equation}
@@ -462,13 +427,11 @@ con $\mathcal{C} \ge 0.8$ como cambio robusto, según el enfoque simple del Atla
 
 \subsubsection{Prueba de rangos con signo de Wilcoxon}
 
-\begin{basico}
 \textbf{El problema:} el acuerdo de signo no distingue un cambio grande de uno apenas distinto de cero. 13 de 15 modelos con aumento podrían ser 13 aumentos de 1\,\%.
 
 \textbf{Qué hace:} toma los cambios de los modelos, los ordena por su tamaño sin importar el signo y les asigna un puesto (1 al más pequeño, 15 al más grande). Luego suma los puestos de los que aumentan. Si no hubiera cambio, aumentos y disminuciones serían igual de frecuentes y de grandes, y esa suma rondaría la mitad del total. En el ejemplo, los 2 modelos con disminución ($-29$ y $-27$\,\%) ocupan puestos intermedios y los aumentos tienen los puestos más altos, por lo que la suma queda muy por encima de la mitad: $W^{+} = 104$ de un máximo de 120, y $p = 0.010$.
 
 \textbf{Por qué esta prueba:} cada modelo aporta un valor y se trata como un ``voto'' con su peso. No supone que los cambios tengan forma de campana (las razones de frecuencia y los conteos no la tienen), como sí lo hace la prueba $t$, y usa el tamaño de cada cambio, a diferencia de contar solo signos. Para las variables que no son un cambio (por ejemplo, la frecuencia en eventos por siglo), se compara cada modelo con su propia referencia: se usa la diferencia futuro menos ref de cada modelo.
-\end{basico}
 
 \noindent\textbf{Definición formal.} Con $d_i = \Delta X_i - x_0$ (o $d_i = X_{i,P} - X_{i,\mathrm{ref}}$ en la forma pareada) y $R_i$ el rango de $|d_i|$ entre los $d_i \neq 0$,
 \begin{equation}
@@ -479,11 +442,9 @@ con $H_0$: los $d_i$ son simétricos alrededor de 0, es decir, la mediana del ca
 
 \subsubsection{Corrección de Holm en la tabla multimodelo}
 
-\begin{basico}
 Cada tabla de resultados (un conjunto de modelos, un escenario y un periodo) reúne unas 69 pruebas de Wilcoxon, una por variable y caja o índice. Sin corrección se esperarían unos 3 ``cambios'' falsos por tabla. Se aplica Holm (Sección~\ref{sec:holm}) a las 69 pruebas juntas y un cambio solo se declara significativo si sobrevive a esa corrección.
 
 \textbf{Consecuencia importante:} con pocos modelos, Wilcoxon no puede dar un $p$ muy pequeño, aunque todos los modelos coincidan. Con 7 modelos el menor $p$ posible es 0.016 y con 11, 0.001; multiplicados por 69 pasan de 0.05. Por eso en los conjuntos de 7 y 11 modelos \emph{ningún} cambio puede salir significativo tras Holm. Esos conjuntos se usan para ver si la mediana y el acuerdo de signo se mantienen al quitar modelos, no para probar significancia. La significancia se lee en los conjuntos de 15 y 40.
-\end{basico}
 
 \noindent\textbf{Definición formal.} Familia: las $k \approx 69$ pruebas de cada (conjunto, escenario, periodo); ecuación~\eqref{eq:holm}. La prueba pareada de la amplitud del ciclo anual se excluye, porque es idéntica a la de $\Delta\mathcal{A}$. El menor $p$ exacto de Wilcoxon con $n$ observaciones es $2/2^n$ ($6\times10^{-5}$, $0.001$ y $0.016$ para $n = 15$, 11 y 7), y $k \cdot 2/2^n$ vale 0.004, 0.07 y $>1$.
 
@@ -491,7 +452,6 @@ Cada tabla de resultados (un conjunto de modelos, un escenario y un periodo) re�
 \subsection{Productos multimodelo para las figuras}
 \label{sec:ensamble}
 
-\begin{basico}
 Las figuras de resultados usan tres formatos repetidos:
 \begin{itemize}[nosep,leftmargin=*]
 \item \textbf{Puntos por modelo} (por ejemplo, Figura~\ref{fig:cambio_cajas}): cada punto de color es un modelo del conjunto de 15 y los círculos grises de fondo, los 40. La barra negra es la mediana de los 15. El número sobre cada columna es el acuerdo de signo y el asterisco indica un cambio significativo tras Wilcoxon y Holm.
@@ -499,7 +459,6 @@ Las figuras de resultados usan tres formatos repetidos:
 \item \textbf{Mapas}: mediana de los 15 modelos en cada punto; el tramado marca los puntos donde menos del 80\,\% de los modelos coincide en el signo del cambio, es decir, donde el resultado no es robusto.
 \end{itemize}
 Los colores identifican siempre lo mismo: gris, la referencia; amarillo, naranja y rojo, SSP2-4.5, SSP3-7.0 y SSP5-8.5; celeste y azul oscuro, los periodos P1 y P2 cuando se comparan dentro de un mismo escenario.
-\end{basico}
 
 Las curvas (trayectoria anual de la TSM, ciclo anual, $\sigma_{3m}$ móvil y estacional, espectro e índices mensuales) se resumen, en cada instante, frecuencia o mes, con la mediana y los percentiles 10 y 90 de los modelos del conjunto: la línea es la mediana y la banda sombreada, el rango del 80\,\% central. Los mapas de cambio muestran la mediana punto a punto, con un tramado donde el acuerdo de signo~\eqref{eq:acuerdo} es menor que 0.8. La $\sigma_{3m}$ móvil se expresa además como cambio porcentual respecto de la ventana centrada en 2000 (1985--2014), modelo por modelo, antes de calcular los percentiles.
 
