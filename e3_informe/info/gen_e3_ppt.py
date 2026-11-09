@@ -37,7 +37,8 @@ VARS=[("delta","nino34","ΔTSM Niño 3.4 [°C]"),("delta","nino12","ΔTSM Niño 
  ("delta_relativo","nino34","ΔTSM rel. Niño 3.4 [°C]"),("delta_relativo","nino12","ΔTSM rel. Niño 1+2 [°C]"),
  ("delta_amplitud","nino34","Δ amplitud Niño 3.4 [°C]"),("delta_amplitud","nino12","Δ amplitud Niño 1+2 [°C]"),
  ("delta_sigma_3m_pct","nino34","Δσ<sub>3m</sub> Niño 3.4 [%]"),("delta_sigma_3m_pct","nino12","Δσ<sub>3m</sub> Niño 1+2 [%]"),
- ("razon_frec","ONI","Frecuencia P/ref ONI"),("razon_frec","RONI","Frecuencia P/ref RONI"),("razon_frec","ICEN","Frecuencia P/ref ICEN")]
+ ("razon_frec","ONI","Frecuencia P/ref ONI"),("razon_frec","RONI","Frecuencia P/ref RONI"),("razon_frec","ICEN","Frecuencia P/ref ICEN"),
+ ("n_fuerte_mas","ONI","Eventos fuertes+ ONI (ref: 3)"),("n_fuerte_mas","RONI","Eventos fuertes+ RONI (ref: 3)"),("n_fuerte_mas","ICEN","Eventos fuertes+ ICEN (ref: 0)")]
 cats=[(e,p) for e in ['ssp245','ssp370','ssp585'] for p in ['P1','P2']]
 filas=[]
 for var,clave,lab in VARS:
@@ -45,6 +46,7 @@ for var,clave,lab in VARS:
     for e,p in cats:
         x=r[(r.variable==var)&(r.caja_indice==clave)&(r.escenario==e)&(r.periodo==p)].iloc[0]
         if var=='razon_frec': v=f"{x.mediana:.2f}"
+        elif var=='n_fuerte_mas': v=f"{x.mediana:.0f}"
         elif var=='delta_sigma_3m_pct': v=f"{x.mediana:+.0f}".replace('-0','0') if abs(x.mediana)>=0.5 else '0'
         else: v=f"{x.mediana:+.2f}"
         v=v.replace('-','−')
@@ -75,7 +77,8 @@ slides.append('''<section class="slide " data-section="1">
   <ul style="margin-top:1em">
     <li>El ciclo anual de Niño 1+2 se aplana: el invierno se calienta más que el verano.</li>
     <li>Variabilidad de Niño 3.4: +11 a +26 % en la mediana, sin acuerdo entre modelos. En Niño 1+2, sin cambio claro.</li>
-    <li>Eventos cálidos: +11 a +44 % en la mediana, algo más largos e intensos; ningún aumento de frecuencia es significativo.</li>
+    <li>Eventos cálidos: +11 a +44 % en la mediana, algo más largos e intensos; el aumento de frecuencia casi nunca es significativo.</li>
+    <li><strong>Eventos extremos:</strong> los fuertes o más intensos del ONI y del RONI pasan de 3 a 5–9 por cada 30 años con SSP3-7.0 y SSP5-8.5, de forma significativa.</li>
   </ul>
   <p class="nota-pie"><strong>ref</strong>: 1985–2014; <strong>P1</strong>: 2036–2065; <strong>P2</strong>: 2071–2100. Los valores son la mediana de los 15 modelos seleccionados en el Entregable 2. <strong>Base fija</strong>: anomalía respecto del clima de 1985–2014, sin quitar el calentamiento.</p>
 </section>
@@ -86,6 +89,7 @@ slides.append('''<section class="slide " data-section="1">
   <div class="grid2">
     <div class="card"><ul>
       <li><strong>Modelos:</strong> los 15 seleccionados en el Entregable 2 (conjunto principal) y los 40 como contraste; un miembro por modelo</li>
+      <li><strong>Controles de sensibilidad:</strong> 40 (sin selección), 11 (sin los 4 de Niño costero más débil) y 7 (solo los mejores en ambas cajas): ¿el resultado depende de qué modelos se eligen?</li>
       <li><strong>Series:</strong> <span class="mono">historical</span> + escenario, 1850–2100</li>
       <li><strong>Escenarios:</strong> SSP2-4.5 (intermedio), SSP3-7.0 (alto) y SSP5-8.5 (muy alto)</li>
       <li><strong>Periodos de 30 años:</strong> ref 1985–2014, P1 2036–2065, P2 2071–2100: conteos y σ con muestras del mismo largo</li>
@@ -94,10 +98,21 @@ slides.append('''<section class="slide " data-section="1">
       <li><strong>Cada modelo contra sí mismo:</strong> cambio = P − ref del mismo modelo; su sesgo fijo se cancela</li>
       <li><strong>Mediana y percentiles 10–90</strong> entre modelos: un modelo extremo no arrastra el resultado</li>
       <li><strong>Acuerdo de signo ≥ 0.8:</strong> al menos 12 de 15 modelos coinciden en la dirección (criterio del IPCC) → robusto</li>
-      <li><strong>*</strong> significativo: Wilcoxon con corrección de Holm, p &lt; 0.05</li>
+      <li><strong>*</strong> significativo: Wilcoxon con corrección de Holm, p &lt; 0.05, en las 30 pruebas que responden al TdR</li>
     </ul></div>
   </div>
   <p class="nota-pie">Cálculo en <span class="mono">scripts_e3/</span> (pasos q01–q11, <span class="mono">./rune3.sh</span>); figuras en <span class="mono">plots_e3.ipynb</span>. El kicker de cada diapositiva indica el paso que produce el dato.</p>
+</section>
+''')
+slides.append('''<section class="slide " data-section="1">
+<div class="kicker">Marco común · q10</div>
+  <h1>¿Cuándo un cambio es “real”? Tres filtros</h1>
+  <div class="grid3">
+    <div class="card"><strong>1. Mediana</strong><p class="small">El valor del medio de los 15 modelos. Un modelo extremo no la mueve.</p><p class="small"><em>Ej.:</em> σ<sub>3m</sub> de Niño 3.4 va de −29 a +105 %; la mediana es +26 %.</p></div>
+    <div class="card"><strong>2. Acuerdo de signo</strong><p class="small">Fracción de modelos que van en la dirección de la mediana. ≥ 0.8 (12 de 15) = robusto.</p><p class="small"><em>Ej.:</em> Niño 1+2 relativo al trópico: 15 de 15 → 1.00.</p></div>
+    <div class="card"><strong>3. Wilcoxon + Holm (*)</strong><p class="small">Wilcoxon: ¿los 15 cambios, por signo y tamaño, se separan de 0? Holm: exige más porque se hacen 30 pruebas a la vez.</p><p class="small"><em>Ej.:</em> eventos fuertes del ONI, SSP3-7.0, P2: p = 0.0014; es la 13.ª de 30 pruebas → ×18 = 0.025 &lt; 0.05 *</p></div>
+  </div>
+  <p class="nota-pie">Solo se prueban las 30 variables que pide el TdR (estado medio, variabilidad, frecuencia, intensidad, extremos, duración y fracción costera). El cambio relativo y la amplitud del ciclo anual se leen por acuerdo de signo. “Significativo” no es lo mismo que “grande”.</p>
 </section>
 ''')
 slides.append(larga(2,'Estado medio · q02','Hasta 2050 los escenarios casi no se distinguen; a 2100 deciden entre +2 y +4 °C','e3_01a_trayectoria_tsm',[
@@ -108,7 +123,7 @@ slides.append(larga(2,'Estado medio · q02','Hasta 2050 los escenarios casi no s
 slides.append(larga(2,'Estado medio · q03','Calentamiento extra en el ecuador oriental y la costa norte del Perú','e3_01c_mapas_cambio_relativo',[
  'Cambio de cada punto menos el cambio medio del trópico (20°S–20°N); rojo = se calienta más que el trópico',
  'Niño 1+2 en P2: +0.42, +0.51 y +0.70 °C más que el trópico, con 15 de 15 modelos',
- 'Niño 3.4: +0.19 a +0.36 °C, con menos acuerdo',
+ 'Niño 3.4: +0.19 a +0.36 °C, con menos acuerdo (0.87–0.93); este patrón se lee por acuerdo de signo, sin prueba formal',
  'El Pacífico suroriental (10–30°S) se calienta menos; tramado = menos del 80 % de acuerdo',
  'En valor total, la costa norte del Perú supera +4 °C en P2 con SSP5-8.5 (por modelo: Anexo)']))
 slides.append(larga(2,'Ciclo anual · q04','Niño 1+2 se calienta más en invierno: su ciclo anual se aplana','e3_02a_ciclo_anual',[
@@ -118,7 +133,7 @@ slides.append(larga(2,'Ciclo anual · q04','Niño 1+2 se calienta más en invier
  'Niño 3.4, al revés: el máximo de abril–mayo sube más que el mínimo y la amplitud crece (+0.13 a +0.40 °C)']))
 slides.append(larga(3,'Variabilidad · q05','Niño 3.4: más variabilidad en la mediana, pero sin acuerdo entre modelos','e3_03b_cambio_sigma_por_modelo',[
  'σ<sub>3m</sub>: desviación estándar de la anomalía suavizada a 3 meses (escala del ONI y del ICEN), sin ciclo anual ni tendencia',
- 'Niño 3.4, P2: +11, +23 y +26 %; con SSP5-8.5 suben 13 de 15 modelos, pero de −29 a +105 % → no significativo',
+ 'Niño 3.4, P2: +11, +23 y +26 %; con SSP5-8.5 suben 13 de 15 modelos, pero de −29 a +105 % → no significativo (solo P1 con SSP3-7.0 y SSP5-8.5 *)',
  'Niño 1+2: de −0.5 a +10 %, con 8 a 12 de 15 modelos de acuerdo: sin cambio claro',
  'En ventanas móviles, el aumento de Niño 3.4 es gradual y llega a +21 a +31 % hacia 2067–2072 (Anexo)']))
 slides.append(larga(3,'Índices ENOS · q06–q08','Con la base actual, el umbral de El Niño se supera casi siempre','e3_04a_tiempo_sobre_umbral',[
@@ -127,16 +142,17 @@ slides.append(larga(3,'Índices ENOS · q06–q08','Con la base actual, el umbra
  'Base fija 1985–2014: ONIfija 31 % → 88–98 %; ICENfija 23 % → 99–100 %',
  'La diferencia es el calentamiento de fondo, no un ENOS más activo'],
  nota='<strong>Base móvil</strong> (ONI, ICEN): el “normal” se actualiza cada 5 años con los 30 años alrededor, como hacen NOAA y el ENFEN. <strong>RONI</strong>: el “normal” es el promedio del trópico en el mismo mes. <strong>Base fija</strong> (ONIfija, ICENfija): el “normal” es siempre 1985–2014.'))
-slides.append(larga(4,'Eventos cálidos · q07–q08','Más eventos en la mediana, ninguno significativo','e3_05a_razon_frecuencia',[
+slides.append(larga(4,'Eventos cálidos · q07–q08','Más eventos en la mediana, casi ninguno significativo','e3_05a_razon_frecuencia',[
  'Frecuencia en P / frecuencia en ref de cada modelo; 1 = sin cambio; eje logarítmico',
  'P2: ONI 1.25 con los tres escenarios; RONI 1.22–1.44; ICEN 1.11–1.20',
  'En absoluto: ONI 27 → 33–37 eventos por siglo; RONI 30 → 37–43 (ERSSTv5 1900–2014: 26 y 30)',
- 'Acuerdo ≤ 0.87: con ~9 eventos por periodo, la señal no se distingue del azar; no significa que no cambie']))
-slides.append(larga(4,'Eventos cálidos · q08','Eventos algo más largos e intensos','e3_05b_duracion_magnitud',[
- 'ICEN, SSP5-8.5: duración media de 8.0 a 10.1 y 11.0 meses en P1 y P2 *',
- 'RONI, SSP3-7.0: pico medio de 1.38 a 1.71 y 1.93 °C *',
- 'Eventos fuertes o más (por 30 años), SSP5-8.5: ONI 3 → 7; RONI 3 → 9',
- 'Eventos ≥ 2σ de la referencia: 1 → 5 en ONI y RONI; coherente con más variabilidad en Niño 3.4',
+ 'Acuerdo ≤ 0.87: con ~9 eventos por periodo, la señal no se distingue del azar; no significa que no cambie',
+ 'Única excepción: RONI con SSP2-4.5 en P2 (1.30 *)']))
+slides.append(larga(4,'Eventos cálidos · q08','Más eventos extremos, y algo más largos e intensos','e3_05b_duracion_magnitud',[
+ '<strong>Eventos fuertes o más (por 30 años):</strong> ONI 3 → 5–7 y RONI 3 → 5–9 con SSP3-7.0 y SSP5-8.5 * (ICEN: 0 → 1–2, no significativo)',
+ 'ICEN: duración media de 8.0 a 10.1 y 11.0 meses (SSP5-8.5, P1 y P2) y a 9.2 (SSP3-7.0, P2) *',
+ 'RONI: pico medio de 1.38 a 1.7–2.0 °C con SSP3-7.0 y SSP5-8.5 *',
+ 'Eventos ≥ 2σ de la referencia (sin prueba): 1 → 5 en ONI y RONI; coherente con más variabilidad en Niño 3.4',
  'Tipo de evento (Anexo): los extendidos suben de 26 a 32–33 por siglo; los costeros se mantienen en ~5']))
 slides.append(f'''<section class="slide " data-section="5">
 <div class="kicker">Síntesis · q10</div>
@@ -148,7 +164,7 @@ slides.append(f'''<section class="slide " data-section="5">
 {tabla}
     </tbody>
   </table>
-  <p class="nota-pie"><strong>Negrita</strong>: robusto (acuerdo de signo ≥ 0.8). <strong>*</strong>: significativo con Wilcoxon y Holm (p &lt; 0.05). Las razones de frecuencia se comparan con 1; el resto, con 0. Las medianas casi no cambian con 40, 11 o 7 modelos (Anexo).</p>
+  <p class="nota-pie"><strong>Negrita</strong>: robusto (acuerdo de signo ≥ 0.8). <strong>*</strong>: significativo con Wilcoxon y Holm (p &lt; 0.05). Las razones de frecuencia se comparan con 1; los eventos fuertes, con su número en ref; el resto, con 0. El cambio relativo y la amplitud no se prueban. Las medianas casi no cambian con 40, 11 o 7 modelos (Anexo).</p>
 </section>
 ''')
 slides.append('''<section class="slide " data-section="5">
@@ -158,7 +174,8 @@ slides.append('''<section class="slide " data-section="5">
     <div class="card"><strong>Conclusiones</strong><ul class="small-list">
       <li>El calentamiento medio es seguro y crece con las emisiones: +2.3 a +3.6 °C en Niño 1+2 a fin de siglo</li>
       <li>Niño 1+2 se calienta más que el trópico y su ciclo anual se aplana</li>
-      <li>El ENOS tiende a más variabilidad (Niño 3.4) y a más eventos, más largos e intensos, pero sin robustez estadística</li>
+      <li>El ENOS tiende a más variabilidad (Niño 3.4) y a más eventos, más largos e intensos; la frecuencia casi nunca es significativa</li>
+      <li>Los eventos fuertes o más intensos (ONI, RONI) sí aumentan de forma significativa con SSP3-7.0 y SSP5-8.5</li>
       <li>Con los umbrales actuales, la costa norte viviría en condición de “Niño” casi permanente: efecto del fondo, no del ENOS</li>
       <li>Comunicar por separado el calentamiento de fondo y el cambio del ENOS</li>
     </ul></div>

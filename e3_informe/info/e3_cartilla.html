@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cartilla del expositor — Entregable 3</title>
+<style>
+  :root { --fg:#1d2430; --muted:#5b6575; --acc:#0b3c8c; --bg:#fbfaf7; --card:#ffffff; --line:#e3e0d8; --ej:#fff6e0; --pr:#eef4fb; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: Georgia, "Times New Roman", serif; color:var(--fg); background:var(--bg); line-height:1.55; }
+  main { max-width: 860px; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
+  h1 { font-size: 1.9rem; margin: 0 0 .3rem; color: var(--acc); }
+  .sub { color: var(--muted); margin: 0 0 1.5rem; }
+  nav { background: var(--card); border:1px solid var(--line); border-radius:8px; padding: .8rem 1.1rem; margin-bottom: 2rem; font-size:.92rem; }
+  nav ol { margin:.3rem 0 0; padding-left:1.4rem; columns: 2; }
+  nav a { color: var(--acc); text-decoration:none; }
+  section { background: var(--card); border:1px solid var(--line); border-radius:8px; padding: 1.2rem 1.4rem; margin: 0 0 1.4rem; }
+  section h2 { font-size: 1.2rem; margin: 0 0 .2rem; }
+  .meta { font-family: system-ui, sans-serif; font-size:.78rem; color: var(--muted); text-transform: uppercase; letter-spacing:.04em; margin-bottom:.6rem; }
+  .idea { font-weight: bold; border-left: 4px solid var(--acc); padding-left: .7rem; margin: .4rem 0 .8rem; }
+  .ej { background: var(--ej); border-radius:6px; padding:.6rem .8rem; margin:.7rem 0; }
+  .pr { background: var(--pr); border-radius:6px; padding:.6rem .8rem; margin:.7rem 0; }
+  .ej b, .pr b { font-family: system-ui, sans-serif; font-size:.82rem; text-transform:uppercase; letter-spacing:.04em; }
+  .pr p { margin:.35rem 0; }
+  p { margin: .45rem 0; }
+  ul { margin:.4rem 0; padding-left: 1.3rem; }
+  .anexo { border-style: dashed; }
+  footer { color: var(--muted); font-size:.85rem; text-align:center; margin-top:2rem; }
+  @media print { body { background:#fff; } section { break-inside: avoid; } nav { display:none; } }
+</style>
+</head>
+<body>
+<main>
+
+<h1>Cartilla del expositor — Entregable 3</h1>
+<p class="sub">Qué decir en cada diapositiva de <code>e3_ppt.html</code>: la idea central, el texto sugerido, un ejemplo simple y respuestas a preguntas probables. Los valores son la mediana de los 15 modelos seleccionados; ref = 1985–2014, P1 = 2036–2065, P2 = 2071–2100.</p>
+
+<nav><strong>Diapositivas</strong>
+<ol>
+<li><a href="#s1">Título</a></li>
+<li><a href="#s2">Resumen</a></li>
+<li><a href="#s3">Datos y criterios</a></li>
+<li><a href="#s4">¿Cuándo un cambio es “real”?</a></li>
+<li><a href="#s5">Trayectoria 1850–2100</a></li>
+<li><a href="#s6">Patrón relativo al trópico</a></li>
+<li><a href="#s7">Ciclo anual</a></li>
+<li><a href="#s8">Variabilidad</a></li>
+<li><a href="#s9">Tiempo sobre el umbral</a></li>
+<li><a href="#s10">Frecuencia de eventos</a></li>
+<li><a href="#s11">Eventos extremos, duración e intensidad</a></li>
+<li><a href="#s12">Síntesis</a></li>
+<li><a href="#s13">Conclusiones y limitaciones</a></li>
+<li><a href="#s14">Gracias</a></li>
+<li><a href="#s15">Anexo: cambio por modelo</a></li>
+<li><a href="#s16">Anexo: σ en ventanas móviles</a></li>
+<li><a href="#s17">Anexo: tipos de evento</a></li>
+<li><a href="#s18">Anexo: asimetría y curtosis</a></li>
+<li><a href="#s19">Anexo: sensibilidad al conjunto</a></li>
+</ol></nav>
+
+<section id="s1">
+<div class="meta">Diapositiva 1 · Título · ~30 s</div>
+<h2>Entregable 3: proyecciones de la TSM y del ENOS</h2>
+<p class="idea">Este entregable responde la actividad (c) del TdR: cómo cambiarían el mar y El Niño en Niño 3.4 y Niño 1+2 con el cambio climático.</p>
+<p>En el Entregable 2 elegimos los 15 modelos CMIP6 que mejor representan el ENOS de hoy. Ahora usamos esos mismos modelos para mirar el futuro: dos periodos de 30 años, a mitad y a fin de siglo, y tres escenarios de emisiones, de intermedio a muy alto.</p>
+</section>
+
+<section id="s2">
+<div class="meta">Diapositiva 2 · Resumen · ~1.5 min</div>
+<h2>El fondo se calienta con seguridad; el ENOS cambia poco, salvo los extremos</h2>
+<p class="idea">Hay que separar dos cosas: el mar se calienta (seguro) y El Niño cambia (menos seguro).</p>
+<p>El resultado más firme es el calentamiento: Niño 1+2 sube entre 2.3 y 3.6 °C a fin de siglo, según el escenario, y los 15 modelos coinciden. Además la costa norte se calienta unos 0.4 a 0.7 °C más que el promedio del trópico. Si seguimos midiendo El Niño con el clima de hoy, a fin de siglo el mar estaría casi siempre “en Niño”.</p>
+<p>El ENOS en sí cambia menos: hay algo más de variabilidad en Niño 3.4 y algo más de eventos en la mediana, pero sin acuerdo entre modelos. La excepción son los eventos fuertes: con emisiones altas pasan de unos 3 a entre 5 y 9 por cada 30 años, y eso sí es significativo.</p>
+<div class="ej"><b>Ejemplo</b><p>+3.6 °C en Niño 1+2, medido con el clima de hoy, es una anomalía del tamaño de un Niño costero extraordinario. La diferencia es que no duraría unos meses: sería el nuevo normal.</p></div>
+</section>
+
+<section id="s3">
+<div class="meta">Diapositiva 3 · Datos y criterios · ~1.5 min</div>
+<h2>Datos y criterios</h2>
+<p class="idea">Cada modelo se compara consigo mismo, y los 15 resultados se resumen con la mediana.</p>
+<p>Unimos la simulación histórica con cada escenario para tener series de 1850 a 2100. Comparamos periodos de 30 años: así los conteos de eventos y las desviaciones estándar salen de muestras del mismo largo.</p>
+<p>Lo más importante: el cambio de un modelo es su futuro menos <em>su propio</em> pasado. Si un modelo tiene el mar 1 °C más cálido que la realidad, ese error está en los dos periodos y se cancela al restar.</p>
+<div class="ej"><b>Ejemplo</b><p>AWI-CM-1-1-MR simula Niño 3.4 a 25.61 °C en 1985–2014 y a 28.30 °C en P2: el cambio es +2.69 °C, aunque su 25.61 no coincida exactamente con el observado.</p></div>
+<div class="pr"><b>Si preguntan</b>
+<p><em>¿Por qué un solo miembro por modelo?</em> Para que cada modelo tenga el mismo peso. La variabilidad interna que eso deja sin medir se cuantifica en el Entregable 4.</p>
+<p><em>¿Por qué no corrigen el sesgo?</em> Al restar el pasado del propio modelo, el sesgo constante ya se elimina.</p>
+<p><em>¿Por qué aparecen conjuntos de 40, 11 y 7 modelos?</em> Son controles para responder una sola pregunta: <strong>¿el resultado depende de qué modelos elegimos?</strong> Ver la explicación completa en la diapositiva 19.</p></div>
+</section>
+
+<section id="s4">
+<div class="meta">Diapositiva 4 · Estadísticos · ~2.5 min</div>
+<h2>¿Cuándo un cambio es “real”? Tres filtros</h2>
+<p class="idea">Pasamos cada resultado por tres preguntas: cuánto cambia, si los modelos coinciden y si el cambio se distingue del azar.</p>
+<p><strong>1. Mediana.</strong> Es el valor del medio de los 15 modelos. La usamos y no el promedio porque un modelo extremo no la mueve. En la variabilidad de Niño 3.4 los modelos van de −29 a +105 %; el promedio se iría hacia arriba por ese +105, pero la mediana queda en +26 %.</p>
+<p><strong>2. Acuerdo de signo.</strong> ¿Cuántos modelos van en la misma dirección que la mediana? Si son al menos 12 de 15 (0.8), el IPCC lo llama robusto. Pero no dice si el cambio es grande: 13 modelos con +0.01 °C también darían 0.87.</p>
+<p><strong>3. Wilcoxon con Holm.</strong> Wilcoxon ordena los 15 cambios por tamaño y mira dónde quedan los negativos. Si son pocos y chicos, es muy improbable que la mediana real sea cero, y el valor p es pequeño. Holm corrige por hacer muchas preguntas a la vez: con 30 pruebas, por puro azar una o dos saldrían “significativas”. Holm ordena los p de menor a mayor y multiplica el primero por 30, el segundo por 29, y así.</p>
+<div class="ej"><b>Ejemplo</b><p>Eventos fuertes del ONI con SSP3-7.0 en P2: Wilcoxon da p = 0.0014. Es el 13.º p más chico de 30, así que se multiplica por 18: 0.025, menor que 0.05. Lleva asterisco.</p>
+<p>En cambio, la variabilidad de Niño 3.4 en el mismo caso da p = 0.0067; es el 20.º, se multiplica por 11 y da 0.074: no lleva asterisco aunque 11 de 15 modelos suban.</p></div>
+<div class="pr"><b>Si preguntan</b>
+<p><em>¿Por qué 30 pruebas?</em> Son las que responden lo que pide el TdR: estado medio, variabilidad, frecuencia, intensidad y eventos extremos con ONI e ICEN, más duración, fracción de Niños costeros, el RONI y los índices de base fija. Cada prueba extra hace más difícil pasar a las demás.</p>
+<p><em>¿Y el cambio relativo y el ciclo anual?</em> Se muestran con mediana y acuerdo. El relativo de Niño 1+2 tiene 15 de 15 modelos de acuerdo: no necesita una prueba para convencer.</p>
+<p><em>¿Significativo quiere decir importante?</em> No. Quiere decir que no se explica por azar. Por eso siempre damos la magnitud junto al asterisco.</p></div>
+</section>
+
+<section id="s5">
+<div class="meta">Diapositiva 5 · Figura 01a · ~1.5 min</div>
+<h2>Hasta 2050 los escenarios casi no se distinguen; a 2100 deciden entre +2 y +4 °C</h2>
+<p class="idea">El calentamiento de las próximas décadas ya está en camino; lo que decidan las emisiones se nota a fin de siglo.</p>
+<p>Cada curva es la TSM anual de un modelo menos su media de 1985–2014. La línea es la mediana y la sombra el rango del 80 % central de modelos. Hasta 2050 los tres escenarios van juntos: Niño 3.4 está entre +1.2 y +1.5 °C. Después se separan y a 2100 llegan a +2.0, +3.2 y +4.1 °C.</p>
+<p>A la derecha está la misma curva menos la del trópico: Niño 1+2 se aparta del trópico de forma gradual desde alrededor de 2020.</p>
+<div class="ej"><b>Ejemplo</b><p>Es como un tren que ya salió: hasta 2050 la velocidad la fija lo que ya emitimos. Las decisiones de hoy cambian dónde llega en 2100: +2 o +4 °C.</p></div>
+</section>
+
+<section id="s6">
+<div class="meta">Diapositiva 6 · Figura 01c · ~2 min</div>
+<h2>Calentamiento extra en el ecuador oriental y la costa norte del Perú</h2>
+<p class="idea">No importa solo cuánto se calienta el mar, sino si se calienta más o menos que el resto del trópico.</p>
+<p>A cada punto le restamos el calentamiento medio del trópico (20°S–20°N) del mismo modelo. Lo que queda es el patrón: rojo se calienta más que el trópico y azul menos. Aparece una franja roja a lo largo del ecuador que llega a la costa de Perú, y una zona azul al sur, frente a Chile.</p>
+<p>¿Por qué restar? La lluvia y la convección no responden a la temperatura absoluta, sino a si una zona está más cálida que sus alrededores (Xie et al. 2010; Johnson y Xie 2010). Si todo el trópico sube 3 °C, el umbral para que llueva también sube. Además, al restar quitamos la parte que más difiere entre modelos, que es su sensibilidad climática (Ma y Xie 2013).</p>
+<div class="ej"><b>Ejemplo</b><p>En AWI-CM-1-1-MR, el trópico sube +2.41 °C y Niño 1+2 +3.22 °C: el cambio relativo es +0.81 °C. En la mediana, Niño 1+2 se calienta 0.4 a 0.7 °C más que el trópico, con 15 de 15 modelos de acuerdo.</p></div>
+<div class="pr"><b>Si preguntan</b>
+<p><em>¿Es lo mismo que el RONI?</em> Es la misma idea: Niño 3.4 menos el trópico. La diferencia es que aquí comparamos promedios de 30 años (estado medio) y el RONI es una serie mensual reescalada (eventos).</p>
+<p><em>¿Significa más Niños?</em> No: significa un fondo más cálido justo donde se desarrollan los Niños costeros.</p></div>
+</section>
+
+<section id="s7">
+<div class="meta">Diapositiva 7 · Figura 02a · ~1.5 min</div>
+<h2>Niño 1+2 se calienta más en invierno: su ciclo anual se aplana</h2>
+<p class="idea">En la costa, los meses fríos se calientan más que los cálidos; la diferencia entre verano e invierno se achica.</p>
+<p>Cada caja muestra los 15 modelos en un mes; la gris es la referencia. En Niño 1+2, con SSP5-8.5 y en P2, marzo pasa de 28.1 a 31.6 °C (+3.3) y agosto de 22.8 a 27.0 °C (+3.8). Como agosto sube más, la amplitud del ciclo baja entre 0.36 y 0.49 °C. En Niño 3.4 pasa lo contrario: el máximo de abril–mayo sube más y el ciclo se amplifica.</p>
+<div class="ej"><b>Ejemplo</b><p>En los modelos, la diferencia entre marzo y agosto en Niño 1+2 es de 5.3 °C en la referencia (28.1 frente a 22.8 °C) y de 4.6 °C en P2 con SSP5-8.5 (31.6 frente a 27.0 °C): un invierno costero relativamente más templado.</p></div>
+</section>
+
+<section id="s8">
+<div class="meta">Diapositiva 8 · Figura 03b · ~1.5 min</div>
+<h2>Niño 3.4: más variabilidad en la mediana, pero sin acuerdo entre modelos</h2>
+<p class="idea">La variabilidad del ENOS tiende a subir en Niño 3.4, pero los modelos no se ponen de acuerdo.</p>
+<p>σ<sub>3m</sub> es la desviación estándar de la anomalía suavizada a 3 meses, la misma escala del ONI y del ICEN, después de quitar el ciclo anual y la tendencia. Mide qué tan lejos suelen ir las anomalías: un σ mayor quiere decir Niños y Niñas más intensos.</p>
+<p>En Niño 3.4 la mediana sube +11, +23 y +26 % en P2. Con SSP5-8.5 suben 13 de 15 modelos, pero los cambios van de −29 a +105 %: no es significativo. Solo P1 con SSP3-7.0 y con SSP5-8.5 pasan la prueba. En Niño 1+2 no hay un cambio claro.</p>
+<div class="ej"><b>Ejemplo</b><p>Si hoy σ es 1 °C, un +26 % la llevaría a 1.26 °C: un Niño típico de 1.5 °C pasaría a ser de unos 1.9 °C.</p></div>
+</section>
+
+<section id="s9">
+<div class="meta">Diapositiva 9 · Figura 04a · ~2 min</div>
+<h2>Con la base actual, el umbral de El Niño se supera casi siempre</h2>
+<p class="idea">La respuesta depende de qué se considera “normal”: el clima de cada época o el de hoy.</p>
+<p>Medimos la fracción de meses con el índice sobre 0.5 °C. Con base móvil (el normal se actualiza con los 30 años de alrededor, como hacen NOAA y el ENFEN), el ONI pasa de 31 % a 35–41 % de los meses y el ICEN de 24 % a 29–36 %. Con base fija 1985–2014, el ONI pasa a 88–98 % y el ICEN a 99–100 %.</p>
+<p>La diferencia entre ambas es el calentamiento de fondo, no un ENOS más activo. Las dos respuestas son válidas: la móvil dice cómo cambia El Niño; la fija dice cuánto tiempo el mar estará más caliente que lo que hoy llamamos normal.</p>
+<div class="ej"><b>Ejemplo</b><p>Es como medir la fiebre: si el “normal” sigue siendo 36.5 °C y toda la población sube a 37.5 °C, todos tendrían fiebre siempre. Para detectar a los enfermos hay que actualizar el normal.</p></div>
+</section>
+
+<section id="s10">
+<div class="meta">Diapositiva 10 · Figura 05a · ~1.5 min</div>
+<h2>Más eventos en la mediana, casi ninguno significativo</h2>
+<p class="idea">Los modelos tienden a dar más Niños, pero con tan pocos eventos por periodo no se puede distinguir del azar.</p>
+<p>Para cada modelo dividimos la frecuencia futura entre la de la referencia: 1 es sin cambio. En P2, el ONI da 1.25 con los tres escenarios, el RONI 1.22–1.44 y el ICEN 1.11–1.20. En eventos por siglo, el ONI pasa de 27 a 33–37. Solo un caso es significativo: el RONI con SSP2-4.5 en P2.</p>
+<div class="ej"><b>Ejemplo</b><p>En 30 años hay unos 9 Niños. Aun si un modelo pasara de 9 a 18, el doble, la prueba daría p = 0.08: no significativo. Con tan pocos eventos, “no significativo” no quiere decir “no cambia”, sino “no lo podemos asegurar”.</p></div>
+</section>
+
+<section id="s11">
+<div class="meta">Diapositiva 11 · Figura 05b · ~2 min</div>
+<h2>Más eventos extremos, y algo más largos e intensos</h2>
+<p class="idea">El aumento más claro no está en cuántos Niños hay, sino en cuántos son fuertes.</p>
+<p>Un evento es “fuerte o más” si su pico alcanza la categoría fuerte de la escala oficial: 1.5 °C en el ONI (NOAA) y 2.1 °C en el ICEN (ENFEN). Esta es nuestra respuesta a la “ocurrencia de eventos extremos” que pide el TdR.</p>
+<p>En el ONI pasan de 3 a 5–7 por cada 30 años y en el RONI de 3 a 5–9, de forma significativa con SSP3-7.0 y SSP5-8.5. En el ICEN suben de 0 a 1–2, pero no es significativo. Además, los eventos del ICEN duran más (de 8 a 11 meses con SSP5-8.5) y el pico medio del RONI sube de 1.4 a 1.7–2.0 °C.</p>
+<div class="ej"><b>Ejemplo</b><p>¿Por qué esto sí es significativo y la frecuencia no? Porque casi todos los modelos aumentan los eventos fuertes, y por mucho (de 3 a 7). En la frecuencia total, entre 2 y 6 modelos no aumentan.</p></div>
+<div class="pr"><b>Si preguntan</b>
+<p><em>¿Por qué no usan los extremos de Cai et al.?</em> Esa definición usa lluvia o patrones espaciales; este entregable trabaja solo con TSM. La escala oficial es la que usan ENFEN y SENAMHI.</p>
+<p><em>¿Y los eventos ≥ 2σ?</em> Es una escala relativa a la variabilidad de cada modelo: pasan de 1 a 5 en ONI y RONI. Se muestran como complemento, sin prueba formal.</p></div>
+</section>
+
+<section id="s12">
+<div class="meta">Diapositiva 12 · Síntesis · ~1.5 min</div>
+<h2>Qué es robusto y qué no</h2>
+<p class="idea">La tabla se lee por filas: de arriba (seguro) hacia abajo (incierto).</p>
+<p>Las dos primeras filas, el calentamiento medio, están en negrita y con asterisco en todos los casos. El patrón relativo y el ciclo anual son robustos en la mayoría de los casos, aunque no llevan prueba. La variabilidad y la frecuencia de eventos tienen medianas positivas, pero rara vez robustas. Las últimas filas, los eventos fuertes del ONI y del RONI, llevan asterisco con emisiones altas.</p>
+<div class="ej"><b>Cómo leer una celda</b><p>“<strong>+0.70</strong>” en negrita: al menos 12 de 15 modelos coinciden. “7*”: el cambio frente a la referencia (3) es significativo. Un número sin negrita ni asterisco es una tendencia, no una conclusión.</p></div>
+</section>
+
+<section id="s13">
+<div class="meta">Diapositiva 13 · Conclusiones · ~2 min</div>
+<h2>Conclusiones y limitaciones</h2>
+<p class="idea">Hay que comunicar por separado el calentamiento de fondo y el cambio del ENOS.</p>
+<p>El calentamiento medio es seguro y crece con las emisiones. La costa norte se calienta más que el trópico y su ciclo anual se aplana. El ENOS tiende a más variabilidad y a más eventos, pero la frecuencia casi nunca es significativa; lo que sí aumenta con claridad son los eventos fuertes. Con los umbrales actuales, la costa viviría en condición de “Niño” casi permanente, por efecto del fondo y no del ENOS.</p>
+<p>Las limitaciones: usamos un miembro por modelo; hay pocos eventos por periodo; los modelos de un mismo centro no son independientes, así que el p es algo optimista; y los modelos no reproducen bien los Niños costeros extraordinarios como el de 1997–98 o el de 2017.</p>
+<div class="pr"><b>Si preguntan</b>
+<p><em>¿Qué recomiendan para el monitoreo?</em> Usar índices relativos o de base móvil, como el ICEN, para que los umbrales sigan identificando eventos y no solo el calentamiento.</p></div>
+</section>
+
+<section id="s14">
+<div class="meta">Diapositiva 14 · Gracias</div>
+<h2>Cierre</h2>
+<p>Agradecer y abrir preguntas. Si hay tiempo, usar el anexo para responder.</p>
+<div class="pr"><b>Preguntas rápidas</b>
+<p><em>¿Habrá más Niños?</em> Probablemente algo más, pero no lo podemos asegurar; lo que sí aumentan son los fuertes.</p>
+<p><em>¿Qué tan seguro es el calentamiento?</em> Muy seguro: 15 de 15 modelos, en todos los escenarios y periodos.</p>
+<p><em>¿Qué falta?</em> Separar las fuentes de incertidumbre y calcular cuándo emerge la señal (tiempo de emergencia), en el Entregable 4.</p></div>
+</section>
+
+<section id="s15" class="anexo">
+<div class="meta">Diapositiva 15 · Anexo · Figura 01d</div>
+<h2>Cambio de la TSM media en las cajas, por modelo</h2>
+<p>Cada punto es un modelo. Arriba, el cambio total: todos los modelos calientan las dos cajas y el número 1.00* indica acuerdo total y cambio significativo. Abajo, el cambio relativo al trópico: en Niño 1+2 los 15 modelos quedan sobre 0 (acuerdo 1.00); en Niño 3.4 hay entre 1 y 4 modelos bajo 0 (acuerdo de 0.73 a 0.93). La fila de abajo no lleva asterisco porque el relativo no se somete a prueba.</p>
+</section>
+
+<section id="s16" class="anexo">
+<div class="meta">Diapositiva 16 · Anexo · Figura 03c</div>
+<h2>σ<sub>3m</sub> en ventanas móviles de 30 años</h2>
+<p>Muestra cómo evoluciona la variabilidad en el tiempo, no solo en P1 y P2. En Niño 3.4 el aumento es gradual y llega a +21 a +31 % hacia ventanas centradas en 2067–2072. Sirve para responder si el cambio es un salto o una tendencia: es una tendencia.</p>
+</section>
+
+<section id="s17" class="anexo">
+<div class="meta">Diapositiva 17 · Anexo · Figura 05c</div>
+<h2>Eventos por tipo: costero, extendido y central</h2>
+<p>Cruzamos los eventos del ICEN y del ONI: costero si solo aparece en el ICEN (como 2017), extendido si aparece en ambos (como 1997–98) y central si solo aparece en el ONI. Los extendidos suben de 26 a 32–33 por siglo; los costeros se mantienen en unos 5. Ninguno de estos cambios es concluyente.</p>
+</section>
+
+<section id="s18" class="anexo">
+<div class="meta">Diapositiva 18 · Anexo · Figura A2</div>
+<h2>Asimetría y curtosis</h2>
+<p>La asimetría mide si los eventos cálidos son más intensos que los fríos. En Niño 1+2 los modelos pasan de 0.17 a 0.33 con SSP5-8.5, muy lejos del 1.06 del ICEN observado. Es decir, los modelos no generan, ni hoy ni en el futuro, la cola de Niños costeros extraordinarios. Es una limitación que hay que tener presente al leer los resultados de Niño 1+2.</p>
+</section>
+
+<section id="s19" class="anexo">
+<div class="meta">Diapositiva 19 · Anexo · Figura A6</div>
+<h2>Sensibilidad al conjunto de modelos</h2>
+<p class="idea">Los conjuntos de 40, 11 y 7 modelos no son resultados nuevos: son controles. Responden si la conclusión depende de qué modelos elegimos.</p>
+<p>Cualquier selección de modelos invita a la pregunta: “¿y si hubieran elegido otros?”. Por eso repetimos todo con tres conjuntos alternativos, cada uno con una pregunta propia:</p>
+<ul>
+<li><strong>40 modelos</strong> (todos los evaluados): ¿cambia el resultado si no seleccionamos ninguno?</li>
+<li><strong>11 modelos</strong>: los 15 sin los cuatro que simulan el Niño costero más débil (MPI-ESM1-2-HR, CNRM-CM6-1-HR, MPI-ESM1-2-LR y UKESM1-0-LL). En el Entregable 2, el Niño costero típico de MPI-ESM1-2-HR tiene menos de la mitad de la amplitud observada. Pregunta: ¿cambia la señal en Niño 1+2 si quitamos los modelos con Niños costeros demasiado débiles?</li>
+<li><strong>7 modelos</strong>: los que, además, representan bien el evento típico tanto en Niño 3.4 como en Niño 1+2. Pregunta: ¿cambia la señal si usamos solo los mejores?</li>
+</ul>
+<p>Los dos últimos son las pruebas de sensibilidad que recomendamos en el informe del Entregable 2. La respuesta es que las medianas casi no cambian: el calentamiento de Niño 1+2 con SSP5-8.5 es +3.6 °C con 15, 40 y 11 modelos y +3.2 °C con 7. La selección del Entregable 2 no altera la señal; su valor está en descartar modelos que no representan bien los eventos actuales.</p>
+<div class="ej"><b>Ejemplo</b><p>Es como una encuesta: si el resultado es el mismo con toda la muestra, sin los encuestados dudosos y solo con los más confiables, el resultado no depende de a quién se preguntó.</p></div>
+<div class="pr"><b>Si preguntan</b>
+<p><em>¿Por qué los de 7 y 11 casi no tienen asteriscos?</em> Con pocos modelos, Wilcoxon no puede dar un p muy chico aunque todos coincidan: con 7 el mínimo es 0.016, que multiplicado por 30 pruebas pasa de 0.05. Por eso con 7 ningún cambio puede ser significativo (marcadores vacíos), y con 11 solo los que tienen acuerdo casi total. En esos conjuntos se mira si la mediana y el acuerdo se mantienen, no la significancia.</p>
+<p><em>Entonces, ¿por qué no usan solo los 7 mejores?</em> Porque con 7 la mediana es más inestable y no se puede probar nada. Los 15 equilibran calidad y tamaño de muestra.</p></div>
+</section>
+
+<footer>Entregable 3 — Servicio prestado para el SENAMHI · Cartilla de apoyo para la exposición</footer>
+</main>
+</body>
+</html>
