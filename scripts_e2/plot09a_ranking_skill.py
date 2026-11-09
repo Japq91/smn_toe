@@ -21,13 +21,11 @@ def main():
     for ax, letra, v in zip(axs, LETRAS, VENTANAS):
         ov = skv[v].sort_values("S_final", ascending=False)
         x = np.arange(len(ov))
-        col_sel = "seleccionado" if v == VENTANA else f"seleccionado_{v}"
-        ax.bar(x, ov["S_final"], color=np.where(sel.loc[ov.index, col_sel], "0.45", "0.82"), width=0.8,
-               label="S_final (oscuro = seleccionado: filtro de eventos, S_final y S_ICEN ≥ 0.9)")
+        ax.bar(x, ov["S_final"], color=np.where(sel.loc[ov.index, "seleccionado"], "0.45", "0.82"), width=0.8,
+               label="S_final (oscuro = seleccionado: pasa el filtro de eventos)")
         for k, i in enumerate(INDICES):
             ax.plot(x + (k - 1) * 0.22, ov[f"S_{i}"], "o", ms=4, color=COL_IDX[i], label=f"S_{i}")
         ax.plot(x, ov["S_nino34"], "_", ms=8, color="k", label="S_nino34 (serie completa, ref.)")
-        ax.axhline(0.9, color="firebrick", ls="--", lw=0.8, label="umbral 0.9")
         ax.set_xticks(x)
         ax.set_xticklabels([etiqueta[n] for n in ov.index], rotation=90, fontsize=7)
         ax.set_ylabel("S")

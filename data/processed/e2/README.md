@@ -53,8 +53,8 @@ solo, en la próxima corrida.
   duración y estacionalidad de los eventos de RONI e ICEN frente a
   ERSSTv5, filtro previo a la selección (ver
   `pruebas_eventos_*.csv` abajo).
-- `p11_seleccion.py` -- selección final: filtro de p10 + `S_final` ≥
-  0.9 + `S_ICEN` ≥ 0.9 (ver `seleccion_*.csv` abajo).
+- `p11_seleccion.py` -- selección final: los modelos que pasan el filtro
+  de p10, ordenados por `S_final` (ver `seleccion_*.csv` abajo).
 
 ## `model_registry_e2.csv`
 
@@ -495,7 +495,7 @@ Scaling (mismo criterio que el resto de E2, por herencia de las tablas
 ## `pruebas_eventos_<y0>-<y1>.csv`
 
 Filtro estadístico del régimen de eventos cálidos, primera etapa de la
-selección (la segunda es el umbral de skill score, en p11).
+selección (la segunda es el orden por skill score, en p11).
 Pregunta, para cada modelo: ¿sus eventos cálidos se pueden distinguir
 estadísticamente de los de ERSSTv5 en frecuencia, duración y
 estacionalidad? Generado por `scripts_e2/p10_pruebas_eventos.py`; el
@@ -548,31 +548,31 @@ que "pasa el filtro" significa "no distinguible con esta muestra", no
 
 ## `seleccion_<y0>-<y1>.csv`
 
-Selección final de modelos del E2 (decisión del usuario, 2026-10-20).
-Generado por `scripts_e2/p11_seleccion.py` a partir de
-`pruebas_eventos_*.csv` (p10) y `skill_score_vent{12,15,18}m_*.csv` (p09).
+Selección final de modelos del E2 (decisión del usuario, 2026-10-31;
+reemplaza el criterio del 2026-10-20). Generado por
+`scripts_e2/p11_seleccion.py` a partir de `pruebas_eventos_*.csv` (p10)
+y `skill_score_vent{12,15,18}m_*.csv` (p09).
 
-**Criterio**: seleccionado = `pasa_filtro` (p10) y `S_final` ≥ 0.9 y
-`S_ICEN` ≥ 0.9, con la ventana principal de ±12 meses.
+**Criterio**: seleccionado = `pasa_filtro` (p10). Los seleccionados se
+ordenan por `S_final` de ±12 meses; S no corta.
 
-- Por qué 0.9: en el compuesto r ≈ 1, así que S depende sobre todo de
-  σ̂. Con r = 1, S ≥ 0.9 equivale a 0.72 ≤ σ̂ ≤ 1.39: un evento típico
-  hasta un 28 % más débil o un 39 % más intenso que el observado. Es un
-  umbral con significado físico; el percentil 75 que se usaba antes deja
-  siempre la cuarta parte de los modelos, cualquiera que sea su
-  desempeño, y el gap statistic no encuentra un corte natural.
-- Por qué también S_ICEN: los rankings de S_ONI y S_RONI casi no se
-  relacionan con el de S_ICEN (Spearman 0.11–0.22). Sin esta condición
-  un modelo podría entrar solo por Niño 3.4 con un Niño costero típico
-  demasiado débil. Con ella, S_final se mantiene como promedio simple.
+- Por qué sin umbral de S: el gap statistic no encuentra un corte
+  natural en `S_final`, y un umbral estricto deja pocos modelos y reduce
+  la dispersión entre modelos que necesita la partición de incertidumbre
+  del E4.
+- Hasta 2026-10-31 se exigía además `S_final` ≥ 0.9 y `S_ICEN` ≥ 0.9
+  (7 modelos: M03, M02, M17, M26, M22, M37, M07). Queda como columna
+  informativa `cumple_s09`. Con r = 1, S ≥ 0.9 equivale a
+  0.72 ≤ σ̂ ≤ 1.39.
 
-Resultado: 7 modelos (M03, M02, M17, M26, M22, M37, M07). Con ±15 y ±18
-meses (mismo criterio; el filtro no depende de la ventana) se repiten
-M02, M03, M17 y M26.
+Resultado: 15 modelos (M03, M02, M17, M26, M22, M13, M11, M40, M37, M30,
+M07, M06, M12, M35, M34). El filtro no depende de la ventana, así que la
+selección es la misma con ±15 y ±18 meses; el orden entre los 15 cambia
+poco (Spearman 0.97 y 0.93 frente a ±12).
 
 **Columnas**: `modelo`, `pasa_filtro`, `rechazadas` (de p10), `S_ONI`,
 `S_RONI`, `S_ICEN`, `S_final` (±12 meses), `S_final_15`, `S_ICEN_15`,
-`S_final_18`, `S_ICEN_18`, `seleccionado` (±12), `seleccionado_15`,
-`seleccionado_18` y `n_ventanas` (en cuántas de las tres ventanas queda
-seleccionado). Ordenado por `S_final` descendente.
+`S_final_18`, `S_ICEN_18`, `seleccionado`, `puesto`, `puesto_15`,
+`puesto_18` (orden por `S_final` entre los seleccionados; vacío si no lo
+está) y `cumple_s09`. Ordenado por `S_final` descendente.
 

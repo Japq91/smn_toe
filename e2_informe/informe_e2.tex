@@ -19,6 +19,13 @@
 \usepackage{enumitem}
 \usepackage{natbib}
 \usepackage{amsmath}
+\usepackage[most]{tcolorbox}
+
+% Recuadro de la explicacion basica de cada estadistico (Marco metodologico)
+\newtcolorbox{basico}{breakable, enhanced, colback=blue!3!white, colframe=blue!35!black,
+  boxrule=0.5pt, arc=1.5mm, left=5pt, right=5pt, top=4pt, bottom=4pt,
+  before upper={\setlength{\parskip}{0.45em}\setlength{\parindent}{0pt}},
+  fonttitle=\bfseries\small, coltitle=white, title={En palabras simples}}
 
 \hypersetup{
   colorlinks=true,
@@ -107,7 +114,7 @@ Este informe documenta el Entregable~2 del servicio de asistencia en temas de in
 
 Los diagnósticos confirman los errores conocidos de CMIP6 en el Pacífico oriental: un sesgo cálido de $+1.9$\,°C en Niño~1+2 (38 de 40 modelos más cálidos que ERSSTv5), una lengua fría ecuatorial demasiado extendida hacia el oeste, un ciclo anual demasiado plano en Niño~1+2 y una variabilidad interanual desplazada al oeste ($+14$\,\% en Niño~3.4, $-22$\,\% en Niño~1+2). Los modelos generan aproximadamente la frecuencia observada de eventos cálidos en el ONI, pero en el ICEN producen menos eventos y más débiles: casi ninguno reproduce los Niños costeros extraordinarios de 1982--1983 y 1997--1998.
 
-El resultado metodológico central es que el diagrama de Taylor sobre la serie completa no distingue modelos ($r \approx 0$ para los 40), porque una corrida \texttt{historical} libre (simulación del clima pasado con los forzamientos observados, pero sin datos oceánicos que fijen la fase del ENOS) no reproduce la cronología observada del ENOS. Se resolvió comparando la forma del evento cálido típico (análisis compuesto alineado en el pico de cada evento) y resumiendo el desempeño con el \emph{skill score} de \citet{taylor2001}. La selección combina un filtro estadístico de la frecuencia, la duración y la estacionalidad de los eventos cálidos con un umbral de \emph{skill score} ($S_{\mathrm{final}} \geq 0.9$ y $S_{\mathrm{ICEN}} \geq 0.9$): quedan 7 modelos, de los cuales cuatro se repiten con los tres anchos de ventana probados (Sección~\ref{sec:seleccion}).
+El resultado metodológico central es que el diagrama de Taylor sobre la serie completa no distingue modelos ($r \approx 0$ para los 40), porque una corrida \texttt{historical} libre (simulación del clima pasado con los forzamientos observados, pero sin datos oceánicos que fijen la fase del ENOS) no reproduce la cronología observada del ENOS. Se resolvió comparando la forma del evento cálido típico (análisis compuesto alineado en el pico de cada evento) y resumiendo el desempeño con el \emph{skill score} de \citet{taylor2001}. La selección la define un filtro estadístico de la frecuencia, la duración y la estacionalidad de los eventos cálidos, que pasan 15 de los 40 modelos; el \emph{skill score} ordena a esos 15 y no impone un corte, porque no existe un salto natural entre modelos buenos y malos (Sección~\ref{sec:seleccion}).
 
 % ============================================================
 \section{Alcance}
@@ -123,12 +130,18 @@ El insumo es exclusivamente el producto del Entregable~1 (\archivo{data/processe
 \label{sec:metodo}
 % ============================================================
 
-El conjunto de diagnósticos (climatología, sesgo, variabilidad, correlación y raíz del error cuadrático medio, RMSE, resumidos en un diagrama de Taylor) es el estándar mínimo de evaluación de modelos CMIP \citep{eyring2019,gleckler2008}. Esta sección define cada métrica tal como se implementó; la Sección~\ref{sec:scripts} indica qué script la calcula.
+El conjunto de diagnósticos (climatología, sesgo, variabilidad, correlación y raíz del error cuadrático medio, RMSE, resumidos en un diagrama de Taylor) es el estándar mínimo de evaluación de modelos CMIP \citep{eyring2019,gleckler2008}. Esta sección define cada métrica tal como se implementó; la Sección~\ref{sec:scripts} indica qué script la calcula. Cada estadístico se presenta en dos niveles: un recuadro \textbf{En palabras simples}, para lectores que no usan estadística (qué dato entra, qué se hace con él y por qué de esa forma), seguido de la \textbf{definición formal}, con la ecuación implementada y sus supuestos.
 
 \subsection{Climatología, anomalía y sesgo}
 \label{sec:clim}
 
-Para una serie de TSM $X(a,m)$ (año $a$, mes $m$), promediada en la caja o en cada punto de grilla, la climatología es la media de cada mes calendario sobre el periodo de referencia 1981--2014 ($N_a = 34$ años; 2014 es el último año de \texttt{historical}):
+\begin{basico}
+\textbf{Dato:} la TSM mensual de cada modelo y de la observación (ERSSTv5) entre 1981 y 2014. \textbf{Climatología:} se promedian todos los eneros, todos los febreros, etc.; esos 12 valores describen el año ``normal'' (el ciclo anual). \textbf{Anomalía:} cada mes menos su valor normal; es lo que queda cuando se quita la estación del año, y es donde aparecen los Niños y las Niñas. \textbf{Sesgo:} el promedio del modelo menos el de la observación. Un sesgo de $+2$\,°C significa que el modelo es, en promedio, 2\,°C más cálido que la realidad en ese lugar.
+
+\textbf{Por qué no se corrige el sesgo:} todas las métricas siguientes usan anomalías, y al calcular la anomalía de cada modelo contra su propia climatología el sesgo se cancela solo. El sesgo se informa como diagnóstico, pero no afecta la selección.
+\end{basico}
+
+\noindent\textbf{Definición formal.} Para una serie de TSM $X(a,m)$ (año $a$, mes $m$), promediada en la caja o en cada punto de grilla, la climatología es la media de cada mes calendario sobre el periodo de referencia 1981--2014 ($N_a = 34$ años; 2014 es el último año de \texttt{historical}):
 \begin{equation}
 \label{eq:clim}
 C_m = \frac{1}{N_a}\sum_{a=1981}^{2014} X(a,m), \qquad m=1,\dots,12 .
@@ -144,17 +157,43 @@ En este entregable no se aplica la corrección \emph{Linear Scaling} (LS), que r
 \subsection{Variabilidad, correlación y diagrama de Taylor}
 \label{sec:taylor}
 
-La variabilidad interanual es la desviación estándar $\sigma$ de la anomalía. En los mapas se expresa como diferencia porcentual respecto a ERSSTv5, $D = 100\,(\sigma_{\mathrm{mod}}/\sigma_{\mathrm{obs}} - 1)$. La covariación modelo-observación se mide con la correlación de Pearson $r$ y el error con el RMSE centrado $E'$, que excluye el sesgo de la media. En adelante, $\sigma_f$ y $\sigma_r$ son la $\sigma$ del modelo y de la referencia (ERSSTv5), y $\hat\sigma=\sigma_f/\sigma_r$ es la $\sigma$ normalizada. Se usa Pearson y no Spearman porque el término $\sigma_f\sigma_r r$ de la identidad de Taylor es la covarianza entre ambas series, y la anomalía de TSM es una variable continua, sin valores atípicos ni relaciones no lineales que justifiquen una correlación de rangos \citep{wilks2011}. Las tres cantidades están ligadas por la identidad de \citet{taylor2001}, que permite resumir cada modelo en un punto de un diagrama polar (radio $\hat\sigma = \sigma_f/\sigma_r$, ángulo $\arccos r$, referencia en $(1,0)$):
+\begin{basico}
+\textbf{Desviación estándar ($\sigma$):} mide qué tanto se aleja, en promedio, la anomalía de cero; un $\sigma$ grande significa Niños y Niñas intensos. Se compara en porcentaje con la observada: $D = -20$\,\% quiere decir que el modelo varía un 20\,\% menos que la realidad.
+
+\textbf{Correlación ($r$):} mide si el modelo y la observación suben y bajan al mismo tiempo. Vale 1 si van perfectamente juntos, 0 si no tienen relación y $-1$ si van en sentidos opuestos.
+
+\textbf{Error cuadrático medio centrado ($E'$):} el tamaño típico de la diferencia entre el modelo y la observación, después de quitar a cada uno su promedio, para que el sesgo no cuente dos veces.
+
+\textbf{Diagrama de Taylor:} las tres medidas anteriores están ligadas por una fórmula, de modo que cada modelo se puede dibujar como un solo punto. La distancia al origen es su $\sigma$ relativa a la observada, el ángulo indica su correlación, y la distancia al punto de la observación es su error. Cuanto más cerca de la observación, mejor es el modelo.
+
+\textbf{Significancia de la correlación:} dos series cualesquiera pueden tener una correlación algo distinta de cero por azar. Se prueba si $r$ es mayor de lo que daría el azar, teniendo en cuenta que meses vecinos se parecen mucho entre sí: 408 meses no equivalen a 408 datos independientes, sino a bastantes menos, y la prueba usa ese número menor.
+\end{basico}
+
+\noindent\textbf{Definición formal.} La variabilidad interanual es la desviación estándar $\sigma$ de la anomalía. En los mapas se expresa como diferencia porcentual respecto a ERSSTv5, $D = 100\,(\sigma_{\mathrm{mod}}/\sigma_{\mathrm{obs}} - 1)$. La covariación modelo-observación se mide con la correlación de Pearson $r$ y el error con el RMSE centrado $E'$, que excluye el sesgo de la media. En adelante, $\sigma_f$ y $\sigma_r$ son la $\sigma$ del modelo y de la referencia (ERSSTv5), y $\hat\sigma=\sigma_f/\sigma_r$ es la $\sigma$ normalizada. Se usa Pearson y no Spearman porque el término $\sigma_f\sigma_r r$ de la identidad de Taylor es la covarianza entre ambas series, y la anomalía de TSM es una variable continua, sin valores atípicos ni relaciones no lineales que justifiquen una correlación de rangos \citep{wilks2011}. Las tres cantidades están ligadas por la identidad de \citet{taylor2001}, que permite resumir cada modelo en un punto de un diagrama polar (radio $\hat\sigma = \sigma_f/\sigma_r$, ángulo $\arccos r$, referencia en $(1,0)$):
 \begin{equation}
 \label{eq:taylor}
 E'^2 = \sigma_f^2 + \sigma_r^2 - 2\,\sigma_f\,\sigma_r\,r .
 \end{equation}
 La identidad solo es exacta con el RMSE de las series ya centradas, por eso el sesgo medio no aparece en el diagrama. En la correlación punto a punto, la significancia se evalúa con una prueba $t$ con tamaño de muestra efectivo corregido por la autocorrelación de lag~1 de ambas series, $n_{\mathrm{ef}} = n\,(1-r_1^{o} r_1^{m})/(1+r_1^{o} r_1^{m})$ \citep{bretherton1999}.
 
+\begin{basico}
+La \textbf{asimetría} indica si las anomalías cálidas llegan más lejos que las frías. Es positiva cuando hay pocos Niños muy intensos y muchas Niñas moderadas, como en la costa del Perú, por los Niños extraordinarios de 1983 y 1998. La \textbf{curtosis} indica si hay más valores extremos, en ambos sentidos, de los que tendría una distribución ``normal'' (en forma de campana). Interesan porque el riesgo para el Perú está en los Niños extraordinarios, no en el promedio.
+\end{basico}
+
+\noindent\textbf{Definición formal.} La forma de la distribución de cada índice se resume con la asimetría $g_1$ y la curtosis en exceso $g_2$, estimadas con los momentos centrales muestrales $m_k = \tfrac{1}{N}\sum_t (x_t - \bar x)^k$ de la serie mensual:
+\[
+g_1 = \frac{m_3}{m_2^{3/2}}, \qquad g_2 = \frac{m_4}{m_2^{2}} - 3 .
+\]
+Ambas valen 0 en una distribución normal; $g_1 > 0$ indica que las anomalías cálidas alcanzan valores mayores que las frías, y $g_2 > 0$, colas más pesadas que las de una normal.
+
 \subsection{Índices ENOS: ONI, RONI e ICEN}
 \label{sec:indices}
 
-Los tres índices son medias móviles centradas de 3 meses de la anomalía de TSM en su caja:
+\begin{basico}
+Un índice ENOS es la anomalía de TSM de una caja del Pacífico, suavizada con un promedio de 3 meses para quitar el ruido de mes a mes. El \textbf{ONI} mira el Pacífico central (Niño~3.4) y es el que usa NOAA; el \textbf{ICEN} mira la costa norte del Perú (Niño~1+2) y es el que usa el ENFEN. Ambos actualizan cada 5 años lo que consideran ``normal''. El \textbf{RONI} compara Niño~3.4 con el promedio de todo el océano tropical, para que el calentamiento global no se confunda con El Niño.
+\end{basico}
+
+\noindent\textbf{Definición formal.} Los tres índices son medias móviles centradas de 3 meses de la anomalía de TSM en su caja:
 \begin{itemize}[nosep]
 \item \textbf{ONI} (Niño~3.4): anomalía respecto a bases móviles de 30 años actualizadas cada 5 años, según el criterio operacional del \emph{Climate Prediction Center} de NOAA (CPC) \citep{trenberth1997}.
 \item \textbf{ICEN} (Niño~1+2): misma construcción, con las bases de 30 años por quinquenio que define el Estudio Nacional del Fenómeno El Niño (ENFEN) para el monitoreo del Niño costero, el calentamiento anómalo frente a la costa norte del Perú (por ejemplo, 1966--1995 para 1981--1985, y 1991--2020 desde 2006) \citep{takahashi2014,enfen2024}.
@@ -170,19 +209,37 @@ Los índices se calculan para toda la ventana común a los 40 modelos, de 1900-0
 \subsection{Eventos cálidos: detección y clasificación dual}
 \label{sec:eventos}
 
-Un evento cálido se detecta cuando el índice supera el umbral operacional de forma sostenida: $\geq 0.5$\,°C durante al menos 5 meses consecutivos para ONI y RONI (NOAA CPC), y $> 0.5$\,°C, con el ICEN redondeado a dos decimales, durante al menos 3 meses consecutivos para el ICEN \citep{enfen2024}. De cada evento se registra inicio, fin, duración, fecha del pico y magnitud del pico. La frecuencia se expresa en eventos por siglo: el número de eventos dividido por la longitud del registro del dataset, en siglos. La magnitud se clasifica en dos escalas simultáneas sobre el mismo evento: (a) la escala oficial en °C (débil, moderado, fuerte y muy fuerte o extraordinario; para el ICEN, límites de 1.3, 2.1 y 3.5\,°C según \citealp{enfen2024}), comparable con los boletines operacionales; y (b) una escala relativa en múltiplos de la propia $\sigma$ del índice en ese dataset (moderado $\geq 0.5\sigma$, fuerte $\geq 1\sigma$, extremo $\geq 2\sigma$; \citealp{shin2022}). La escala relativa es necesaria porque la amplitud del ENOS difiere hasta en un factor de dos entre modelos: con la escala oficial, un modelo con varianza excesiva tendría más eventos fuertes solo por su escala, no por tener un ENOS más realista.
+\begin{basico}
+\textbf{Evento:} el índice pasa un umbral (0.5\,°C) y se queda arriba un tiempo mínimo: 5 meses seguidos en el ONI y el RONI (criterio de NOAA) y 3 en el ICEN (criterio del ENFEN). De cada evento se guarda cuándo empieza y termina, cuánto dura y su valor máximo (pico). \textbf{Frecuencia:} eventos por siglo, para comparar registros de distinto largo.
+
+\textbf{Dos escalas de intensidad:} la oficial en °C, que permite comparar con los boletines; y una relativa a la variabilidad propia de cada modelo, que es justa con los modelos cuyo ENOS es naturalmente más débil o más fuerte. Con la escala oficial, un modelo que exagera la variabilidad tendría muchos Niños ``fuertes'' sin ser mejor.
+\end{basico}
+
+\noindent\textbf{Definición formal.} Un evento cálido se detecta cuando el índice supera el umbral operacional de forma sostenida: $\geq 0.5$\,°C durante al menos 5 meses consecutivos para ONI y RONI (NOAA CPC), y $> 0.5$\,°C, con el ICEN redondeado a dos decimales, durante al menos 3 meses consecutivos para el ICEN \citep{enfen2024}. De cada evento se registra inicio, fin, duración, fecha del pico y magnitud del pico. La frecuencia se expresa en eventos por siglo: el número de eventos dividido por la longitud del registro del dataset, en siglos. La magnitud se clasifica en dos escalas simultáneas sobre el mismo evento: (a) la escala oficial en °C (débil, moderado, fuerte y muy fuerte o extraordinario; para el ICEN, límites de 1.3, 2.1 y 3.5\,°C según \citealp{enfen2024}), comparable con los boletines operacionales; y (b) una escala relativa en múltiplos de la propia $\sigma$ del índice en ese dataset (moderado $\geq 0.5\sigma$, fuerte $\geq 1\sigma$, extremo $\geq 2\sigma$; \citealp{shin2022}). La escala relativa es necesaria porque la amplitud del ENOS difiere hasta en un factor de dos entre modelos: con la escala oficial, un modelo con varianza excesiva tendría más eventos fuertes solo por su escala, no por tener un ENOS más realista.
 
 \subsection{Análisis compuesto del evento típico}
 \label{sec:compuesto}
 
-El experimento \texttt{historical} es una corrida libre, no inicializada con el estado oceánico observado. El ENOS forma parte de la variabilidad interna del sistema climático, es decir, de las fluctuaciones que existen aun sin forzamiento radiativo; esa componente solo puede ponerse en fase con la observada inicializando el modelo con datos oceánicos, como en las predicciones decadales \citep{hawkins2009}. Por eso las corridas \texttt{historical} no tienen por qué reproducir la cronología de los eventos cálidos observados, y los estudios que evalúan modelos CMIP frente al ENOS comparan la respuesta asociada al índice Niño~3.4 (patrones de regresión) y no la coincidencia temporal de las series \citep{kaur2021,sardana2024}. Un modelo puede producir su Niño fuerte en otro año que ERSSTv5 sin que eso sea un defecto, y la correlación sobre la serie completa penaliza por igual un error de fase (el evento ocurre otro año) y un error de forma (el evento no se parece al observado). Para aislar la forma, cada evento de la Sección~\ref{sec:eventos} se alinea en su propio pico y se extrae una ventana de $\pm V$ meses; las ventanas que salen del registro se descartan enteras (no se rellenan) y las válidas se promedian en una curva de $2V+1$ puntos, el ``evento típico'' del dataset. Sobre la curva del modelo frente a la de ERSSTv5 se calculan las mismas métricas de la Ecuación~\eqref{eq:taylor}.
+\begin{basico}
+\textbf{El problema:} un modelo climático no sabe en qué año ocurrió cada Niño real. Simula su propia secuencia de Niños, igual de válida pero en otras fechas. Por eso comparar mes a mes el modelo con la observación da una correlación cercana a cero en todos los modelos, buenos y malos.
+
+\textbf{La solución (evento típico):} se toman todos los eventos de un modelo, se alinean por su mes de máxima intensidad y se promedian los 12 meses antes y después. El resultado es la forma del ``Niño típico'' del modelo, que sí se puede comparar con el Niño típico observado sin importar en qué años ocurrieron.
+\end{basico}
+
+\noindent\textbf{Definición formal.} El experimento \texttt{historical} es una corrida libre, no inicializada con el estado oceánico observado. El ENOS forma parte de la variabilidad interna del sistema climático, es decir, de las fluctuaciones que existen aun sin forzamiento radiativo; esa componente solo puede ponerse en fase con la observada inicializando el modelo con datos oceánicos, como en las predicciones decadales \citep{hawkins2009}. Por eso las corridas \texttt{historical} no tienen por qué reproducir la cronología de los eventos cálidos observados, y los estudios que evalúan modelos CMIP frente al ENOS comparan la respuesta asociada al índice Niño~3.4 (patrones de regresión) y no la coincidencia temporal de las series \citep{kaur2021,sardana2024}. Un modelo puede producir su Niño fuerte en otro año que ERSSTv5 sin que eso sea un defecto, y la correlación sobre la serie completa penaliza por igual un error de fase (el evento ocurre otro año) y un error de forma (el evento no se parece al observado). Para aislar la forma, cada evento de la Sección~\ref{sec:eventos} se alinea en su propio pico y se extrae una ventana de $\pm V$ meses; las ventanas que salen del registro se descartan enteras (no se rellenan) y las válidas se promedian en una curva de $2V+1$ puntos, el ``evento típico'' del dataset. Sobre la curva del modelo frente a la de ERSSTv5 se calculan las mismas métricas de la Ecuación~\eqref{eq:taylor}.
 
 La alineación en el mes del pico sigue el compuesto del ciclo de vida de los eventos ENOS de \citet{yu2011}, que centra cada evento en el mes de su máxima intensidad y promedia su evolución antes y después. Ese trabajo muestra además que, tras un Niño fuerte del Pacífico oriental, aparecen anomalías negativas en el Pacífico central entre 6 y 18 meses después del pico. El ancho principal es $V=12$ meses porque la duración media de los eventos cálidos del ONI en ERSSTv5 es de unos 11 meses (Sección~\ref{sec:res_eventos}, Figura~\ref{fig:eventos}): una ventana de $\pm12$ meses contiene el evento completo con margen a ambos lados. Los anchos $V=15$ y $V=18$ se usan como pruebas de sensibilidad, ya que incluyen parte de la transición posterior descrita por \citet{yu2011}. No se encontró en la literatura revisada un trabajo que combine este compuesto con el diagrama de Taylor para seleccionar modelos CMIP; es una decisión de este trabajo, basada en el argumento de fase anterior.
 
 \subsection{\emph{Skill score}}
 \label{sec:skill}
 
-El desempeño de cada modelo en cada índice se resume con el \emph{skill score} de \citet{taylor2001} con exponente $n=1$ y correlación máxima alcanzable $R_0=1$, la forma usada para evaluar modelos CMIP frente al ENOS por \citet[ec.~3]{kaur2021}:
+\begin{basico}
+\textbf{\emph{Skill score} ($S$):} una nota de 0 a 1 que combina dos cosas: si el Niño típico del modelo tiene la forma correcta (correlación) y si tiene la intensidad correcta ($\sigma$ relativa). Vale 1 solo si ambas son perfectas, y castiga igual a un modelo con el doble de intensidad que a uno con la mitad. La nota final promedia las de ONI, RONI e ICEN.
+
+\textbf{\emph{Gap statistic}:} antes de separar los modelos en ``buenos'' y ``malos'' hay que comprobar que de verdad existen dos grupos, y no una gradación continua donde cualquier corte sería arbitrario. El método compara qué tan agrupadas están las notas reales con lo agrupadas que estarían 40 notas puestas al azar en el mismo rango. Si las reales no están más agrupadas que las del azar, no hay un corte natural.
+\end{basico}
+
+\noindent\textbf{Definición formal.} El desempeño de cada modelo en cada índice se resume con el \emph{skill score} de \citet{taylor2001} con exponente $n=1$ y correlación máxima alcanzable $R_0=1$, la forma usada para evaluar modelos CMIP frente al ENOS por \citet[ec.~3]{kaur2021}:
 \begin{equation}
 \label{eq:skill}
 S = \frac{2\,(1+r)}{\big(\hat\sigma + 1/\hat\sigma\big)^2}, \qquad S_{\mathrm{final}} = \tfrac{1}{3}\big(S_{\mathrm{ONI}} + S_{\mathrm{RONI}} + S_{\mathrm{ICEN}}\big).
@@ -192,7 +249,20 @@ $S$ está acotado en $[0,1]$, vale 1 solo si $r=1$ y $\hat\sigma=1$, y penaliza 
 \subsection{Filtro de eventos y criterio de selección}
 \label{sec:filtro}
 
-$S_{\mathrm{final}}$ mide la amplitud del evento típico, pero no si el modelo produce eventos con la frecuencia, la duración y la estacionalidad observadas. Por eso la selección tiene dos etapas: primero, un filtro estadístico descarta los modelos cuyo régimen de eventos se distingue del de ERSSTv5; después, se aplica un umbral de \emph{skill score} a los que pasan.
+\begin{basico}
+\textbf{Idea general:} además de la forma del Niño típico, un buen modelo debe producir Niños con la frecuencia, la duración y la época del año reales. Para cada una de esas tres propiedades se aplica una \textbf{prueba estadística}, que responde si la diferencia entre el modelo y la observación es real o podría ser casualidad: 115 años de otro planeta idéntico habrían dado Niños algo distintos. La prueba supone que no hay diferencia y calcula qué tan raro sería ver la diferencia observada; esa probabilidad es el \textbf{valor $p$}. Si es menor que 5\,\% ($p < 0.05$), la diferencia no se explica por azar y el modelo se descarta.
+
+\begin{itemize}[nosep,leftmargin=*]
+\item \textbf{Frecuencia (prueba de Poisson):} cada registro da un solo número, cuántos eventos tuvo. Los Niños son raros e independientes, como los goles en un partido, y para ese tipo de conteos el azar sigue una ley conocida (la de Poisson), que dice cuánto pueden diferir dos conteos sin que cambie la tasa real.
+\item \textbf{Duración (Anderson-Darling):} compara las listas completas de duraciones, no solo su promedio, porque la mayoría de los eventos son cortos y unos pocos muy largos, y lo que más fallan los modelos es justamente esa cola de eventos largos.
+\item \textbf{Estacionalidad (prueba $G$):} cuenta cuántos picos caen en cada mes y lo compara con lo esperado si modelo y observación tuvieran la misma época de picos. Trata cada mes como una categoría, porque diciembre y enero son vecinos y no extremos opuestos.
+\item \textbf{Permutaciones:} con pocos eventos, las fórmulas de libro fallan. Si modelo y observación fueran iguales, daría lo mismo qué evento se etiquetó como de cada uno; entonces se mezclan los eventos, se reparten al azar 9999 veces y se ve con qué frecuencia el azar da una diferencia tan grande como la real.
+\item \textbf{Corrección de Holm:} cada modelo pasa 6 pruebas, y con 6 intentos es fácil fallar alguna por pura mala suerte (26\,\% de probabilidad). Holm exige un $p$ más pequeño cuantas más pruebas se hacen, para que esa probabilidad vuelva a 5\,\%.
+\end{itemize}
+Pasar el filtro no significa que el modelo sea igual a la realidad, sino que con los datos disponibles no se le puede distinguir de ella.
+\end{basico}
+
+\noindent\textbf{Definición formal.} $S_{\mathrm{final}}$ mide la amplitud del evento típico, pero no si el modelo produce eventos con la frecuencia, la duración y la estacionalidad observadas. Por eso la selección tiene dos etapas: primero, un filtro estadístico descarta los modelos cuyo régimen de eventos se distingue del de ERSSTv5; después, los que pasan se ordenan por $S_{\mathrm{final}}$.
 
 El filtro usa los eventos de RONI e ICEN de la Sección~\ref{sec:eventos}, 1900--2014. El ONI no entra porque comparte casi todos sus eventos con el RONI: sus pruebas no serían independientes y Niño~3.4 contaría dos veces. Los eventos del modelo y los de ERSSTv5 se tratan como dos muestras; la observación también lo es, porque otros 115 años habrían dado eventos algo distintos. En cada prueba, la hipótesis nula $H_0$ es que ambas muestras provienen de la misma distribución de esa propiedad, y la alternativa bilateral $H_1$, que provienen de distribuciones distintas. Se aplica una prueba por propiedad, elegida según el tipo de dato que aporta cada una y la forma que tienen los eventos observados:
 \begin{itemize}[nosep]
@@ -207,22 +277,17 @@ que bajo $H_0$ sigue una distribución $\chi^2$ con 1 grado de libertad \citep{w
 \end{itemize}
 En la duración y la estacionalidad el valor $p$ se obtiene con 9999 permutaciones de los eventos entre las dos muestras, porque con 35--41 eventos observados las aproximaciones asintóticas no son fiables: los 35 eventos observados del RONI toman solo 17 duraciones distintas, con muchos empates, y cerca del 80\,\% de las celdas de la tabla de meses tiene una frecuencia esperada menor que 5. Bajo $H_0$ las etiquetas \emph{modelo} y \emph{observación} de los eventos son intercambiables, así que la permutación da la distribución nula sin suponer una forma teórica. Cada modelo recibe seis pruebas, y con $\alpha = 0.05$ la probabilidad de rechazar al menos una por azar, aun siendo el modelo igual a la observación, sería $1-0.95^6 \approx 0.26$. Por eso se aplica la corrección de \citet{holm1979} sobre las seis pruebas de cada modelo, que mantiene esa probabilidad en 0.05 sin suponer independencia entre ellas: los valores $p$ se ordenan de menor a mayor y el $j$-ésimo se compara con $\alpha/(6-j+1)$. Un modelo pasa el filtro si no se rechaza ninguna prueba. No rechazar significa que su régimen de eventos no se distingue del observado con la muestra disponible, no que sea igual.
 
-A los modelos que pasan el filtro se les aplica el umbral
-\begin{equation}
-\label{eq:corte}
-S_{\mathrm{final}} \geq 0.9 \qquad \text{y} \qquad S_{\mathrm{ICEN}} \geq 0.9 .
-\end{equation}
-Como en el compuesto $r \approx 1$, el umbral tiene una lectura física: despejando $\hat\sigma$ de la Ecuación~\eqref{eq:skill} con $r = 1$, $S \geq 0.9$ equivale a $0.72 \leq \hat\sigma \leq 1.39$, es decir, a un evento típico hasta un 28\,\% más débil o un 39\,\% más intenso que el observado. La condición sobre $S_{\mathrm{ICEN}}$ impide que un modelo entre solo por su desempeño en Niño~3.4 con un Niño costero típico demasiado débil. Se usa un umbral fijo y no un percentil porque no existe un corte natural en $S_{\mathrm{final}}$ (Sección~\ref{sec:seleccion}): un percentil dejaría siempre la misma fracción de modelos, cualquiera que fuera su desempeño.
+Los modelos que pasan el filtro forman la selección, y se ordenan por $S_{\mathrm{final}}$ de la ventana principal de $\pm12$ meses. No se impone además un umbral de \emph{skill score}, por dos razones. La primera es que no existe un corte natural en $S_{\mathrm{final}}$ (Sección~\ref{sec:seleccion}), de modo que cualquier umbral sería arbitrario. La segunda es que el ensamble se usa para proyectar y, en el Entregable~4, para estimar la incertidumbre de modelo: un umbral estricto deja pocos modelos y reduce artificialmente su dispersión \citep{zhong2023,gopika2024}. Como referencia, en el compuesto $r \approx 1$, y despejando $\hat\sigma$ de la Ecuación~\eqref{eq:skill} con $r = 1$, $S \geq 0.9$ equivale a $0.72 \leq \hat\sigma \leq 1.39$, es decir, a un evento típico hasta un 28\,\% más débil o un 39\,\% más intenso que el observado; el Cuadro~\ref{tab:seleccion} indica qué modelos seleccionados cumplen $S_{\mathrm{final}} \geq 0.9$ y $S_{\mathrm{ICEN}} \geq 0.9$.
 
 % ============================================================
 \section{Datos}
 \label{sec:datos}
 % ============================================================
 
-Los 40 modelos CMIP6 son los que el Entregable~1 dejó completos en los cuatro experimentos y aprobados en control de calidad. En este entregable se renumeran M01--M40 por orden alfabético (\archivo{data/processed/e2/model_registry_e2.csv}); la numeración es distinta de la M001--M102 del Entregable~1. El Cuadro~\ref{tab:modelos} los lista con su país de origen y resolución nominal; en negrita, los 7 seleccionados (Sección~\ref{sec:seleccion}). La referencia observacional es ERSSTv5 (NOAA), en la misma grilla y máscara que los modelos.
+Los 40 modelos CMIP6 son los que el Entregable~1 dejó completos en los cuatro experimentos y aprobados en control de calidad. En este entregable se renumeran M01--M40 por orden alfabético (\archivo{data/processed/e2/model_registry_e2.csv}); la numeración es distinta de la M001--M102 del Entregable~1. El Cuadro~\ref{tab:modelos} los lista con su país de origen y resolución nominal; en negrita, los 15 seleccionados (Sección~\ref{sec:seleccion}). La referencia observacional es ERSSTv5 (NOAA), en la misma grilla y máscara que los modelos.
 
 \begin{table}[htbp]
-\caption{Modelos CMIP6 evaluados (código M01--M40, país de la institución y resolución nominal en km). En negrita, los 7 modelos seleccionados.}
+\caption{Modelos CMIP6 evaluados (código M01--M40, país de la institución y resolución nominal en km). En negrita, los 15 modelos seleccionados.}
 \label{tab:modelos}
 \centering
 \footnotesize
@@ -236,21 +301,21 @@ M01 & ACCESS-CM2 & Australia & 250 & M21 & FGOALS-g3 & China & 100 \\
 \textbf{M03} & \textbf{AWI-CM-1-1-MR} & Alemania & 25 & M23 & GISS-E2-1-G & EE.\,UU. & 250 \\
 M04 & BCC-CSM2-MR & China & 100 & M24 & GISS-E2-1-H & EE.\,UU. & 250 \\
 M05 & CAMS-CSM1-0 & China & 100 & M25 & GISS-E2-2-G & EE.\,UU. & 250 \\
-M06 & CAS-ESM2-0 & China & 100 & \textbf{M26} & \textbf{IITM-ESM} & India & 250 \\
+\textbf{M06} & \textbf{CAS-ESM2-0} & China & 100 & \textbf{M26} & \textbf{IITM-ESM} & India & 250 \\
 \textbf{M07} & \textbf{CESM2} & EE.\,UU. & 111 & M27 & INM-CM4-8 & Rusia & 100 \\
 M08 & CESM2-WACCM & EE.\,UU. & 111 & M28 & INM-CM5-0 & Rusia & 100 \\
 M09 & CMCC-CM2-SR5 & Italia & 100 & M29 & IPSL-CM6A-LR & Francia & 100 \\
-M10 & CMCC-ESM2 & Italia & 100 & M30 & KACE-1-0-G & Corea del Sur & 250 \\
-M11 & CNRM-CM6-1 & Francia & 100 & M31 & MCM-UA-1-0 & EE.\,UU. & 250 \\
-M12 & CNRM-CM6-1-HR & Francia & 25 & M32 & MIROC-ES2L & Japón & 111 \\
-M13 & CNRM-ESM2-1 & Francia & 100 & M33 & MIROC6 & Japón & 100 \\
-M14 & CanESM5 & Canadá & 100 & M34 & MPI-ESM1-2-HR & Alemania & 50 \\
-M15 & CanESM5-1 & Canadá & 100 & M35 & MPI-ESM1-2-LR & Alemania & 250 \\
+M10 & CMCC-ESM2 & Italia & 100 & \textbf{M30} & \textbf{KACE-1-0-G} & Corea del Sur & 250 \\
+\textbf{M11} & \textbf{CNRM-CM6-1} & Francia & 100 & M31 & MCM-UA-1-0 & EE.\,UU. & 250 \\
+\textbf{M12} & \textbf{CNRM-CM6-1-HR} & Francia & 25 & M32 & MIROC-ES2L & Japón & 111 \\
+\textbf{M13} & \textbf{CNRM-ESM2-1} & Francia & 100 & M33 & MIROC6 & Japón & 100 \\
+M14 & CanESM5 & Canadá & 100 & \textbf{M34} & \textbf{MPI-ESM1-2-HR} & Alemania & 50 \\
+M15 & CanESM5-1 & Canadá & 100 & \textbf{M35} & \textbf{MPI-ESM1-2-LR} & Alemania & 250 \\
 M16 & CanESM5-CanOE & Canadá & 100 & M36 & MRI-ESM2-0 & Japón & 100 \\
 \textbf{M17} & \textbf{EC-Earth3} & Suecia & 100 & \textbf{M37} & \textbf{NorESM2-LM} & Noruega & 100 \\
 M18 & EC-Earth3-Veg & Suecia & 100 & M38 & NorESM2-MM & Noruega & 100 \\
 M19 & EC-Earth3-Veg-LR & Suecia & 100 & M39 & TaiESM1 & Taiwán & 100 \\
-M20 & FGOALS-f3-L & China & 100 & M40 & UKESM1-0-LL & Reino Unido & 100 \\
+M20 & FGOALS-f3-L & China & 100 & \textbf{M40} & \textbf{UKESM1-0-LL} & Reino Unido & 100 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -277,7 +342,7 @@ Climatología, sesgo, variabilidad, correlación, Taylor de serie completa & 198
 \label{sec:scripts}
 % ============================================================
 
-El código está en \archivo{scripts_e2/} del mismo repositorio \archivo{smn_toe} y solo lee lo que dejó el Entregable~1. Sigue los mismos principios: un punto de entrada, pasos numerados e idempotentes (repetir un paso da el mismo resultado), y salidas en \archivo{data/processed/e2/} y \archivo{figures/e2/}. El cálculo se ejecuta con \archivo{./rune2.sh [desde] [hasta]} (pasos \texttt{p01}--\texttt{p09}) y las figuras con \archivo{bash rune2plot.sh [desde] [hasta]}, donde cada script \archivo{plot<codigo>_*.py} genera la figura \archivo{e2_<codigo>_*.png} del mismo código. El Cuadro~\ref{tab:scripts} resume cada paso; las funciones comunes (cajas, climatología, índices, estadísticos de Taylor) están en \archivo{common_e2.py}.
+El código está en \archivo{scripts_e2/} del mismo repositorio \archivo{smn_toe} y solo lee lo que dejó el Entregable~1. Sigue los mismos principios: un punto de entrada, pasos numerados e idempotentes (repetir un paso da el mismo resultado), y salidas en \archivo{data/processed/e2/} y \archivo{figures/e2/}. El cálculo se ejecuta con \archivo{./rune2.sh [desde] [hasta]} (pasos \texttt{p01}--\texttt{p11}) y las figuras con \archivo{bash rune2plot.sh [desde] [hasta]}, donde cada script \archivo{plot<codigo>_*.py} genera la figura \archivo{e2_<codigo>_*.png} del mismo código. El Cuadro~\ref{tab:scripts} resume cada paso; las funciones comunes (cajas, climatología, índices, estadísticos de Taylor) están en \archivo{common_e2.py}.
 
 \begin{table}[htbp]
 \caption{Pasos del cálculo del Entregable~2 (\texttt{rune2.sh}).}
@@ -298,7 +363,7 @@ El código está en \archivo{scripts_e2/} del mismo repositorio \archivo{smn_toe
 \archivo{p08_taylor_compuesto.py} & Índices de \archivo{p01} y fechas de pico de \archivo{p07} & Compuesto de $\pm12$, 15 y 18 meses y su $\sigma$, $r$, RMSE centrado y $\hat\sigma$ & \archivo{taylor_compuesto_<indice>_vent<V>m_1900-2014.csv} \\
 \archivo{p09_skill_score.py} & Tablas de \archivo{p05} y \archivo{p08} & $S$, $S_{\mathrm{final}}$ y \emph{gap statistic} & \archivo{skill_score_vent<V>m_1900-2014.csv} \\
 \archivo{p10_pruebas_eventos.py} & Eventos de \archivo{p07} (RONI, ICEN) y longitud de las series de \archivo{p01} & Pruebas de frecuencia, duración y estacionalidad con corrección de Holm (Sec.~\ref{sec:filtro}) & \archivo{pruebas_eventos_1900-2014.csv} \\
-\archivo{p11_seleccion.py} & Tablas de \archivo{p09} y \archivo{p10} & Selección final: filtro, $S_{\mathrm{final}} \geq 0.9$ y $S_{\mathrm{ICEN}} \geq 0.9$ & \archivo{seleccion_1900-2014.csv} \\
+\archivo{p11_seleccion.py} & Tablas de \archivo{p09} y \archivo{p10} & Selección final: los modelos que pasan el filtro, ordenados por $S_{\mathrm{final}}$ & \archivo{seleccion_1900-2014.csv} \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -510,33 +575,41 @@ Rechazar $H_0$ significa que la diferencia entre el modelo y ERSSTv5 es demasiad
 \subsection{Resultado final de la selección}
 \label{sec:seleccion}
 
-$S_{\mathrm{final}}$ desciende de forma continua entre los 40 modelos, de 0.979 (AWI-CM-1-1-MR) a 0.526 (INM-CM4-8), sin un salto que separe grupos. El \emph{gap statistic} lo confirma: $\mathrm{Gap}(1) = 0.542 \pm 0.153$ frente a $\mathrm{Gap}(2) = 0.336 \pm 0.149$, por lo que se elige $K=1$ y no existe un corte natural entre modelos ``buenos'' y ``malos''. Por eso se usa el umbral fijo de la Ecuación~\eqref{eq:corte}. De los 15 modelos que pasan el filtro, 7 cumplen $S_{\mathrm{final}} \geq 0.9$ y $S_{\mathrm{ICEN}} \geq 0.9$ (Cuadro~\ref{tab:seleccion}). Otros cuatro superan $S_{\mathrm{final}} \geq 0.9$ pero quedan fuera por el ICEN: CNRM-ESM2-1 (M13), CNRM-CM6-1 (M11), UKESM1-0-LL (M40) y KACE-1-0-G (M30), con $S_{\mathrm{ICEN}}$ entre 0.83 y 0.89 y un evento típico del ICEN entre un 21 y un 36\,\% más débil que el observado.
+$S_{\mathrm{final}}$ desciende de forma continua entre los 40 modelos, de 0.979 (AWI-CM-1-1-MR) a 0.526 (INM-CM4-8), sin un salto que separe grupos. El \emph{gap statistic} lo confirma: $\mathrm{Gap}(1) = 0.542 \pm 0.153$ frente a $\mathrm{Gap}(2) = 0.336 \pm 0.149$, por lo que se elige $K=1$ y no existe un corte natural entre modelos ``buenos'' y ``malos''. Por eso $S_{\mathrm{final}}$ solo ordena a los modelos que pasan el filtro y no impone un umbral.\footnote{Como chequeo de robustez, se repitió el \emph{gap statistic} con cinco variables estandarizadas: $S_{\mathrm{final}}$, $S_{\mathrm{ICEN}}$ y, para cada prueba del filtro (frecuencia, duración y estacionalidad), el menor $p$ de Holm entre RONI e ICEN. También se elige $K=1$ ($\mathrm{Gap}(1) = 0.026 \pm 0.071$ frente a $\mathrm{Gap}(2) = 0.049 \pm 0.072$). Si se fuerza $K=2$, el agrupamiento no separa modelos buenos de malos: solo aparta a los cuatro con menor $S_{\mathrm{ICEN}}$ (INM-CM5-0, MCM-UA-1-0, MPI-ESM1-2-HR e INM-CM4-8). Los $p$ no se usan como puntaje en la selección porque un $p$ alto indica falta de evidencia de diferencia, no parecido con la observación, y porque la corrección de Holm acumula muchos valores en 1.} Los 15 modelos que pasan el filtro forman la selección (Cuadro~\ref{tab:seleccion}). Ocupan puestos del 1 al 39 entre los 40 modelos: el filtro y el \emph{skill score} miden propiedades distintas, y varios modelos con $S_{\mathrm{final}}$ alto quedan fuera por su régimen de eventos (Sección~\ref{sec:res_filtro}). Siete de los 15 cumplen además $S_{\mathrm{final}} \geq 0.9$ y $S_{\mathrm{ICEN}} \geq 0.9$; otros cuatro superan $S_{\mathrm{final}} \geq 0.9$ con un $S_{\mathrm{ICEN}}$ menor: CNRM-ESM2-1 (M13), CNRM-CM6-1 (M11), UKESM1-0-LL (M40) y KACE-1-0-G (M30), con $S_{\mathrm{ICEN}}$ entre 0.83 y 0.89 y un evento típico del ICEN entre un 21 y un 36\,\% más débil que el observado.
 
 \begin{table}[htbp]
-\caption[Modelos seleccionados y su \emph{skill score}.]{Modelos seleccionados: pasan el filtro de eventos (Sección~\ref{sec:filtro}) y cumplen $S_{\mathrm{final}} \geq 0.9$ y $S_{\mathrm{ICEN}} \geq 0.9$ con la ventana principal de $\pm12$ meses. \emph{Skill score} por índice, $S_{\mathrm{final}}$, puesto entre los 40 modelos y si el modelo sigue seleccionado con las ventanas de $\pm15$ y $\pm18$ meses (el filtro no depende de la ventana).}
+\caption[Modelos seleccionados y su \emph{skill score}.]{Modelos seleccionados: los 15 que pasan el filtro de eventos (Sección~\ref{sec:filtro}), ordenados por $S_{\mathrm{final}}$ con la ventana principal de $\pm12$ meses. \emph{Skill score} por índice, $S_{\mathrm{final}}$, puesto entre los 40 modelos, puesto entre los 15 seleccionados con las ventanas de $\pm12$, $\pm15$ y $\pm18$ meses (el filtro no depende de la ventana) y si cumple $S_{\mathrm{final}} \geq 0.9$ y $S_{\mathrm{ICEN}} \geq 0.9$.}
 \label{tab:seleccion}
 \centering
 \small
-\begin{tabular}{@{}llccccccc@{}}
+\begin{tabular}{@{}llccccccccc@{}}
 \toprule
- & & & & & & & \multicolumn{2}{c}{\textbf{Seleccionado con}} \\
-\cmidrule(l){8-9}
-\textbf{Código} & \textbf{Modelo} & $S_{\mathrm{ONI}}$ & $S_{\mathrm{RONI}}$ & $S_{\mathrm{ICEN}}$ & $S_{\mathrm{final}}$ & \textbf{Puesto} & $\pm15$ & $\pm18$ \\
+ & & & & & & & \multicolumn{3}{c}{\textbf{Puesto entre los 15}} & \\
+\cmidrule(lr){8-10}
+\textbf{Código} & \textbf{Modelo} & $S_{\mathrm{ONI}}$ & $S_{\mathrm{RONI}}$ & $S_{\mathrm{ICEN}}$ & $S_{\mathrm{final}}$ & \textbf{Puesto (40)} & $\pm12$ & $\pm15$ & $\pm18$ & $S \geq 0.9$ \\
 \midrule
-M03 & AWI-CM-1-1-MR & 0.978 & 0.983 & 0.977 & 0.979 & 1 & sí & sí \\
-M02 & ACCESS-ESM1-5 & 0.954 & 0.990 & 0.984 & 0.976 & 2 & sí & sí \\
-M17 & EC-Earth3 & 0.967 & 0.989 & 0.949 & 0.968 & 4 & sí & sí \\
-M26 & IITM-ESM & 0.952 & 0.962 & 0.968 & 0.961 & 8 & sí & sí \\
-M22 & GFDL-ESM4 & 0.988 & 0.989 & 0.905 & 0.961 & 9 & no & no \\
-M37 & NorESM2-LM & 0.931 & 0.941 & 0.919 & 0.931 & 20 & no & no \\
-M07 & CESM2 & 0.879 & 0.857 & 0.970 & 0.902 & 28 & no & no \\
+M03 & AWI-CM-1-1-MR & 0.978 & 0.983 & 0.977 & 0.979 & 1 & 1 & 1 & 1 & sí \\
+M02 & ACCESS-ESM1-5 & 0.954 & 0.990 & 0.984 & 0.976 & 2 & 2 & 2 & 2 & sí \\
+M17 & EC-Earth3 & 0.967 & 0.989 & 0.949 & 0.968 & 4 & 3 & 3 & 3 & sí \\
+M26 & IITM-ESM & 0.952 & 0.962 & 0.968 & 0.961 & 8 & 4 & 4 & 4 & sí \\
+M22 & GFDL-ESM4 & 0.988 & 0.989 & 0.905 & 0.961 & 9 & 5 & 6 & 5 & sí \\
+M13 & CNRM-ESM2-1 & 0.996 & 0.985 & 0.893 & 0.958 & 12 & 6 & 7 & 7 & no \\
+M11 & CNRM-CM6-1 & 0.998 & 0.977 & 0.873 & 0.950 & 14 & 7 & 5 & 6 & no \\
+M40 & UKESM1-0-LL & 0.985 & 0.983 & 0.825 & 0.931 & 19 & 8 & 8 & 8 & no \\
+M37 & NorESM2-LM & 0.932 & 0.941 & 0.920 & 0.931 & 20 & 9 & 11 & 14 & sí \\
+M30 & KACE-1-0-G & 0.985 & 0.956 & 0.842 & 0.928 & 21 & 10 & 9 & 9 & no \\
+M07 & CESM2 & 0.879 & 0.857 & 0.970 & 0.902 & 28 & 11 & 12 & 12 & sí \\
+M06 & CAS-ESM2-0 & 0.853 & 0.829 & 0.947 & 0.877 & 30 & 12 & 10 & 10 & no \\
+M12 & CNRM-CM6-1-HR & 0.881 & 0.963 & 0.785 & 0.876 & 31 & 13 & 13 & 11 & no \\
+M35 & MPI-ESM1-2-LR & 0.790 & 0.764 & 0.805 & 0.786 & 35 & 14 & 14 & 13 & no \\
+M34 & MPI-ESM1-2-HR & 0.674 & 0.708 & 0.452 & 0.611 & 39 & 15 & 15 & 15 & no \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Cuatro modelos se repiten con las tres ventanas: AWI-CM-1-1-MR (M03), ACCESS-ESM1-5 (M02), EC-Earth3 (M17) e IITM-ESM (M26), que forman el núcleo estable de la selección. Los otros tres están cerca del umbral y su inclusión depende del ancho de ventana: GFDL-ESM4 (M22) queda fuera con $\pm15$ y $\pm18$ meses por su $S_{\mathrm{ICEN}}$ (0.887 y 0.896), y NorESM2-LM (M37) y CESM2 (M07) por su $S_{\mathrm{final}}$ (0.891 y 0.865, y 0.886 y 0.873). Con $\pm18$ meses entran en su lugar CNRM-CM6-1 (M11) y CAS-ESM2-0 (M06). El orden de $S_{\mathrm{final}}$ es estable entre ventanas (Sección~\ref{sec:res_compuesto}); lo que cambia es de qué lado del umbral quedan los modelos próximos a 0.9.
+Como el filtro no depende del ancho de ventana del compuesto, la selección es la misma con $\pm12$, $\pm15$ y $\pm18$ meses; lo que cambia es el orden dentro de ella, y poco: la correlación de Spearman entre puestos es 0.97 con $\pm15$ meses y 0.93 con $\pm18$ meses. Los cuatro primeros, AWI-CM-1-1-MR (M03), ACCESS-ESM1-5 (M02), EC-Earth3 (M17) e IITM-ESM (M26), conservan su puesto con las tres ventanas, y MPI-ESM1-2-HR (M34) queda siempre último. El cambio mayor es el de NorESM2-LM (M37), que baja del puesto 9 al 14 con $\pm18$ meses.
 
-Que un modelo esté seleccionado no significa que no tenga defectos. ACCESS-ESM1-5 tiene un sesgo cálido de 2.9\,°C en Niño~1+2 y AWI-CM-1-1-MR un sesgo frío de 1.4\,°C en Niño~3.4; GFDL-ESM4 y NorESM2-LM subestiman en un 25\,\% la amplitud del evento típico del ICEN ($\hat\sigma$ de 0.74 y 0.76); CESM2 exagera la de Niño~3.4 en más de un 40\,\% ($\hat\sigma$ de 1.42 en ONI y 1.47 en RONI) y entra por su buen ICEN; y ninguno de los siete reproduce la asimetría observada del ICEN (entre 0.13 y 0.61, frente a 1.06). Cinco de ellos tienen además alguna prueba con $p < 0.05$ antes de la corrección: la estacionalidad en EC-Earth3, IITM-ESM, GFDL-ESM4 y CESM2, y la duración del RONI en NorESM2-LM. Son diferencias moderadas, no concluyentes entre seis pruebas, pero conviene tenerlas presentes. Por último, los rankings de $S_{\mathrm{ONI}}$ y $S_{\mathrm{RONI}}$ se parecen (Spearman 0.80) pero apenas se relacionan con el de $S_{\mathrm{ICEN}}$ (0.11--0.22): sin la condición $S_{\mathrm{ICEN}} \geq 0.9$, ser bueno en el Pacífico central bastaría para entrar.
+Que un modelo esté seleccionado no significa que no tenga defectos. El más débil del conjunto es MPI-ESM1-2-HR (M34), con un evento típico del ICEN de menos de la mitad de la amplitud observada ($\hat\sigma = 0.39$, $S_{\mathrm{ICEN}} = 0.45$), y otros tres seleccionados tienen $S_{\mathrm{ICEN}} < 0.83$: UKESM1-0-LL (M40), MPI-ESM1-2-LR (M35) y CNRM-CM6-1-HR (M12). Entre los siete de mayor \emph{skill score}, ACCESS-ESM1-5 tiene un sesgo cálido de 2.9\,°C en Niño~1+2 y AWI-CM-1-1-MR un sesgo frío de 1.4\,°C en Niño~3.4; GFDL-ESM4 y NorESM2-LM subestiman en un 25\,\% la amplitud del evento típico del ICEN ($\hat\sigma$ de 0.74 y 0.76); CESM2 exagera la de Niño~3.4 en más de un 40\,\% ($\hat\sigma$ de 1.42 en ONI y 1.47 en RONI) y entra por su buen ICEN; y ninguno de esos siete reproduce la asimetría observada del ICEN (entre 0.13 y 0.61, frente a 1.06). Cinco de esos siete tienen además alguna prueba con $p < 0.05$ antes de la corrección: la estacionalidad en EC-Earth3, IITM-ESM, GFDL-ESM4 y CESM2, y la duración del RONI en NorESM2-LM. Son diferencias moderadas, no concluyentes entre seis pruebas, pero conviene tenerlas presentes. Por último, los rankings de $S_{\mathrm{ONI}}$ y $S_{\mathrm{RONI}}$ se parecen (Spearman 0.80) pero apenas se relacionan con el de $S_{\mathrm{ICEN}}$ (0.11--0.22): un modelo puede estar entre los primeros por su desempeño en el Pacífico central y tener un Niño costero típico demasiado débil, como CNRM-CM6-1 (M11) o UKESM1-0-LL (M40), por lo que conviene revisar $S_{\mathrm{ICEN}}$ además del puesto.
 
 % ============================================================
 \section{Limitaciones}
@@ -546,9 +619,9 @@ Que un modelo esté seleccionado no significa que no tenga defectos. ACCESS-ESM1
 \begin{itemize}[nosep]
 \item \textbf{Bases antes de 1946 y después de 2014.} Antes de 1946 ni CPC ni ENFEN definen bases, y el esquema de 30 años por quinquenio se extiende hacia atrás por decisión propia. Al final del registro, la observación y los modelos usan 1985--2014 en lugar de la base oficial 1991--2020, porque \texttt{historical} termina en 2014.
 \item \textbf{ICEN observado calculado desde la grilla.} El ICEN de ERSSTv5 se calcula promediando la caja Niño~1+2 sobre la grilla nativa de 2° con máscara océano-tierra, y no desde la serie Niño~1+2 que publica NOAA, que es la que usa el ENFEN. Con las bases oficiales, este cálculo reproduce las fechas de 20 de los 21 Niños costeros de 1950--2014 de la cronología del ENFEN \citep{enfen2024}; queda fuera el evento débil de 1968 (pico de 0.48\,°C), y el de 1951 resulta moderado (2.04\,°C) en lugar de fuerte. Ambas diferencias indican valores ligeramente menores que los oficiales, sin efecto apreciable en la comparación con los modelos, que usan el mismo cálculo.
-\item \textbf{Qué mide el \emph{skill score}.} $S_{\mathrm{final}}$ mide sobre todo la amplitud del evento típico (Sección~\ref{sec:res_compuesto}); no incorpora el sesgo medio ni la asimetría, que se reportan como diagnósticos aparte; la frecuencia, la duración y la estacionalidad entran solo como filtro. En particular, la asimetría del ICEN, la propiedad que distingue a los Niños costeros extraordinarios, queda fuera de la selección. Con pesos iguales, Niño~3.4 pesa dos tercios de $S_{\mathrm{final}}$; la condición $S_{\mathrm{ICEN}} \geq 0.9$ compensa ese peso, pero no lo elimina.
+\item \textbf{Qué mide el \emph{skill score}.} $S_{\mathrm{final}}$ mide sobre todo la amplitud del evento típico (Sección~\ref{sec:res_compuesto}); no incorpora el sesgo medio ni la asimetría, que se reportan como diagnósticos aparte; la frecuencia, la duración y la estacionalidad entran solo como filtro. En particular, la asimetría del ICEN, la propiedad que distingue a los Niños costeros extraordinarios, queda fuera de la selección. Con pesos iguales, Niño~3.4 pesa dos tercios de $S_{\mathrm{final}}$, de modo que el orden de la selección favorece a los modelos buenos en el Pacífico central.
 \item \textbf{Potencia del filtro de eventos.} Con 35--41 eventos observados las pruebas solo detectan diferencias claras: pasar el filtro significa que el régimen de eventos no se distingue del observado con esta muestra, no que sea igual. Las pruebas tratan los eventos de un dataset como independientes, aunque el ENOS tiene memoria interanual.
-\item \textbf{Umbral de selección.} El valor 0.9 es una decisión de este trabajo, apoyada en su lectura física (Sección~\ref{sec:filtro}) pero no derivada de los datos. Tres de los siete seleccionados están cerca del umbral y su inclusión depende del ancho de ventana del compuesto.
+\item \textbf{Selección sin umbral de desempeño.} La selección la define solo el filtro de eventos, que no evalúa la amplitud del evento típico: entran modelos con un Niño costero típico mucho más débil que el observado, como MPI-ESM1-2-HR (M34). Con baja potencia, el filtro tampoco garantiza que los 15 sean igualmente realistas; el orden por $S_{\mathrm{final}}$ permite contrastar, en los entregables siguientes, el conjunto completo con sus primeros puestos.
 \item \textbf{Un miembro por modelo.} Cada modelo se representa con una sola realización, por lo que parte de las diferencias de frecuencia y magnitud de eventos entre modelos puede deberse a variabilidad interna de esa corrida y no a su física.
 \end{itemize}
 
@@ -563,7 +636,7 @@ El Entregable~2, en cumplimiento de la actividad~(b) del TdR (Sección~\ref{sec:
 \item Los 40 modelos comparten los errores conocidos de CMIP en el Pacífico oriental: un sesgo cálido de $+1.9$\,°C en Niño~1+2 y una lengua fría ecuatorial extendida al oeste, un ciclo anual demasiado plano en Niño~1+2 y una variabilidad interanual desplazada al oeste, con un déficit del 22\,\% en Niño~1+2. Estos errores tienen un mismo origen físico, la surgencia de borde oriental mal representada, y afectan justo a la caja más relevante para Perú.
 \item Los modelos reproducen la frecuencia de eventos cálidos del ONI, pero no la intensidad de los Niños costeros extraordinarios: la asimetría del ICEN simulado es un tercio de la observada, y casi ningún modelo alcanza magnitudes como las de 1982--1983 y 1997--1998.
 \item El diagrama de Taylor sobre la serie completa no sirve para seleccionar modelos a partir de corridas libres ($r \approx 0$ para todos). El análisis compuesto del evento típico evita ese problema y permite discriminar modelos por la amplitud y la evolución de sus eventos.
-\item La selección combina un filtro estadístico del régimen de eventos (frecuencia, duración y estacionalidad de RONI e ICEN, con corrección de Holm), que pasan 15 de los 40 modelos, con el umbral $S_{\mathrm{final}} \geq 0.9$ y $S_{\mathrm{ICEN}} \geq 0.9$, que equivale a un evento típico hasta un 28\,\% más débil o un 39\,\% más intenso que el observado. Quedan 7 modelos (Sección~\ref{sec:seleccion}); cuatro de ellos, AWI-CM-1-1-MR, ACCESS-ESM1-5, EC-Earth3 e IITM-ESM, se repiten con las tres ventanas y forman un núcleo robusto. No existe una separación estadística natural entre modelos buenos y malos, por lo que el umbral es un criterio explícito y no un resultado de los datos.
+\item La selección combina un filtro estadístico del régimen de eventos (frecuencia, duración y estacionalidad de RONI e ICEN, con corrección de Holm), que pasan 15 de los 40 modelos y forman la selección (Sección~\ref{sec:seleccion}). El \emph{skill score} los ordena sin imponer un corte, porque no existe una separación estadística natural entre modelos buenos y malos. Los cuatro primeros, AWI-CM-1-1-MR, ACCESS-ESM1-5, EC-Earth3 e IITM-ESM, conservan su puesto con las tres ventanas; siete de los 15 tienen además $S_{\mathrm{final}} \geq 0.9$ y $S_{\mathrm{ICEN}} \geq 0.9$, y el último, MPI-ESM1-2-HR, simula un Niño costero típico de menos de la mitad de la amplitud observada.
 \end{enumerate}
 
 % ============================================================
@@ -574,8 +647,7 @@ El Entregable~2, en cumplimiento de la actividad~(b) del TdR (Sección~\ref{sec:
 Para la continuidad del proyecto hacia los Entregables~3 y~4, se recomienda:
 
 \begin{itemize}
-\item Tratar como núcleo del conjunto los cuatro modelos seleccionados con las tres ventanas (M02, M03, M17 y M26), y comprobar en el Entregable~3 si la señal proyectada cambia al agregar los otros tres (M07, M22 y M37), cuya selección depende del ancho de ventana.
-\item Usar en el Entregable~3 las proyecciones de los 7 modelos seleccionados como conjunto principal y las de los 40 como contraste, para documentar cuánto cambia la señal proyectada al restringir el conjunto. Siguiendo a \citet{zhong2023} y \citet{gopika2024}, conviene además verificar que la selección no reduzca artificialmente la dispersión entre modelos, lo que subestimaría la incertidumbre de modelo en el Entregable~4.
+\item Usar en el Entregable~3 los 15 modelos seleccionados como conjunto principal y las proyecciones de los 40 como contraste, para documentar cuánto cambia la señal proyectada al restringir el conjunto. Conviene además comprobar si la señal cambia al quitar los modelos de menor $S_{\mathrm{ICEN}}$ (M34, M35, M12 y M40) o al quedarse con los siete que cumplen $S_{\mathrm{final}} \geq 0.9$ y $S_{\mathrm{ICEN}} \geq 0.9$, sobre todo en Niño~1+2.
 \item Interpretar los valores absolutos de TSM de los modelos seleccionados con su sesgo de la Sección~\ref{sec:res_sesgo}: el \emph{skill score} trabaja con anomalías y no corrige el nivel.
 \end{itemize}
 

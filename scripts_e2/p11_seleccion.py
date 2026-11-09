@@ -1,41 +1,27 @@
 #!/usr/bin/env python3
 """Paso p11 del calculo de E2: seleccion final de modelos.
 
-Combina los dos criterios del E2 en un solo paso:
+Seleccion = los modelos que pasan el filtro de eventos (p10,
+pruebas_eventos_<y0>-<y1>.csv): ninguna de las 6 pruebas de frecuencia,
+duracion y estacionalidad de los eventos de RONI e ICEN se rechaza con
+la correccion de Holm (columna pasa_filtro). Su regimen de eventos no se
+distingue estadisticamente del de ERSSTv5. Con el periodo 1900-2014 son
+15 de los 40 modelos.
 
-1. Filtro de eventos (p10, pruebas_eventos_<y0>-<y1>.csv): el modelo
-   pasa si ninguna de las 6 pruebas de frecuencia, duracion y
-   estacionalidad de los eventos de RONI e ICEN se rechaza con la
-   correccion de Holm (columna pasa_filtro). Su regimen de eventos no
-   se distingue estadisticamente del de ERSSTv5.
-
-2. Umbral de skill score (p09, skill_score_vent<V>m_<y0>-<y1>.csv):
-
-       S_final >= S_MIN      y      S_ICEN >= S_ICEN_MIN
-
-   con S_MIN = S_ICEN_MIN = 0.9. Como en el compuesto r ~ 1, S depende
-   sobre todo de sigma_hat (amplitud del evento tipico del modelo /
-   observada). Despejando sigma_hat de S = 2 (1 + r) / (sigma_hat +
-   1/sigma_hat)^2 con r = 1, S >= 0.9 equivale a 0.72 <= sigma_hat <=
-   1.39 (con r = 0.97, entre 0.74 y 1.35): un evento tipico entre ~26 %
-   mas debil y ~35 % mas intenso que el observado. Es un umbral con
-   significado fisico, a diferencia del percentil 75 usado antes, que
-   deja siempre la cuarta parte de los modelos. La condicion sobre
-   S_ICEN evita que un modelo entre solo por su desempeño en Nino 3.4
-   (S_ONI y S_RONI altos) con un Nino costero tipico demasiado debil;
-   con ella no hace falta ponderar el ICEN dentro de S_final, que sigue
-   siendo el promedio simple de S_ONI, S_RONI y S_ICEN.
-
-Seleccionado = pasa_filtro y S_final >= 0.9 y S_ICEN >= 0.9, con la
-ventana principal de +-12 meses. Las ventanas de +-15 y +-18 meses se
-evaluan con el mismo criterio como prueba de sensibilidad (el filtro de
-eventos no depende de la ventana).
+Dentro de la seleccion, los modelos se ordenan por S_final (p09,
+skill_score_vent<V>m_<y0>-<y1>.csv) de la ventana principal de +-12
+meses (columna puesto, 1 = mejor). S ya no corta: hasta 2026-10-31 se
+exigia ademas S_final >= 0.9 y S_ICEN >= 0.9 (7 modelos); ese criterio
+queda como columna informativa cumple_s09. Como el filtro no depende de
+la ventana del compuesto, la seleccion es la misma con +-15 y +-18
+meses; lo que cambia con la ventana es el orden (puesto_15, puesto_18).
 
 Salida: seleccion_<y0>-<y1>.csv, una fila por modelo, ordenada por
 S_final de +-12 meses. Columnas: modelo, pasa_filtro, rechazadas,
 S_ONI, S_RONI, S_ICEN, S_final (+-12), S_final_15, S_ICEN_15,
-S_final_18, S_ICEN_18, seleccionado, seleccionado_15, seleccionado_18
-y n_ventanas (en cuantas de las tres ventanas queda seleccionado).
+S_final_18, S_ICEN_18, seleccionado, puesto, puesto_15, puesto_18
+(orden por S_final entre los seleccionados; vacio si no lo esta) y
+cumple_s09 (S_final >= 0.9 y S_ICEN >= 0.9 con +-12 meses).
 
 Uso:
     python3 scripts_e2/p11_seleccion.py
@@ -48,6 +34,7 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import common_e2 as c2
 
+# Umbral anterior (hasta 2026-10-31), solo informativo: columna cumple_s09.
 S_MIN = 0.9
 S_ICEN_MIN = 0.9
 VENTANA = 12
@@ -77,22 +64,20 @@ def main():
         df[f"S_final_{v}"] = sk[v]["S_final"]
         df[f"S_ICEN_{v}"] = sk[v]["S_ICEN"]
 
-    def criterio(s_final, s_icen):
-        return df["pasa_filtro"] & (s_final >= S_MIN) & (s_icen >= S_ICEN_MIN)
-
-    df["seleccionado"] = criterio(df["S_final"], df["S_ICEN"])
-    for v in VENTANAS_SENS:
-        df[f"seleccionado_{v}"] = criterio(df[f"S_final_{v}"], df[f"S_ICEN_{v}"])
-    df["n_ventanas"] = df[["seleccionado"] + [f"seleccionado_{v}" for v in VENTANAS_SENS]].sum(axis=1)
+    df["seleccionado"] = df["pasa_filtro"]
+    for v, col in [(VENTANA, "S_final")] + [(v, f"S_final_{v}") for v in VENTANAS_SENS]:
+        nombre = "puesto" if v == VENTANA else f"puesto_{v}"
+        df[nombre] = df.loc[df["seleccionado"], col].rank(ascending=False, method="min").astype("Int64")
+    df["cumple_s09"] = (df["S_final"] >= S_MIN) & (df["S_ICEN"] >= S_ICEN_MIN)
     df = df.sort_values("S_final", ascending=False)
 
     sel = df.index[df["seleccionado"]].tolist()
-    print(f"  Pasan el filtro de eventos: {int(df['pasa_filtro'].sum())} de {len(df)}", file=sys.stderr)
-    print(f"  Seleccion (filtro + S_final >= {S_MIN} + S_ICEN >= {S_ICEN_MIN}, +-{VENTANA} m): "
-          f"{len(sel)} -> {', '.join(sel)}", file=sys.stderr)
+    print(f"  Seleccion (pasan el filtro de eventos): {len(sel)} de {len(df)} -> {', '.join(sel)}", file=sys.stderr)
+    print(f"  De ellos con S_final >= {S_MIN} y S_ICEN >= {S_ICEN_MIN} (+-{VENTANA} m): "
+          f"{', '.join(df.index[df['seleccionado'] & df['cumple_s09']])}", file=sys.stderr)
     for v in VENTANAS_SENS:
-        sv = df.index[df[f"seleccionado_{v}"]].tolist()
-        print(f"  Con +-{v} m: {len(sv)} -> {', '.join(sv)}", file=sys.stderr)
+        rho = df.loc[df["seleccionado"], ["puesto", f"puesto_{v}"]].astype(float).corr("spearman").iloc[0, 1]
+        print(f"  Orden con +-{v} m vs +-{VENTANA} m (Spearman, seleccionados): {rho:.2f}", file=sys.stderr)
 
     out = c2.E2_DIR / f"seleccion_{periodo}.csv"
     df.to_csv(out, float_format="%.4f")

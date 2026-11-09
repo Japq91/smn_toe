@@ -416,7 +416,7 @@ def cargar_skv():
 
 @lru_cache(maxsize=None)
 def cargar_sel():
-    """Seleccion final de p11 (filtro de eventos + S_final >= 0.9 + S_ICEN >= 0.9)."""
+    """Seleccion final de p11 (los modelos que pasan el filtro de eventos, ordenados por S_final)."""
     return pd.read_csv(E2 / f"seleccion_{PER}.csv", index_col="number")
 
 

@@ -191,7 +191,7 @@ El `.tex` referencia sus figuras como `figuras/<archivo>.png` (carpeta en españ
 
 ## Entregable 2 — Evaluación histórica y selección de modelos
 
-Evalúa los 40 modelos que el E1 dejó aprobados (experimento `historical`) frente a ERSSTv5: estado medio, ciclo anual y variabilidad en 1981–2014; índices ONI y RONI (Niño 3.4) e ICEN (Niño 1+2), eventos cálidos y su evento típico (análisis compuesto) en 1900–2014. La selección combina un filtro estadístico del régimen de eventos (frecuencia, duración y estacionalidad de RONI e ICEN frente a ERSSTv5, con corrección de Holm) con el *skill score* de Taylor (2001) sobre los compuestos: quedan **7 modelos** con S_final ≥ 0.9 y S_ICEN ≥ 0.9. Métodos, resultados y limitaciones: `e2_informe/informe_e2.tex`.
+Evalúa los 40 modelos que el E1 dejó aprobados (experimento `historical`) frente a ERSSTv5: estado medio, ciclo anual y variabilidad en 1981–2014; índices ONI y RONI (Niño 3.4) e ICEN (Niño 1+2), eventos cálidos y su evento típico (análisis compuesto) en 1900–2014. La selección combina un filtro estadístico del régimen de eventos (frecuencia, duración y estacionalidad de RONI e ICEN frente a ERSSTv5, con corrección de Holm) con el *skill score* de Taylor (2001) sobre los compuestos: se seleccionan los **15 modelos** que pasan el filtro, ordenados por S_final (sin umbral de S). Métodos, resultados y limitaciones: `e2_informe/informe_e2.tex`.
 
 ### Ejecución
 
@@ -214,7 +214,7 @@ Usan el mismo entorno conda que `run.sh` y lo activan solos. Logs en `logs/`.
 | p08 | Evento compuesto (±12, 15 y 18 meses) y sus métricas de Taylor | `taylor_compuesto_<indice>_vent<V>m_1900-2014.csv` |
 | p09 | *Skill score* y *gap statistic* | `skill_score_vent<V>m_1900-2014.csv` |
 | p10 | Pruebas estadísticas de frecuencia, duración y estacionalidad de los eventos de RONI e ICEN frente a ERSSTv5 (filtro previo a la selección) | `pruebas_eventos_1900-2014.csv` |
-| p11 | Selección final: pasa el filtro, S_final ≥ 0.9 y S_ICEN ≥ 0.9 (y sensibilidad a la ventana) | `seleccion_1900-2014.csv` |
+| p11 | Selección final: los modelos que pasan el filtro (15), ordenados por S_final (y sensibilidad del orden a la ventana) | `seleccion_1900-2014.csv` |
 
 p02–p06 solo leen `masked/` y son independientes entre sí. p07 → p08 → p09 es una cadena: p07 necesita p01, p08 necesita p01 y p07, y p09 necesita p05 y p08. p10 necesita p01 y p07, y p11 necesita p09 y p10. El detalle de columnas y convenciones (numeración M01–M40, bases de los índices, ventana común) está en `data/processed/e2/README.md`; el contrato de entrada, en `scripts_e2/README.md`.
 
