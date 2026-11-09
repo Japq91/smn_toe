@@ -82,7 +82,8 @@ e2_informe/informe_e2.blg
 e2_informe/informe_e2.pdf
 e2_informe/informe_e2.fdb_latexmk
 e2_informe/informe_e2.fls
-# Artefactos de compilar e3_informe/informe_e3.tex (mismo criterio).
+# Artefactos de compilar e3_informe/informe_e3.tex (mismo criterio; el PDF
+# del informe E3 si se versiona, como entregable).
 e3_informe/informe_e3.aux
 e3_informe/informe_e3.log
 e3_informe/informe_e3.toc
@@ -91,7 +92,6 @@ e3_informe/informe_e3.lot
 e3_informe/informe_e3.out
 e3_informe/informe_e3.bbl
 e3_informe/informe_e3.blg
-e3_informe/informe_e3.pdf
 e3_informe/informe_e3.fdb_latexmk
 e3_informe/informe_e3.fls
 # Material de consulta local, no se versiona: papers de referencia (con
