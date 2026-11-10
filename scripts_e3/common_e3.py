@@ -34,9 +34,9 @@ WEIGHTED = c2.WEIGHTED
 
 # Escenarios: SSP2-4.5 y SSP5-8.5 son los del TdR (actividad a/c);
 # SSP3-7.0 (descargado, config/periods.yaml lo lista) se suma como
-# escenario intermedio opcional. Las figuras del TdR siguen usando solo
-# ssp245 y ssp585 (plots_e3.ipynb fija ESCS); ssp370 aparece donde se
-# lo pide explicitamente (ej. ESC_02A en la figura 2a).
+# escenario intermedio. Las figuras del cuerpo del informe usan
+# los tres; algunas del anexo (A02, A04, A06,
+# A07, A09, A10) usan solo ssp245 y ssp585 (ESCS_TDR en plot00_comun_e3.py).
 ESCENARIOS = ["ssp245", "ssp370", "ssp585"]
 
 # Inicio de la serie: 1850, todo el historical. p01 de E2 calcula los

@@ -96,7 +96,7 @@ figures/e1/                                         # scripts/plot_*.py (automat
 data/processed/e2/                                  # E2: rune2.sh (p01-p09)
 figures/e2/                                         # E2: rune2plot.sh (scripts_e2/plot*.py)
 data/processed/e3/                                  # E3: rune3.sh (q01-q11)
-figures/e3/                                         # E3: scripts_e3/plots_e3.ipynb
+figures/e3/                                         # E3: rune3plot.sh (scripts_e3/plot*.py)
 ```
 
 `data/interim/processed/` es un paso intermedio (regrillado, todavía sin máscara); `data/processed/masked/` es el dato final. `run.sh` genera los PNG de `figures/e1/` el mismo (`scripts/plot_*.py`, al final de cada corrida).
@@ -251,7 +251,11 @@ Actividad c) del TdR: cambio del estado medio, del ciclo anual, de la variabilid
 ./rune3.sh [desde] [hasta]          # cálculo: pasos q01..q11 (ej. ./rune3.sh q06 q11)
 ```
 
-Las figuras salen de un solo notebook, `scripts_e3/plots_e3.ipynb` (correr desde `scripts_e3/`, kernel del entorno `smn_toe`), que solo lee `data/processed/e3/` y guarda en `figures/e3/e3_<código>.png` (13 figuras del cuerpo del informe, `01a`–`05c`, y 6 del anexo, `A1`–`A6`; la síntesis es una tabla). La variable `GRUPO` de la primera celda cambia el conjunto de modelos que se dibuja (15, 40, 11 o 7) y `ESCS`, los escenarios. La sección 7 del notebook repite a mano las pruebas (Wilcoxon, Holm, Poisson, Anderson-Darling, G) y las compara con las del pipeline. Como el resto de los notebooks, no se versiona (`*.ipynb` en `.gitignore`).
+```
+bash rune3plot.sh [desde] [hasta]  # figuras: scripts_e3/plot<código>_<nombre>.py (ej. bash rune3plot.sh A)
+```
+
+Cada figura sale de su propio script, `scripts_e3/plot<código>_<nombre>.py`, que solo lee `data/processed/e3/` y guarda `figures/e3/e3_<código>_<nombre>.png`. El código es el **número de la figura en el informe**: `01`–`09` las 9 del cuerpo y `A01`–`A10` las 10 del anexo (la síntesis es una tabla). `rune3plot.sh` las corre en orden y copia las del conjunto de 15 a `e3_informe/figuras/`; `E3_GRUPO=40 bash rune3plot.sh` dibuja otro conjunto (15, 40, 11 o 7) con sufijo `_g40`, sin tocar las del informe. Configuración, cargas y funciones de dibujo comunes en `scripts_e3/plot00_comun_e3.py`. Si se agrega o reordena una figura del informe, se renombran script y PNG para que el código siga siendo el número de la figura. El notebook `scripts_e3/plots_e3.ipynb` queda como prototipo local (no se versiona): su sección 7 repite a mano las pruebas (Wilcoxon, Holm, Poisson, Anderson-Darling, G) y las compara con las del pipeline.
 
 | Paso | Calcula | Salida en `data/processed/e3/` |
 |---|---|---|
