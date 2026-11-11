@@ -3,7 +3,48 @@ import pandas as pd
 ROOT='/p1-swell/japq/loca/smn_toe/'
 e2=open(ROOT+'e2_informe/info/e2_ppt.html',encoding='utf-8').read()
 head=e2[:e2.index('<body>')].replace('<title>Entregable 2 — Evaluación ENOS CMIP6</title>','<title>Entregable 3 — Proyecciones de la TSM y del ENOS</title>')
+# Diapositivas fijas: sin desplazamiento vertical ni horizontal; rotulo y
+# titulo pegados arriba. Si el contenido no cabe en la ventana, se reduce
+# (zoom) en vez de mostrar barras de desplazamiento.
+head=head.replace('</style>', """
+html,body,.deck{overflow:hidden!important;overscroll-behavior:none;}
+.section-nav{top:8px;bottom:auto;}
+.slide{overflow:hidden!important;justify-content:flex-start;padding:calc(8px + 2.4em) 7vw 9vh;}
+.nota-pie{bottom:4.5vh!important;}
+.slide.title-slide{justify-content:center;}
+.slide .fit{width:100%;transform-origin:top center;}
+.slide.title-slide .fit{display:flex;flex-direction:column;align-items:center;}
+.slide .kicker{margin:0 0 .25em;}
+.resumen-cajas .stat{font-size:clamp(1.5rem,2.7vw,2.3rem);white-space:nowrap;margin-top:.15em;}
+.resumen-cajas .stat-caja{display:block;font-size:.85rem;font-weight:700;color:var(--muted);margin-top:.3em;}
+.resumen-cajas .stat-label{font-size:.85rem;}
+</style>""",1)
 script=e2[e2.index('<script>'):]
+script=script.replace("  function show(i){", """  slides.forEach(function(s){
+    var box=document.createElement('div'); box.className='fit';
+    Array.prototype.slice.call(s.childNodes).forEach(function(n){
+      if(!(n.classList && n.classList.contains('nota-pie'))) box.appendChild(n);
+    });
+    s.insertBefore(box, s.firstChild);
+  });
+  function fit(s){
+    var box=s.querySelector('.fit'); if(!box) return;
+    box.style.zoom=1;
+    var cs=getComputedStyle(s);
+    var availH=s.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom);
+    var availW=s.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
+    for(var k=0;k<4;k++){
+      var z=parseFloat(box.style.zoom)||1;
+      var bb=box.getBoundingClientRect(); var r=Math.min(availH/Math.max(bb.height,box.scrollHeight*z), availW/Math.max(bb.width,box.scrollWidth*z));
+      if(r>=0.999) break;
+      box.style.zoom=Math.max(0.4, z*r*0.98);
+    }
+  }
+  window.addEventListener('resize', function(){ fit(slides[idx]); });
+  window.addEventListener('load', function(){ fit(slides[idx]); });
+  function show(i){""",1)
+script=script.replace("    slides[idx].classList.add('active');\n", "    slides[idx].classList.add('active');\n    fit(slides[idx]);\n",1)
+assert "fit(slides[idx]);\n    document.getElementById('counter')" in script
 script=script.replace("var sectionLabels = {1:'Introducción',2:'Estado medio',3:'ENOS y eventos',4:'Método',5:'Selección',6:'Anexo'};",
                       "var sectionLabels = {1:'Introducción',2:'Estado medio',3:'Variabilidad y umbrales',4:'Eventos',5:'Síntesis',6:'Anexo'};")
 assert "Variabilidad y umbrales" in script
@@ -68,8 +109,8 @@ slides.append('''<section class="slide title-slide" data-section="1">
 slides.append('''<section class="slide " data-section="1">
 <div class="kicker">Resumen · lo que pide el TdR</div>
   <h1>El mar se calienta con seguridad; el ENOS cambia menos, pero los Niños fuertes aumentan</h1>
-  <div class="grid3">
-    <div class="card"><strong>1. Estado medio</strong><div class="stat">+2.3 a +3.6 °C</div><div class="stat-label">Calentamiento de Niño 1+2 a fin de siglo (2071–2100), del escenario intermedio al muy alto. <strong>Los 15 modelos coinciden.</strong></div></div>
+  <div class="grid3 resumen-cajas">
+    <div class="card"><strong>1. Estado medio</strong><div class="stat"><span class="stat-caja">Niño 3.4</span> +1.9 a +3.4 °C</div><div class="stat"><span class="stat-caja">Niño 1+2</span> +2.3 a +3.6 °C</div><div class="stat-label">Calentamiento a fin de siglo (2071–2100), del escenario intermedio al muy alto; Niño 1+2 se calienta más que el trópico. <strong>Los 15 modelos coinciden.</strong></div></div>
     <div class="card"><strong>2. Variabilidad del ENOS</strong><div class="stat">+11 a +26 %</div><div class="stat-label">Intensidad típica de Niños y Niñas en Niño 3.4 a fin de siglo. <strong>Incierto:</strong> los modelos no coinciden. En Niño 1+2, sin cambio claro.</div></div>
     <div class="card"><strong>3. Eventos extremos (ONI, ICEN)</strong><div class="stat">3 → 5 a 9</div><div class="stat-label">Niños fuertes o más intensos cada 30 años (ONI y RONI), con emisiones altas y muy altas. <strong>Aumento significativo.</strong> En el ICEN, pocos y sin cambio claro.</div></div>
   </div>
