@@ -27,8 +27,8 @@ def main():
                  ("delta_relativo", "nino12", "ΔTSM rel. Niño 1+2 [°C]"),
                  ("delta_amplitud", "nino34", "Δ amplitud ciclo Niño 3.4 [°C]"),
                  ("delta_amplitud", "nino12", "Δ amplitud ciclo Niño 1+2 [°C]"),
-                 ("delta_sigma_3m_pct", "nino34", "Δσ$_{3m}$ Niño 3.4 [%]"),
-                 ("delta_sigma_3m_pct", "nino12", "Δσ$_{3m}$ Niño 1+2 [%]"),
+                 ("delta_sigma_3m_pct", "nino34", "ΔAnom$_{3m}$ Niño 3.4 [%]"),
+                 ("delta_sigma_3m_pct", "nino12", "ΔAnom$_{3m}$ Niño 1+2 [%]"),
                  ("razon_frec", "ONI", "frec. P/ref ONI"), ("razon_frec", "RONI", "frec. P/ref RONI"),
                  ("razon_frec", "ICEN", "frec. P/ref ICEN")]
     neutro = {"razon_frec": 1}

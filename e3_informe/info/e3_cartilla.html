@@ -51,7 +51,7 @@
 <li><a href="#s5">¿Cuándo un cambio es “real”?</a></li>
 <li><a href="#s6">Estado medio: trayectoria</a></li>
 <li><a href="#s7">Estado medio: cambio por modelo</a></li>
-<li><a href="#s8">Variabilidad (σ<sub>3m</sub>)</a></li>
+<li><a href="#s8">Variabilidad (Anom<sub>3m</sub>)</a></li>
 <li><a href="#s9">Tiempo sobre el umbral</a></li>
 <li><a href="#s10">Frecuencia de eventos</a></li>
 <li><a href="#s11">Eventos extremos</a></li>
@@ -60,10 +60,11 @@
 <li><a href="#s14">Gracias</a></li>
 <li><a href="#s15">Anexo: patrón relativo al trópico</a></li>
 <li><a href="#s16">Anexo: ciclo anual</a></li>
-<li><a href="#s17">Anexo: σ en ventanas móviles</a></li>
-<li><a href="#s18">Anexo: tipos de evento</a></li>
-<li><a href="#s19">Anexo: asimetría y curtosis</a></li>
-<li><a href="#s20">Anexo: sensibilidad al conjunto</a></li>
+<li><a href="#s17">Anexo: Anom<sub>3m</sub> en ventanas móviles</a></li>
+<li><a href="#s18">Anexo: espectro de potencia</a></li>
+<li><a href="#s19">Anexo: tipos de evento</a></li>
+<li><a href="#s20">Anexo: asimetría y curtosis</a></li>
+<li><a href="#s21">Anexo: sensibilidad al conjunto</a></li>
 </ol></nav>
 
 <section id="s1">
@@ -105,13 +106,13 @@
 <div class="ej"><b>Ejemplo</b><p>Un termómetro que marca 1 °C de más sirve igual para medir cuánto subió la fiebre: 38 → 40 en el termómetro malo es lo mismo que 37 → 39 en el bueno.</p></div>
 <div class="pr"><b>Si preguntan</b>
 <p><em>¿Por qué no corrigen el sesgo?</em> Al restar el pasado del propio modelo, el sesgo constante ya se elimina.</p>
-<p><em>¿Para qué los conjuntos de 40, 11 y 7 modelos?</em> Son controles: ¿el resultado depende de qué modelos elegimos? El Entregable 2 recomendó comprobar si la señal cambia al quitar los 4 modelos con el Niño costero más débil (quedan 11) o al quedarse con los 7 mejores. La respuesta es que casi no cambia (diapositiva 20).</p></div>
+<p><em>¿Para qué los conjuntos de 40, 11 y 7 modelos?</em> Son controles: ¿el resultado depende de qué modelos elegimos? El Entregable 2 recomendó comprobar si la señal cambia al quitar los 4 modelos con el Niño costero más débil (quedan 11) o al quedarse con los 7 mejores. La respuesta es que casi no cambia (diapositiva 21).</p></div>
 </section>
 
 <section id="s4">
 <div class="meta">Diapositiva 4 · Términos clave · ~1.5 min</div>
 <h2>Términos clave: índices, eventos y variabilidad</h2>
-<p class="idea">Antes de las figuras, fijamos qué medimos: los índices ONI e ICEN, qué cuenta como un Niño, y qué es σ<sub>3m</sub>.</p>
+<p class="idea">Antes de las figuras, fijamos qué medimos: los índices ONI e ICEN, qué cuenta como un Niño, y qué es Anom<sub>3m</sub>.</p>
 <div class="fig"><b>Cómo leer la diapositiva</b>
 <ul>
 <li><strong>Izquierda:</strong> los índices. Son los mismos que usan NOAA y el ENFEN y los mismos del Entregable 2.</li>
@@ -121,7 +122,7 @@
 <p>El <strong>ONI</strong> mira el Pacífico central (Niño 3.4) y el <strong>ICEN</strong> la costa (Niño 1+2). Los dos son la anomalía de la TSM promediada en 3 meses. El <strong>RONI</strong> resta lo que se calienta todo el trópico, para quedarse solo con el ENOS.</p>
 <p>Hay un <strong>evento cálido</strong> cuando el índice pasa 0.5 °C y se queda arriba: 5 trimestres seguidos en el ONI, 3 meses seguidos en el ICEN. Es <strong>fuerte o más</strong> desde 1.5 °C en el ONI y desde 2.1 °C en el ICEN.</p>
 <p>Contamos los eventos <strong>por 30 años</strong> porque ese es el largo de cada periodo: el número que ven es directamente cuántos Niños hubo en ese periodo.</p>
-<p><strong>σ<sub>3m</sub></strong> es la desviación estándar de esa misma anomalía suavizada a 3 meses: dice qué tan lejos de lo normal llegan los Niños y las Niñas típicos. Si sube, los umbrales de 0.5 y 1.5 °C se pasan más fácil.</p>
+<p><strong>Anom<sub>3m</sub></strong> es la desviación estándar de esa misma anomalía suavizada a 3 meses: dice qué tan lejos de lo normal llegan los Niños y las Niñas típicos. Si sube, los umbrales de 0.5 y 1.5 °C se pasan más fácil.</p>
 <div class="ej"><b>Ejemplo</b><p>Si en un periodo el ICEN pasa 0.5 °C durante 4 meses seguidos, cuenta como un evento del ICEN; si el ONI pasa 0.5 °C solo en 4 trimestres seguidos, no alcanza para ser un Niño según NOAA.</p></div>
 <div class="pr"><b>Si preguntan</b>
 <p><em>¿El ONI no es de 5 meses y el ICEN de 3?</em> Los dos índices son el promedio de 3 meses. El 5 y el 3 son la persistencia: cuántos valores seguidos sobre el umbral hacen falta para declarar el evento.</p>
@@ -190,22 +191,22 @@
 
 <section id="s8">
 <div class="meta">Diapositiva 8 · Variabilidad · Figura 5 del informe · ~2 min</div>
-<h2>Variabilidad del ENOS: σ<sub>3m</sub></h2>
+<h2>Variabilidad del ENOS: Anom<sub>3m</sub></h2>
 <p class="idea">En Niño 3.4 los Niños y las Niñas típicos tienden a ser más intensos, pero los modelos no se ponen de acuerdo; en Niño 1+2 no hay cambio claro.</p>
 <div class="fig"><b>Cómo leer la figura</b>
 <ul>
 <li>Mismo formato que la anterior: un punto por modelo, barra = mediana, número = acuerdo, * = significativo.</li>
-<li>El eje vertical es el <strong>cambio de σ<sub>3m</sub> en %</strong>: 0 = misma variabilidad que hoy; +20 % = oscilaciones 20 % más amplias.</li>
+<li>El eje vertical es el <strong>cambio de Anom<sub>3m</sub> en %</strong>: 0 = misma variabilidad que hoy; +20 % = oscilaciones 20 % más amplias.</li>
 <li>(a) Niño 3.4, (b) Niño 1+2.</li>
 </ul></div>
-<span class="decir">Qué decir: qué es σ<sub>3m</sub> y por qué la usamos</span>
-<p>Para medir la variabilidad del ENOS preguntamos qué tan lejos de lo normal llega el mar año a año. Eso es la <strong>desviación estándar</strong>. Primero quitamos el ciclo de las estaciones y la subida por calentamiento, para quedarnos solo con los Niños y las Niñas. Luego suavizamos con un promedio de 3 meses porque <strong>así se calculan el ONI y el ICEN</strong>: σ<sub>3m</sub> está en la misma escala que los umbrales de El Niño (0.5 °C, 1.5 °C…). Si σ<sub>3m</sub> sube, esos umbrales se superan con más facilidad. El suavizado además quita fluctuaciones de pocas semanas, que no son ENOS.</p>
+<span class="decir">Qué decir: qué es Anom<sub>3m</sub> y por qué la usamos</span>
+<p>Para medir la variabilidad del ENOS preguntamos qué tan lejos de lo normal llega el mar año a año. Eso es la <strong>desviación estándar</strong>. Primero quitamos el ciclo de las estaciones y la subida por calentamiento, para quedarnos solo con los Niños y las Niñas. Luego suavizamos con un promedio de 3 meses porque <strong>así se calculan el ONI y el ICEN</strong>: Anom<sub>3m</sub> está en la misma escala que los umbrales de El Niño (0.5 °C, 1.5 °C…). Si Anom<sub>3m</sub> sube, esos umbrales se superan con más facilidad. El suavizado además quita fluctuaciones de pocas semanas, que no son ENOS.</p>
 <p><em>Si preguntan «¿el ONI no es de 5 meses y el ICEN de 3?»:</em> los dos índices son el promedio de 3 meses. El 5 y el 3 son la <strong>persistencia</strong> para declarar un evento: el ONI debe pasar el umbral en 5 trimestres móviles seguidos (NOAA) y el ICEN en 3 meses seguidos (ENFEN).</p>
 <span class="decir">Qué decir: el resultado</span>
 <p>En Niño 3.4, la mediana sube +11, +23 y +26 % a fin de siglo. Pero miren los puntos: con SSP5-8.5 van de −29 a +105 %. La mayoría sube, pero la dispersión es tan grande que el cambio no es significativo; solo lo es a mitad de siglo con SSP3-7.0 y SSP5-8.5. En Niño 1+2 la mediana está entre 0 y +10 % y los modelos no coinciden.</p>
-<div class="ej"><b>Ejemplo</b><p>Si las olas de una playa miden en promedio 1 m y pasan a 1.2 m, el nivel medio del mar no cambió, pero las olas son 20 % más grandes: eso mide σ. Con σ<sub>3m</sub> +10 %, un Niño típico de 1.0 °C pasaría a ser de 1.1 °C.</p></div>
+<div class="ej"><b>Ejemplo</b><p>Si las olas de una playa miden en promedio 1 m y pasan a 1.2 m, el nivel medio del mar no cambió, pero las olas son 20 % más grandes: eso mide σ. Con Anom<sub>3m</sub> +10 %, un Niño típico de 1.0 °C pasaría a ser de 1.1 °C.</p></div>
 <div class="pr"><b>Si preguntan</b>
-<p><em>¿Y si no suavizan?</em> El resultado casi no cambia: con la σ mensual, Niño 3.4 en P2 con SSP5-8.5 da +25 %; con σ<sub>3m</sub>, +26 %.</p>
+<p><em>¿Y si no suavizan?</em> El resultado casi no cambia: con la σ mensual, Niño 3.4 en P2 con SSP5-8.5 da +25 %; con Anom<sub>3m</sub>, +26 %.</p>
 <p><em>¿Por qué en porcentaje?</em> Para que un modelo con un ENOS naturalmente débil y otro con uno fuerte pesen igual.</p>
 <p><em>¿Por qué quitan la tendencia?</em> Porque dentro de los 30 años de P2 el mar sube ~1 °C; sin quitarla, esa subida se contaría como variabilidad.</p></div>
 </section>
@@ -270,7 +271,7 @@
 <p class="idea">La tabla ordena todo según los puntos del TdR: el calentamiento es firme, la variabilidad y la frecuencia no, los eventos fuertes sí.</p>
 <div class="fig"><b>Cómo leer la tabla</b>
 <ul>
-<li>Filas por bloque: estado medio (ΔTSM y cambio relativo), variabilidad (Δσ<sub>3m</sub>), frecuencia (razón P/ref) y eventos fuertes (número por 30 años).</li>
+<li>Filas por bloque: estado medio (ΔTSM y cambio relativo), variabilidad (ΔAnom<sub>3m</sub>), frecuencia (razón P/ref) y eventos fuertes (número por 30 años).</li>
 <li>Columnas: P1 y P2 de cada escenario.</li>
 <li><strong>Negrita</strong> = robusto (al menos 12 de 15 modelos); <strong>*</strong> = significativo.</li>
 </ul></div>
@@ -322,18 +323,34 @@
 
 <section id="s17" class="anexo">
 <div class="meta">Diapositiva 17 · Anexo · Figura 6 del informe</div>
-<h2>σ<sub>3m</sub> en ventanas móviles de 30 años</h2>
+<h2>Anom<sub>3m</sub> en ventanas móviles de 30 años</h2>
 <p class="idea">El aumento de la variabilidad de Niño 3.4 es gradual y llega a su máximo hacia 2067–2072.</p>
 <div class="fig"><b>Cómo leer la figura</b>
 <ul>
-<li>Cada valor es σ<sub>3m</sub> de una ventana de 30 años, ubicado en su año central; la ventana avanza de año en año.</li>
+<li>Cada valor es Anom<sub>3m</sub> de una ventana de 30 años, ubicado en su año central; la ventana avanza de año en año.</li>
 <li>Eje vertical: cambio en % respecto de la ventana 1985–2014. Línea = mediana; sombra = percentiles 10–90.</li>
 </ul></div>
 <p>En Niño 3.4 sube +21 a +31 % según el escenario; la sombra va de −20 a +70 %, mucho más ancha que en el periodo histórico: la magnitud depende mucho del modelo. En Niño 1+2 casi siempre queda por debajo de +10 %.</p>
 </section>
 
 <section id="s18" class="anexo">
-<div class="meta">Diapositiva 18 · Anexo · Figura A8 del informe</div>
+<div class="meta">Diapositiva 18 · Anexo · Figura A9 del informe</div>
+<h2>Espectro de potencia: cada cuánto ocurre un Niño</h2>
+<p class="idea">El ritmo dominante del ENOS se mantiene en unos 3.6 años; lo que crece es la potencia del ONI en la banda del ENOS, no la frecuencia.</p>
+<div class="fig"><b>Cómo leer la figura</b>
+<ul>
+<li><strong>Tramos comparados, 86 años cada uno:</strong> histórico <strong>1929–2014</strong> (negro) frente a cada escenario <strong>2015–2100</strong> (azul SSP2-4.5, amarillo SSP3-7.0, naranja SSP5-8.5). Mismo largo = misma resolución y mismo ruido.</li>
+<li>Eje horizontal: <strong>periodo</strong> de la oscilación, en años por ciclo (escala logarítmica). Eje vertical: <strong>potencia</strong>, cuánta variabilidad aporta cada ritmo. El pico de la curva es el ritmo dominante.</li>
+<li>Paneles: (a) ONI, (b) RONI, (c) ICEN. Línea = mediana de los 15 modelos; barras = percentiles 10–90, un poco desplazadas para que no se tapen. Franja gris: banda del ENOS, 2 a 7 años.</li>
+</ul></div>
+<div class="ej"><b>Ejemplo</b><p>Es como el ecualizador de un equipo de música: separa la serie en “graves” (oscilaciones lentas, de muchos años) y “agudos” (oscilaciones rápidas) y mide el volumen de cada una. En el ENOS el volumen más alto está en oscilaciones de unos 3.6 años: más o menos cada cuánto se repite un Niño. Si en el futuro la curva sube sin moverse, los Niños llegan con el mismo ritmo pero más intensos.</p></div>
+<span class="decir">Qué decir: por qué 86 años y no los periodos de 30</span>
+<p>Con 30 años solo se distinguen seis ritmos dentro de la banda del ENOS; con 86 años hay ocho y el espectro es mucho menos ruidoso. Por eso se compara todo el siglo XXI de cada escenario (2015–2100) con los 86 años anteriores (1929–2014).</p>
+<p>El pico queda en 3.6 años en el histórico y en casi todos los escenarios; los modelos se reparten entre los que lo acortan y los que lo alargan: <strong>no cambia cada cuánto ocurren los Niños</strong>. En el ONI la potencia de la banda de 2–7 años sube +28, +62 y +40 % (SSP2-4.5, SSP3-7.0, SSP5-8.5; mediana); con SSP3-7.0 sube en 13 de 15 modelos. Es el mismo aumento de Anom<sub>3m</sub>, visto desde otro ángulo. En el ICEN casi no cambia (+1 a +12 %) y sin acuerdo.</p>
+</section>
+
+<section id="s19" class="anexo">
+<div class="meta">Diapositiva 19 · Anexo · Figura A8 del informe</div>
 <h2>Tipos de evento: costero, extendido y central</h2>
 <p class="idea">Los Niños extendidos son los que más aumentan; los costeros se mantienen.</p>
 <div class="fig"><b>Cómo leer la figura</b>
@@ -344,8 +361,8 @@
 <p>Los extendidos pasan de 8 a 10 cada 30 años con emisiones altas; los costeros, 1 o 2 cada 30 años, no cambian. La fracción costera baja en la mediana, pero sin acuerdo.</p>
 </section>
 
-<section id="s19" class="anexo">
-<div class="meta">Diapositiva 19 · Anexo · Figura A5 del informe</div>
+<section id="s20" class="anexo">
+<div class="meta">Diapositiva 20 · Anexo · Figura A5 del informe</div>
 <h2>Asimetría y curtosis</h2>
 <p class="idea">Los modelos no generan, ni hoy ni en el futuro, la cola de Niños costeros extraordinarios.</p>
 <div class="fig"><b>Cómo leer la figura</b>
@@ -356,8 +373,8 @@
 <p>En Niño 1+2 la asimetría de los modelos pasa de 0.17 a 0.33 con SSP5-8.5, lejos del 1.06 observado. Es la principal limitación para hablar de Niños costeros extremos.</p>
 </section>
 
-<section id="s20" class="anexo">
-<div class="meta">Diapositiva 20 · Anexo · Figura A10 del informe</div>
+<section id="s21" class="anexo">
+<div class="meta">Diapositiva 21 · Anexo · Figura A10 del informe</div>
 <h2>Sensibilidad al conjunto de modelos</h2>
 <p class="idea">El resultado casi no depende de qué modelos se eligen.</p>
 <div class="fig"><b>Cómo leer la figura</b>

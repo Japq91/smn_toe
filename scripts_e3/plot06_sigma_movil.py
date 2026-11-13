@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """plot06 -- Figura 6 del informe E3: figures/e3/e3_06_sigma_movil.png
 
-Cambio de σ3m en ventanas móviles de 30 años respecto de 1985-2014, mediana y
+Cambio de Anom3m en ventanas móviles de 30 años respecto de 1985-2014, mediana y
 p10-p90 del grupo, por escenario.
 
 Entrada: ens_variabilidad_movil_30a.csv (q11) (data/processed/e3/)
@@ -34,10 +34,10 @@ def main():
                     fontsize=8)
         ax.axhline(0, color="0.4", lw=0.7)
         ax.set_xlabel("año central de la ventana de 30 años")
-        ax.set_ylabel("Δσ$_{3m}$ respecto de 1985-2014 [%]")
+        ax.set_ylabel("ΔAnom$_{3m}$ [%]\nrespecto de 1985-2014")
         p0.titulo_panel(ax, LETRAS[j], NOM_CAJA[caja], pad=14)
     axs[0].legend(frameon=False, fontsize=8, loc="upper left", ncol=2)
-    fig.suptitle(f"σ$_{{3m}}$ en ventanas móviles\nmediana y percentiles 10-90 de {GRUPO} modelos", y=1.06)
+    fig.suptitle(f"Anom$_{{3m}}$ en ventanas móviles\nmediana y percentiles 10-90 de {GRUPO} modelos", y=1.06)
     guardar(fig, "06_sigma_movil")
 
 

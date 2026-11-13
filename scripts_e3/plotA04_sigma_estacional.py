@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """plotA04 -- Figura A4 del informe E3: figures/e3/e3_A04_sigma_estacional.png
 
-σ3m por estación (trimestre centrado en cada mes) en ref, P1 y P2, mediana y p10-p90
+Anom3m por estación (trimestre centrado en cada mes) en ref, P1 y P2, mediana y p10-p90
 del grupo, para SSP2-4.5 y SSP5-8.5.
 
 Entrada: ens_variabilidad_estacional_ref<ref>.csv (q11) (data/processed/e3/)
@@ -27,10 +27,10 @@ def main():
                 banda(ax, ens(ens_estac(), grupo=GRUPO, escenario=esc, caja=caja, periodo=per, variable="sigma_3m"),
                       "mes", COL_PER[per], NOM_PER[per])
             ax.set_xticks(range(1, 13), MESES)
-            ax.set_ylabel("σ$_{3m}$ [°C]")
+            ax.set_ylabel("Anom$_{3m}$ [°C]")
             p0.titulo_panel(ax, LETRAS[len(escs) * i + j], f"{NOM_CAJA[caja]}, {NOM_ESC[esc]}")
     axs[0, 0].legend(frameon=False, fontsize=8)
-    fig.suptitle(f"σ$_{{3m}}$ por estación -- mediana y percentiles 10-90 de {GRUPO} modelos")
+    fig.suptitle(f"Anom$_{{3m}}$ por estación -- mediana y percentiles 10-90 de {GRUPO} modelos")
     guardar(fig, "A04_sigma_estacional")
 
 

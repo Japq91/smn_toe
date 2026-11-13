@@ -76,7 +76,7 @@ rm=pd.read_csv(ROOT+'data/processed/e3/resumen_multimodelo_ref1985-2014.csv',dty
 r=rm[rm.grupo=='15']
 VARS=[("delta","nino34","ΔTSM Niño 3.4 [°C]"),("delta","nino12","ΔTSM Niño 1+2 [°C]"),
  ("delta_relativo","nino34","ΔTSM rel. Niño 3.4 [°C]"),("delta_relativo","nino12","ΔTSM rel. Niño 1+2 [°C]"),
- ("delta_sigma_3m_pct","nino34","Δσ<sub>3m</sub> Niño 3.4 [%]"),("delta_sigma_3m_pct","nino12","Δσ<sub>3m</sub> Niño 1+2 [%]"),
+ ("delta_sigma_3m_pct","nino34","ΔAnom<sub>3m</sub> Niño 3.4 [%]"),("delta_sigma_3m_pct","nino12","ΔAnom<sub>3m</sub> Niño 1+2 [%]"),
  ("razon_frec","ONI","Frecuencia P/ref ONI"),("razon_frec","RONI","Frecuencia P/ref RONI"),("razon_frec","ICEN","Frecuencia P/ref ICEN"),
  ("n_fuerte_mas","ONI","Eventos fuertes+ ONI (ref: 3)"),("n_fuerte_mas","RONI","Eventos fuertes+ RONI (ref: 3)"),("n_fuerte_mas","ICEN","Eventos fuertes+ ICEN (ref: 0)")]
 cats=[(e,p) for e in ['ssp245','ssp370','ssp585'] for p in ['P1','P2']]
@@ -156,7 +156,7 @@ slides.append('''<section class="slide " data-section="1">
       <li><strong>Evento cálido:</strong> ONI ≥ 0.5 °C en 5 trimestres seguidos; ICEN &gt; 0.5 °C en 3 meses seguidos. Los dos índices son promedios de 3 meses: el 5 y el 3 son cuánto debe durar</li>
       <li><strong>Fuerte o más:</strong> ONI ≥ 1.5 °C; ICEN &gt; 2.1 °C (ENFEN, 2024)</li>
       <li><strong>Eventos por 30 años:</strong> el conteo de cada periodo (ref, P1 y P2 duran 30 años)</li>
-      <li><strong>σ<sub>3m</sub>:</strong> desviación estándar de la anomalía suavizada a 3 meses, la misma serie del ONI y del ICEN. Mide qué tan intensos son los Niños y las Niñas típicos; <strong>Δσ<sub>3m</sub></strong> es su cambio en %</li>
+      <li><strong>Anom<sub>3m</sub>:</strong> desviación estándar de la anomalía suavizada a 3 meses, la misma serie del ONI y del ICEN. Mide qué tan intensos son los Niños y las Niñas típicos; <strong>ΔAnom<sub>3m</sub></strong> es su cambio en %</li>
     </ul></div>
   </div>
   <p class="nota-pie">Glosario completo en el Cuadro 1 del informe, después del Resumen.</p>
@@ -166,7 +166,7 @@ slides.append('''<section class="slide " data-section="1">
 <div class="kicker">Marco común · q10</div>
   <h1>¿Cuándo un cambio es “real”? Tres filtros</h1>
   <div class="grid3">
-    <div class="card"><strong>1. Mediana</strong><p class="small">El valor del medio de los 15 modelos. Un modelo extremo no la mueve.</p><p class="small"><em>Ej.:</em> σ<sub>3m</sub> de Niño 3.4 va de −29 a +105 %; la mediana es +26 %.</p></div>
+    <div class="card"><strong>1. Mediana</strong><p class="small">El valor del medio de los 15 modelos. Un modelo extremo no la mueve.</p><p class="small"><em>Ej.:</em> Anom<sub>3m</sub> de Niño 3.4 va de −29 a +105 %; la mediana es +26 %.</p></div>
     <div class="card"><strong>2. Acuerdo de signo</strong><p class="small">Fracción de modelos que van en la dirección de la mediana. ≥ 0.8 (12 de 15) = robusto.</p><p class="small"><em>Ej.:</em> Niño 1+2 relativo al trópico: 15 de 15 → 1.00.</p></div>
     <div class="card"><strong>3. Wilcoxon + Holm (*)</strong><p class="small">Wilcoxon: ¿los 15 cambios, por signo y tamaño, se separan de 0? Holm: exige más porque se hacen 30 pruebas a la vez.</p><p class="small"><em>Ej.:</em> eventos fuertes del ONI, SSP3-7.0, P2: p = 0.0014; es la 13.ª de 30 pruebas → ×18 = 0.025 &lt; 0.05 *</p></div>
   </div>
@@ -184,7 +184,7 @@ slides.append(larga(2,'Estado medio · q02','Los 15 modelos calientan las dos ca
  'Entre modelos hay mucha diferencia: con SSP5-8.5, Niño 1+2 va de +2.6 a +5.5 °C',
  'Fila de abajo: Niño 1+2 se calienta 0.4–0.7 °C más que el trópico (15 de 15); Niño 3.4, 0.2–0.4 °C y con menos acuerdo']))
 slides.append(larga(3,'Variabilidad · q05','Niño 3.4: más variabilidad en la mediana, pero sin acuerdo entre modelos','e3_05_cambio_sigma_por_modelo',[
- 'σ<sub>3m</sub> mide qué tan intensos son los Niños y las Niñas típicos: es la desviación estándar de la misma serie suavizada a 3 meses con la que se calculan el ONI y el ICEN y sus umbrales',
+ 'Anom<sub>3m</sub> mide qué tan intensos son los Niños y las Niñas típicos: es la desviación estándar de la misma serie suavizada a 3 meses con la que se calculan el ONI y el ICEN y sus umbrales',
  'Su cambio en %: +10 % = las oscilaciones típicas son 10 % más amplias, y los umbrales de El Niño se superan con más facilidad',
  'Niño 3.4, P2: +11, +23 y +26 %; con SSP5-8.5 suben 13 de 15 modelos, pero de −29 a +105 % → no significativo (solo P1 con SSP3-7.0 y SSP5-8.5 *)',
  'Niño 1+2: de −0.5 a +10 %, con 8 a 12 de 15 modelos de acuerdo: sin cambio claro',
@@ -250,7 +250,8 @@ slides.append('''<section class="slide title-slide" data-section="5">
 ''')
 slides.append(anexo('Patrón del calentamiento: cambio relativo al trópico','e3_A01_mapas_cambio_relativo'))
 slides.append(anexo('Ciclo anual: Niño 1+2 se calienta más en invierno y su ciclo se aplana','e3_A02_ciclo_anual'))
-slides.append(anexo('σ<sub>3m</sub> en ventanas móviles de 30 años','e3_06_sigma_movil'))
+slides.append(anexo('Anom<sub>3m</sub> en ventanas móviles de 30 años','e3_06_sigma_movil'))
+slides.append(anexo('Espectro de potencia, 86 años cada tramo: histórico 1929–2014 frente a 2015–2100','e3_A09_espectro'))
 slides.append(anexo('Eventos por tipo: costero, extendido y central','e3_A08_tipo_eventos'))
 slides.append(anexo('Asimetría y curtosis: los modelos no generan la cola de Niños costeros extraordinarios','e3_A05_asimetria_curtosis'))
 slides.append(anexo('Sensibilidad al conjunto de modelos (15, 40, 11 y 7) en P2','e3_A10_sensibilidad_conjuntos'))

@@ -21,6 +21,19 @@ Metricas por periodo:
   frac_banda_enso     fraccion de la varianza total en 2-7 anios
                       (banda clasica del ENOS)
 
+Ademas, espectro en tramos largos de igual duracion (86 anios = 1032
+meses), para comparar el clima historico con cada escenario completo:
+  historical  1929-2014 (los 86 anios previos al inicio de los SSP)
+  ssp<xyz>    2015-2100 (todo el escenario)
+Con 86 anios se usa el segmento de E2, 256 meses (21.3 anios): 7
+segmentos con 50 % de solapamiento cubren 1024 de los 1032 meses (~14
+grados de libertad por frecuencia) y la resolucion es 12/256 ciclos/anio
+(periodos de 7.1, 5.3, 4.3, 3.6, 3.0, 2.7, 2.4 y 2.1 anios en la banda
+del ENOS). Los indices usan base movil de 30 anios, asi que cerca de 2014
+el tramo historico depende un poco del escenario con que se extendio la
+serie: se calcula con los tres archivos (columna fuente) y las figuras
+usan el de SSP2-4.5.
+
 Lee indices_enso_<escenario>_1850-2100.csv (q06).
 
 Salidas (data/processed/e3/):
@@ -29,6 +42,11 @@ Salidas (data/processed/e3/):
       periodo_anios, potencia [degC^2 anio].
   espectro_resumen_ref1985-2014.csv -- una fila por (escenario, indice,
       modelo, periodo): periodo_pico_anios, frac_banda_enso.
+  espectro_indices_86a.csv -- una fila por (fuente, tramo, indice,
+      modelo, frecuencia), tramo = historical (1929-2014) o el escenario
+      (2015-2100); mismas columnas que espectro_indices.
+  espectro_resumen_86a.csv -- una fila por (fuente, tramo, indice,
+      modelo): anios, n_meses, periodo_pico_anios, frac_banda_enso.
 
 Uso: python3 scripts_e3/q09_espectro.py
 """
@@ -46,12 +64,53 @@ INDICES = ["ONI", "RONI", "ICEN"]
 NPERSEG = 180          # 15 anios: 3 segmentos en 360 meses (E2: 256 en 115 anios)
 BANDA_PICO = (1.5, 10)  # anios
 BANDA_ENSO = (2, 7)     # anios
+NPERSEG_86 = 256       # 21.3 anios, como E2: 7 segmentos en 1032 meses
+TRAMOS_86 = {"historical": (1929, 2014), "futuro": (2015, 2100)}   # 86 anios cada uno
 
 
-def espectro(serie):
+def espectro(serie, nperseg=NPERSEG):
     s = serie.dropna().to_numpy()
-    f, p = signal.welch(s - s.mean(), fs=12, nperseg=min(NPERSEG, len(s)), detrend="linear")
+    f, p = signal.welch(s - s.mean(), fs=12, nperseg=min(nperseg, len(s)), detrend="linear")
     return f[1:], p[1:]  # sin la frecuencia 0
+
+
+def metricas(f, p):
+    t = 1 / f
+    en_pico = (t >= BANDA_PICO[0]) & (t <= BANDA_PICO[1])
+    en_enso = (t >= BANDA_ENSO[0]) & (t <= BANDA_ENSO[1])
+    return {"periodo_pico_anios": float(t[en_pico][np.argmax(p[en_pico])]),
+            "frac_banda_enso": float(p[en_enso].sum() / p.sum())}
+
+
+def espectro_86a(sel):
+    """Historico 1929-2014 frente a cada escenario 2015-2100 (86 anios cada uno)."""
+    filas, resumen = [], []
+    for esc in c3.ESCENARIOS:
+        ind = pd.read_csv(c3.find_indices_csv(esc), index_col="time", parse_dates=True)
+        for indice in INDICES:
+            for number in sel.index:
+                for nombre, (y0, y1) in TRAMOS_86.items():
+                    tramo = "historical" if nombre == "historical" else esc
+                    serie = ind[f"{number}_{indice}"].loc[f"{y0}":f"{y1}"]
+                    f, p = espectro(serie, NPERSEG_86)
+                    base = {"fuente": esc, "tramo": tramo, "indice": indice, "number": number,
+                            "modelo": sel.loc[number, "modelo"],
+                            "seleccionado": bool(sel.loc[number, "seleccionado"])}
+                    filas.append(pd.DataFrame({**base, "frecuencia": f, "periodo_anios": 1 / f,
+                                               "potencia": p}))
+                    resumen.append({**base, "anios": f"{y0}-{y1}", "n_meses": int(serie.notna().sum()),
+                                    **metricas(f, p)})
+    esp = pd.concat(filas, ignore_index=True)
+    path = c3.E3_DIR / "espectro_indices_86a.csv"
+    esp.to_csv(path, index=False, float_format="%.5g")
+    print(f"Listo: {path} ({len(esp)} filas)", file=sys.stderr)
+    res = pd.DataFrame(resumen)
+    path = c3.E3_DIR / "espectro_resumen_86a.csv"
+    res.to_csv(path, index=False, float_format="%.4f")
+    print(f"Listo: {path} ({len(res)} filas)", file=sys.stderr)
+    tabla = res[res.seleccionado].groupby(["fuente", "indice", "tramo"])[
+        ["periodo_pico_anios", "frac_banda_enso"]].median()
+    print("86 anios, mediana de los 15 seleccionados:\n" + tabla.round(2).to_string(), file=sys.stderr)
 
 
 def main():
@@ -65,16 +124,11 @@ def main():
                 for per in c3.PERIODOS:
                     y0, y1 = c3.PERIODOS[per]
                     f, p = espectro(serie.loc[f"{y0}":f"{y1}"])
-                    t = 1 / f
                     base = {"escenario": esc, "indice": indice, "number": number,
                             "modelo": sel.loc[number, "modelo"],
                             "seleccionado": bool(sel.loc[number, "seleccionado"]), "periodo": per}
-                    filas.append(pd.DataFrame({**base, "frecuencia": f, "periodo_anios": t, "potencia": p}))
-                    en_pico = (t >= BANDA_PICO[0]) & (t <= BANDA_PICO[1])
-                    en_enso = (t >= BANDA_ENSO[0]) & (t <= BANDA_ENSO[1])
-                    resumen.append({**base, "anios": c3.etiqueta_periodo(per),
-                                    "periodo_pico_anios": float(t[en_pico][np.argmax(p[en_pico])]),
-                                    "frac_banda_enso": float(p[en_enso].sum() / p.sum())})
+                    filas.append(pd.DataFrame({**base, "frecuencia": f, "periodo_anios": 1 / f, "potencia": p}))
+                    resumen.append({**base, "anios": c3.etiqueta_periodo(per), **metricas(f, p)})
 
     ref = c3.etiqueta_periodo("ref")
     esp = pd.concat(filas, ignore_index=True)
@@ -89,6 +143,8 @@ def main():
     tabla = res[res.seleccionado].groupby(["escenario", "indice", "periodo"])[
         ["periodo_pico_anios", "frac_banda_enso"]].median().unstack()
     print("Mediana de los 15 seleccionados:\n" + tabla.round(2).to_string(), file=sys.stderr)
+
+    espectro_86a(sel)
 
 
 if __name__ == "__main__":

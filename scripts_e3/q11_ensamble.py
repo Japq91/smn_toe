@@ -27,6 +27,9 @@ Salidas (data/processed/e3/, prefijo ens_):
                                         mes x {sigma_3m, delta_sigma_3m_pct}
   ens_espectro_ref1985-2014.csv         grupo, escenario, indice,
                                         periodo, frecuencia x {potencia}
+  ens_espectro_86a.csv                  grupo, fuente, tramo (historical
+                                        1929-2014 o ssp 2015-2100), indice,
+                                        frecuencia x {potencia}
   ens_indices_1850-2100.csv             grupo, escenario, indice, time
                                         x {valor}
   ens_mapas_ref1985-2014.nc             (grupo, escenario, periodo, lat,
@@ -131,6 +134,10 @@ def main():
     df = leer(f"espectro_indices_ref{REF}.csv")
     guardar(percentiles(df, ["escenario", "indice", "periodo", "frecuencia"], ["potencia"]),
             f"ens_espectro_ref{REF}.csv")
+
+    df = leer("espectro_indices_86a.csv")
+    guardar(percentiles(df, ["fuente", "tramo", "indice", "frecuencia"], ["potencia"]),
+            "ens_espectro_86a.csv")
 
     largos = []
     for esc in c3.ESCENARIOS:

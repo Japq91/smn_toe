@@ -30,7 +30,8 @@ se pueden cambiar en un solo lugar:
 
 - **Escenarios**: `ESCENARIOS = ["ssp245", "ssp370", "ssp585"]`. El
   figuras del cuerpo dibujan los tres (`ESCS` de `plot00_comun_e3.py`);
-  A02, A04, A06, A07, A09 y A10, solo SSP2-4.5 y SSP5-8.5 (`ESCS_TDR`).
+  A02, A04, A06, A07 y A10, solo SSP2-4.5 y SSP5-8.5 (`ESCS_TDR`); A09,
+  el histórico 1929–2014 frente a los tres escenarios 2015–2100.
 - **Periodos**: referencia 1985–2014 frente a P1 2036–2065 y P2
   2071–2100 (los dos últimos, de `config/periods.yaml`). La referencia
   tiene 30 años, igual que P1 y P2, y no los 34 de 1981–2014: así las σ
@@ -122,18 +123,18 @@ E3_GRUPO=40 bash rune3plot.sh   # otro conjunto (15, 40, 11 o 7): sufijo _g40, n
 | 02 | 2 | Mapas del cambio de la TSM media | q11 |
 | 03 | 3 | Cambio medio en las cajas, por modelo | q02, q10 |
 | 04 | 4 | Mapas del cambio de la desviación estándar | q11 |
-| 05 | 5 | Cambio de σ3m en las cajas, por modelo | q05, q10 |
-| 06 | 6 | σ3m en ventanas móviles de 30 años | q11 |
+| 05 | 5 | Cambio de Anom3m en las cajas, por modelo | q05, q10 |
+| 06 | 6 | Anom3m en ventanas móviles de 30 años | q11 |
 | 07 | 7 | Tiempo sobre el umbral de inicio (bases móviles y fijas) | q08 |
 | 08 | 8 | Razón de frecuencias de eventos P/ref | q08, q10 |
 | 09 | 9 | Duración, magnitud y eventos fuertes | q08, q10 |
 | A01 | A1 | Mapas del cambio relativo al trópico | q11 |
 | A02 | A2 | Ciclo anual por mes | q04 |
 | A03 | A3 | Cambio de la amplitud del ciclo anual, por modelo | q04, q10 |
-| A04 | A4 | σ3m por estación | q11 |
+| A04 | A4 | Anom3m por estación | q11 |
 | A05 | A5 | Asimetría y curtosis | q05 |
 | A06 | A6 | Series de ONI, RONI e ICEN hasta 2100 | q06, q11 |
 | A07 | A7 | Series de ONIfija e ICENfija | q06, q11 |
 | A08 | A8 | Eventos por tipo: costero, extendido y central | q08, q10 |
-| A09 | A9 | Espectro de Welch de los índices | q11 |
+| A09 | A9 | Espectro de Welch de los índices, histórico 1929–2014 frente a 2015–2100 (86 años cada uno) | q09, q11 |
 | A10 | A10 | Sensibilidad al conjunto de modelos | q10 |

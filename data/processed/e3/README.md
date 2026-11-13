@@ -148,6 +148,21 @@ años por periodo):
   periodo), con `periodo_pico_anios` (máximo de potencia en 1.5–10 años)
   y `frac_banda_enso` (fracción de la varianza en 2–7 años).
 
+## `espectro_indices_86a.csv` y `espectro_resumen_86a.csv` (q09)
+
+Mismo espectro en dos tramos del mismo largo, 86 años (1032 meses):
+histórico 1929–2014 frente a cada escenario 2015–2100 (`nperseg=256`,
+como E2: 7 segmentos de 21.3 años). Es lo que dibuja la Figura A9.
+
+- `fuente`: archivo de índices usado (`indices_enso_<fuente>_1850-2100.csv`);
+  el tramo histórico se calcula con los tres, porque la base móvil del
+  índice cerca de 2014 depende levemente del escenario.
+- `tramo`: `historical` (1929–2014) o el escenario (2015–2100).
+- `espectro_indices_86a`: una fila por (fuente, tramo, indice, modelo,
+  `frecuencia`), con `periodo_anios` y `potencia`.
+- `espectro_resumen_86a`: una fila por (fuente, tramo, indice, modelo),
+  con `anios`, `n_meses`, `periodo_pico_anios` y `frac_banda_enso`.
+
 ## `resumen_multimodelo_ref1985-2014.csv` (q10)
 
 Una fila por (`grupo` ∈ {15, 40, 11, 7}, escenario, periodo, `variable`,
@@ -195,6 +210,7 @@ clave, `variable`, `n_modelos`, `mediana`, `p10` y `p90`.
 | `ens_variabilidad_movil_30a.csv` | escenario, caja, anio_central | sigma_3m, delta_sigma_3m_pct (respecto de la ventana centrada en 2000) |
 | `ens_variabilidad_estacional_ref1985-2014.csv` | escenario, caja, periodo, mes | sigma_3m, delta_sigma_3m_pct |
 | `ens_espectro_ref1985-2014.csv` | escenario, indice, periodo, frecuencia | potencia |
+| `ens_espectro_86a.csv` | fuente, tramo, indice, frecuencia | potencia |
 | `ens_indices_1850-2100.csv` | escenario, indice, time | valor |
 
 `ens_mapas_ref1985-2014.nc` tiene dimensiones (grupo, escenario,
