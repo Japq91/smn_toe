@@ -111,7 +111,7 @@ slides.append('''<section class="slide title-slide" data-section="1">
 ''')
 slides.append('''<section class="slide " data-section="1">
 <div class="kicker">Resumen · lo que pide el TdR</div>
-  <h1>El mar se calienta con seguridad; el ENOS cambia menos, pero los Niños fuertes aumentan</h1>
+  <h1>Los 15 modelos calientan el mar; el ENOS cambia menos, pero los Niños fuertes aumentan</h1>
   <div class="grid3 resumen-cajas">
     <div class="card"><strong>1. Estado medio</strong><div class="stat"><span class="stat-caja">Niño 3.4</span> +1.9 a +3.4 °C</div><div class="stat"><span class="stat-caja">Niño 1+2</span> +2.3 a +3.6 °C</div><div class="stat-label">Calentamiento a fin de siglo (2071–2100), del escenario intermedio al muy alto; Niño 1+2 se calienta más que el trópico. <strong>Los 15 modelos coinciden.</strong></div></div>
     <div class="card"><strong>2. Variabilidad del ENOS</strong><div class="stat">+11 a +26 %</div><div class="stat-label">Intensidad típica de Niños y Niñas en Niño 3.4 a fin de siglo. <strong>Incierto:</strong> los modelos no coinciden. En Niño 1+2, sin cambio claro.</div></div>
@@ -119,7 +119,7 @@ slides.append('''<section class="slide " data-section="1">
   </div>
   <ul style="margin-top:1em">
     <li><strong>Cuántos Niños:</strong> la frecuencia del ONI y del RONI sube en la mediana (+10 a +44 %) y la del ICEN casi no cambia; solo es significativa en dos casos (RONI, P2): con ~9 eventos por periodo la señal apenas se distingue del azar.</li>
-    <li><strong>Con el umbral de hoy:</strong> a fin de siglo Niño 1+2 estaría sobre el umbral de El Niño casi todo el tiempo. Es el calentamiento de fondo, no más Niños.</li>
+    <li><strong>Con base fija 1985–2014:</strong> a fin de siglo Niño 1+2 estaría sobre el umbral de inicio de El Niño en el 99–100 % de los meses (22 % en el Histórico); con la base móvil del ENFEN, 27 → 29–36 %. Es el calentamiento de fondo, no más Niños.</li>
   </ul>
   <p class="nota-pie">Cada número es la mediana de los 15 modelos seleccionados en el Entregable 2, comparando 2071–2100 con el Histórico 1985–2014 en cada modelo. Escenarios: SSP2-4.5 (intermedio), SSP3-7.0 (alto) y SSP5-8.5 (muy alto). <strong>Significativo</strong>: no se explica por azar (Wilcoxon con corrección de Holm).</p>
 </section>
@@ -191,7 +191,7 @@ slides.append(larga(3,'Variabilidad · q05','Niño 3.4: más variabilidad en la 
  'Niño 3.4, P2: +11, +23 y +26 %; con SSP5-8.5 suben 13 de 15 modelos, pero de −29 a +105 % → no significativo (solo P1 con SSP3-7.0 y SSP5-8.5 *)',
  'Niño 1+2: de −0.5 a +10 %, con 8 a 12 de 15 modelos de acuerdo: sin cambio claro',
  'En ventanas móviles, el aumento de Niño 3.4 es gradual y llega a +21 a +31 % hacia 2067–2072 (Anexo)']))
-slides.append(larga(3,'Índices ENOS · q06–q08','Con la base actual, el umbral de El Niño se supera casi siempre','e3_07_tiempo_sobre_umbral',[
+slides.append(larga(3,'Índices ENOS · q06–q08','Con base fija 1985–2014, el umbral de El Niño se superaría casi siempre','e3_07_tiempo_sobre_umbral',[
  'Fracción de meses con el índice sobre el umbral de inicio (0.5 °C), sin exigir duración',
  'Base móvil (clima de su época), Histórico → P2: ONI 33 % → 35–41 %; ICEN 27 % → 29–36 %',
  'Base fija 1985–2014: ONIfija 31 % → 88–98 %; ICENfija 22 % → 99–100 %',
@@ -227,10 +227,10 @@ slides.append('''<section class="slide " data-section="5">
   <h1>Conclusiones y limitaciones</h1>
   <div class="grid2">
     <div class="card"><strong>Conclusiones</strong><ul class="small-list">
-      <li><strong>Estado medio:</strong> calentamiento seguro, +2.3 a +3.6 °C en Niño 1+2 a fin de siglo, y más que el trópico</li>
+      <li><strong>Estado medio:</strong> calentamiento robusto en los 15 modelos; la mediana proyecta +2.3 a +3.6 °C en Niño 1+2 a fin de siglo, y más que el trópico</li>
       <li><strong>Variabilidad:</strong> tiende a subir en Niño 3.4, sin acuerdo entre modelos; Niño 1+2 sin cambio claro</li>
       <li><strong>Eventos extremos:</strong> los Niños fuertes o más intensos (ONI, RONI) suben de 3 a 5–9 cada 30 años, de forma significativa; la frecuencia total, no</li>
-      <li><strong>Umbrales de hoy:</strong> se superarían casi siempre; es el fondo, no el ENOS</li>
+      <li><strong>Base fija 1985–2014:</strong> el umbral se superaría casi siempre (99–100 % de los meses); es el fondo, no el ENOS</li>
       <li><strong>Recomendación:</strong> comunicar por separado el calentamiento de fondo y el cambio del ENOS</li>
     </ul></div>
     <div class="card"><strong>Limitaciones</strong><ul class="small-list">
@@ -255,7 +255,7 @@ slides.append(anexo('Ciclo anual: Niño 1+2 se calienta más en invierno y su ci
 slides.append(anexo('Anom<sub>3m</sub> en ventanas móviles de 30 años','e3_06_sigma_movil'))
 slides.append(anexo('Espectro de potencia, 86 años cada tramo: histórico 1929–2014 frente a 2015–2100','e3_A09_espectro'))
 slides.append(anexo('Eventos por tipo: costero, extendido y central','e3_A08_tipo_eventos'))
-slides.append(anexo('Asimetría y curtosis: los modelos no generan la cola de Niños costeros extraordinarios','e3_A05_asimetria_curtosis'))
+slides.append(anexo('Asimetría y curtosis: en la mediana, los modelos no generan la cola de Niños costeros extraordinarios','e3_A05_asimetria_curtosis'))
 slides.append(anexo('Sensibilidad al conjunto de modelos: 15 seleccionados frente a los 40, en P2','e3_A10_sensibilidad_conjuntos'))
 slides.append(anexo('Mes del pico de los eventos: Histórico frente a P1 y P2 (en cada modelo casi nunca cambia de forma significativa)','e3_A11_pruebas_por_modelo'))
 

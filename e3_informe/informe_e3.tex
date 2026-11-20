@@ -125,18 +125,18 @@ indicada en el numeral 6 del TDR \par}
 Este informe documenta el Entregable~3 del servicio de asistencia en temas de investigación de SENAMHI sobre la influencia del cambio climático en El Niño-Oscilación del Sur (ENOS). Analiza cómo cambian la temperatura superficial del mar (TSM) y el ENOS en las regiones Niño~3.4 y Niño~1+2 en dos periodos futuros, 2036--2065 (P1) y 2071--2100 (P2), frente al periodo histórico 1985--2014 (Histórico), bajo tres escenarios de emisiones: SSP2-4.5, SSP3-7.0 y SSP5-8.5. Se usan los 15 modelos CMIP6 seleccionados en el Entregable~2, con los 40 como contraste. Cada modelo se compara con su propio pasado, de modo que su error fijo se cancela, y los resultados se resumen con la mediana de los modelos, su acuerdo de signo y una prueba de significancia con corrección por pruebas múltiples.
 
 Estado medio: 
-El calentamiento es consistente, todos los modelos lo proyectan en todos los escenarios. 
-En P2, Niño~3.4 se calienta $+1.9$, $+2.6$ y $+3.4$\,°C y Niño~1+2 $+2.3$, $+2.8$ y $+3.6$\,°C bajo SSP2-4.5, SSP3-7.0 y SSP5-8.5, respectivamente. 
-Niño~1+2 se calienta además entre 0.4 y 0.7\,°C más que el promedio del trópico, con acuerdo de los 15 modelos.
+Los 15 modelos proyectan calentamiento en todos los escenarios. 
+En P2, la mediana proyecta $+1.9$, $+2.6$ y $+3.4$\,°C en Niño~3.4 y $+2.3$, $+2.8$ y $+3.6$\,°C en Niño~1+2 bajo SSP2-4.5, SSP3-7.0 y SSP5-8.5, respectivamente. 
+En Niño~1+2 el calentamiento supera en 0.4 a 0.7\,°C al del promedio del trópico, con acuerdo de los 15 modelos.
 
 Variabilidad: 
 La variabilidad del ENOS ($\mathrm{Anom}_{3m}$, intensidad de evento típico) tiende a aumentar en Niño~3.4: $+11$, $+23$ y $+26$\,\% en la mediana en P2, pero los modelos discrepan mucho (de $-29$ a $+105$\,\% con SSP5-8.5) y el cambio no es robusto. 
 En Niño~1+2 el cambio es pequeño ($+2$ a $+9$\,\%) y sin acuerdo.
 
 Ocurrencia de eventos extremos: 
-Los eventos fuertes o más intensos del ONI y del RONI aumentan de forma significativa, pasan de 3 a entre 5 y 9 por cada 30 años con SSP3-7.0 y SSP5-8.5. 
+Los eventos fuertes o más intensos del ONI y del RONI aumentan en la mediana de 3 a entre 5 y 9 por cada 30 años con SSP3-7.0 y SSP5-8.5, y el aumento es significativo. 
 La frecuencia de eventos cálidos del ONI y del RONI sube entre 10 y 44\,\% en la mediana (el ONI pasa de 8 a 10--11 eventos cada 30 años en P2) y la del ICEN casi no cambia, pero solo es significativa en dos casos (RONI, P2); con unos 9 eventos por periodo la señal apenas se distingue del azar. 
-Medido contra el clima actual (base fija), a fin de siglo la TSM de Niño~1+2 pasa casi todo el tiempo por encima del umbral de El Niño de hoy, por el calentamiento de fondo y no por un ENOS más activo.
+Si la anomalía se midiera siempre respecto de 1985--2014 (base fija), a fin de siglo Niño~1+2 estaría sobre el umbral de inicio de El Niño en el 99--100\,\% de los meses, frente al 22\,\% del Histórico; con la base móvil del ENFEN la fracción apenas sube (27 a 29--36\,\%). La diferencia es el calentamiento de fondo, no un ENOS más activo.
 
 \begin{table}[H]
 \caption{Glosario de términos, símbolos y acrónimos del informe.}
@@ -174,6 +174,8 @@ TdR & Términos de Referencia del servicio. & Conjuntos 15 y 40 & Selección del
 
 Los Términos de Referencia del servicio (en adelante, \textsc{TdR}) definen el Entregable~3 como la actividad~(c): analizar las proyecciones futuras de la TSM y de la variabilidad del ENOS en las regiones Niño~3.4 y Niño~1+2, y evaluar la influencia del cambio climático sobre el estado medio, la variabilidad y la ocurrencia de eventos extremos mediante índices como el ONI y el ICEN. Los resultados responden a esos tres puntos: el estado medio (Sección~\ref{sec:res_media}), la variabilidad (Sección~\ref{sec:res_var}) y la ocurrencia de eventos, con el tiempo sobre el umbral de El Niño (Sección~\ref{sec:res_umbral}) y la frecuencia, la intensidad y los eventos extremos (Sección~\ref{sec:res_eventos}). 
 La Sección~\ref{sec:res_sintesis} reúne las respuestas en un solo cuadro. Los análisis que ayudan a interpretar, pero que el TdR no pide (el mapa del patrón relativo al trópico, el ciclo anual, la variabilidad por estación, la asimetría, el tipo de evento, el espectro, la sensibilidad al conjunto de modelos y las pruebas de cambio en cada modelo), están en el Anexo (Sección~\ref{sec:anexo}). Además de los escenarios SSP2-4.5 y SSP5-8.5 que indica el TdR, se usa también SSP3-7.0.
+
+\noindent{Componente oceánica del ENOS}: el ENOS es un fenómeno acoplado océano--atmósfera. Este informe analiza su componente oceánica: la TSM y los índices que se calculan con ella (ONI, RONI e ICEN), que son los que usan NOAA y el ENFEN para declarar El Niño y La Niña. No se analizan variables atmosféricas (presión, vientos, lluvia); ``variabilidad del ENOS'' se refiere aquí a la de la TSM en Niño~3.4 y Niño~1+2.
 
 El insumo son los productos de los entregables anteriores, la TSM de los 40 modelos en la grilla común del Entregable~1 (\archivo{data/processed/masked/}) y, del Entregable~2, la selección de 15 modelos con su \emph{skill score}, la construcción de los índices ONI, RONI e ICEN, los criterios de detección y clasificación de eventos cálidos, las tres pruebas del filtro de eventos (frecuencia, duración y estacionalidad) y su recomendación de comparar conjuntos de modelos. 
 Este entregable se centra en la aplicación al futuro, cambios por modelo entre periodos de 30 años, cambio relativo al trópico, RONI con escala calculada solo en la base, índices de base fija ONIfija e ICENfija, filtros aplicados entre periodos del mismo modelo —no frente a ERSSTv5—, conjuntos de 11 y 7 modelos y significancia del cambio multimodelo (Wilcoxon–Holm). No descarga datos ni corrige sesgos; la partición de incertidumbre, la relación señal-ruido y el tiempo de emergencia corresponden al Entregable 4.
@@ -575,42 +577,6 @@ Las cajas son las de los entregables anteriores: Niño~3.4 (170°O--120°O, 5°S
 Los mapas cubren 30°S--30°N entre 120°E y 70°O.
 
 % ============================================================
-\section{\emph{Pipeline} del Entregable 3}
-\label{sec:scripts}
-% ============================================================
-
-El código está en \archivo{scripts_e3/} del repositorio \archivo{smn_toe} y sigue los principios de los entregables anteriores: un punto de entrada, pasos numerados que se pueden repetir con el mismo resultado y salidas en \archivo{data/processed/e3/}.
-El cálculo se ejecuta con \archivo{./rune3.sh [desde] [hasta]} (pasos \texttt{q01}--\texttt{q11}, Cuadro~\ref{tab:scripts}).
-Cada figura sale de su propio script, \archivo{scripts_e3/plot<código>_<nombre>.py}, que solo lee esas salidas y guarda \archivo{figures/e3/e3_<código>_<nombre>.png}; se ejecutan todos con \archivo{bash rune3plot.sh}, que además copia las figuras a la carpeta del informe.
-El código es el número de la figura en este informe: \archivo{01}--\archivo{09} para el cuerpo y \archivo{A01}--\archivo{A10} para el Anexo.
-Por ejemplo, la Figura~\ref{fig:sigma} es \archivo{e3_05_cambio_sigma_por_modelo.png}, generada por \archivo{plot05_cambio_sigma_por_modelo.py}, y la Figura~\ref{fig:a_estacional} es \archivo{e3_A04_sigma_estacional.png}.
-La configuración, las cargas y las funciones de dibujo comunes están en \archivo{plot00_comun_e3.py}.
-
-\begin{table}[htbp]
-\caption{Pasos del cálculo del Entregable~3.}
-\label{tab:scripts}
-\centering
-\footnotesize
-\begin{tabular}{@{}lL{4.4cm}L{\dimexpr\textwidth-4.4cm-1.2cm-4\tabcolsep\relax}@{}}
-\toprule
-\textbf{Paso} & \textbf{Qué hace} & \textbf{Salida} \\
-\midrule
-q01 & Series mensuales de las cajas, 1850--2100 & \archivo{series_cajas_1850-2100.nc} \\
-q02 & Cambio del estado medio y serie anual & \archivo{estado_medio_ref1985-2014.csv} \\
-q03 & Mapas de cambio de la media y de $\sigma$ & \archivo{cambio_tsm_mapas_ref1985-2014.nc} \\
-q04 & Ciclo anual y su amplitud & \archivo{ciclo_anual_ref1985-2014.csv} \\
-q05 & Variabilidad: $\sigma$, $\mathrm{Anom}_{3m}$, asimetría, curtosis, ventanas móviles & \archivo{variabilidad_cajas_ref1985-2014.csv} \\
-q06 & Índices ONI, RONI, ICEN, ONIfija e ICENfija hasta 2100 & \archivo{indices_enso_<esc>_1850-2100.csv} \\
-q07 & Eventos cálidos y su tipo (costero, extendido, central) & \archivo{eventos_<esc>_1850-2100.csv} \\
-q08 & Métricas de eventos por periodo y pruebas por modelo & \archivo{cambio_eventos_ref1985-2014.csv} \\
-q09 & Espectro de Welch (por periodo y en tramos de 86 años) & \archivo{espectro_resumen_86a.csv} \\
-q10 & Síntesis multimodelo: mediana, acuerdo, Wilcoxon y Holm & \archivo{resumen_multimodelo_ref1985-2014.csv} \\
-q11 & Curvas y mapas multimodelo para las figuras & \archivo{ens_*.csv}, \archivo{ens_mapas_ref1985-2014.nc} \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-% ============================================================
 \section{Resultados}
 \label{sec:resultados}
 % ============================================================
@@ -692,7 +658,7 @@ En Niño~1+2 (Figura~\ref{fig:sigma}b) la mediana queda entre $-0.5$ y $+10$\,\%
 
 La Figura~\ref{fig:sigma_movil} muestra cómo evoluciona $\mathrm{Anom}_{3m}$ con ventanas de 30 años que avanzan año a año.
 En Niño~3.4 el aumento es gradual desde la década de 2020 y alcanza su máximo en ventanas centradas entre 2067 y 2072 ($+21$, $+29$ y $+31$\,\% con los tres escenarios).
-La banda entre modelos (de $-20$ a $+70$\,\%) es mucho más ancha que la variación del periodo histórico, lo que confirma que la magnitud del aumento depende fuertemente del modelo.
+La banda entre modelos (de $-20$ a $+70$\,\%) es mucho más ancha que la variación del periodo histórico, lo que indica que la magnitud del aumento depende fuertemente del modelo.
 En Niño~1+2 la mediana se mantiene casi siempre por debajo de $+10$\,\%, con un máximo de $+20$\,\% hacia 2077 con SSP5-8.5.
 
 \begin{figure}[htbp]
@@ -710,7 +676,7 @@ La respuesta depende de con qué ``normal'' se compare.
 La Figura~\ref{fig:umbral} cuenta qué fracción de los meses de cada periodo el índice está por encima del umbral de inicio de El Niño (0.5\,°C), sin exigir duración.
 Con los índices de base móvil (ONI, RONI, ICEN), que comparan cada mes con el clima de su época, la fracción sube poco: el ONI pasa del 33\,\% de los meses en el Histórico al 35--41\,\% en P2, y el ICEN del 27\,\% al 29--36\,\%.
 Con los índices de base fija, que comparan con el clima de 1985--2014, la fracción se dispara: ONIfija pasa del 31\,\% al 88--98\,\% e ICENfija del 22\,\% al 99--100\,\%.
-Dicho de otro modo: a fin de siglo, la TSM de Niño~1+2 estará casi siempre por encima de lo que hoy se consideraría el inicio de un Niño costero, aunque el ENOS mismo cambie poco.
+Dicho de otro modo: si se mantuviera la base 1985--2014, a fin de siglo la TSM de Niño~1+2 estaría casi siempre por encima del umbral de inicio de un Niño costero, aunque el ENOS mismo cambiara poco.
 Las series de los índices hasta 2100 están en el Anexo (Figuras~\ref{fig:a_indices} y \ref{fig:a_fijos}).
 
 \begin{figure}[htbp]
@@ -807,6 +773,7 @@ Eventos fuertes+, ICEN (Hist.: 0) & 1 & 1 & 1 & 1 & 1 & 2 \\
 % ============================================================
 
 \begin{itemize}[nosep]
+\item \textbf{Solo la componente oceánica.} Sin variables atmosféricas no se evalúa si cambia el acoplamiento océano--atmósfera ni el impacto en la lluvia, aunque el patrón de TSM relativo al trópico (RONI y Figura~\ref{fig:mapas_rel}) es el que más se relaciona con la convección.
 \item \textbf{Un miembro por modelo.} Cada modelo aporta una sola realización.
 En 30 años, la variabilidad interna de esa corrida puede producir o borrar diferencias de frecuencia y de $\sigma$ sin que cambie la física del modelo.
 Separar ese efecto es parte del Entregable~4.
@@ -827,13 +794,13 @@ Las proyecciones de eventos intensos en Niño~1+2 heredan esa limitación (Anexo
 En cumplimiento de la actividad~(c) del TdR, con los 15 modelos seleccionados en el Entregable~2:
 
 \begin{enumerate}[label=(\roman*)]
-\item \textbf{Estado medio.} El calentamiento es el resultado más seguro: todos los modelos lo proyectan.
-En 2071--2100, Niño~1+2 sube $+2.3$, $+2.8$ y $+3.6$\,°C con SSP2-4.5, SSP3-7.0 y SSP5-8.5, y 0.4--0.7\,°C más que el trópico.
+\item \textbf{Estado medio.} El calentamiento es el resultado más robusto: los 15 modelos lo proyectan en todos los escenarios.
+En 2071--2100, la mediana proyecta en Niño~1+2 $+2.3$, $+2.8$ y $+3.6$\,°C con SSP2-4.5, SSP3-7.0 y SSP5-8.5, y 0.4--0.7\,°C más que el trópico.
 Hasta mediados de siglo los escenarios casi no se distinguen.
 \item \textbf{Variabilidad.} La de Niño~3.4 tiende a aumentar ($+11$ a $+26$\,\% en P2), sin acuerdo suficiente entre modelos; en Niño~1+2 no cambia de forma clara.
-\item \textbf{Eventos extremos.} Los eventos fuertes o más intensos del ONI y del RONI pasan de 3 a 5--9 por cada 30 años con SSP3-7.0 y SSP5-8.5, de forma significativa.
+\item \textbf{Eventos extremos.} Los eventos fuertes o más intensos del ONI y del RONI aumentan en la mediana de 3 a 5--9 por cada 30 años con SSP3-7.0 y SSP5-8.5, de forma significativa.
 La frecuencia del ONI y del RONI sube 10--44\,\% en la mediana, y la del ICEN casi no cambia; solo es significativa en el RONI en P2 con SSP2-4.5 y SSP5-8.5.
-\item \textbf{Umbrales actuales.} Respecto del clima de hoy, Niño~1+2 estará sobre el umbral de El Niño casi todo el tiempo a fin de siglo, por el calentamiento de fondo y no por un ENOS más activo.
+\item \textbf{Umbrales actuales.} Si la anomalía se midiera siempre respecto de 1985--2014 (base fija, ICENfija), a fin de siglo Niño~1+2 estaría sobre el umbral de inicio de El Niño (0.5\,°C) en el 99--100\,\% de los meses, frente al 22\,\% del Histórico (mediana de los 15 modelos). Con la base móvil que usa el ENFEN, la fracción apenas sube (27\,\% a 29--36\,\%): la diferencia es el calentamiento de fondo, no un ENOS más activo.
 \end{enumerate}
 
 % ============================================================
@@ -842,7 +809,7 @@ La frecuencia del ONI y del RONI sube 10--44\,\% en la mediana, y la del ICEN ca
 % ============================================================
 
 \begin{itemize}
-\item Comunicar por separado el calentamiento de fondo, que es seguro, y el cambio del ENOS, que es probable pero incierto.
+\item Comunicar por separado el calentamiento de fondo, robusto en todos los modelos, y el cambio del ENOS, probable pero incierto.
 \item En el monitoreo futuro, mantener índices de base móvil o relativos (ICEN, RONI), para que los umbrales detecten eventos y no solo el calentamiento.
 \item En el Entregable~4, cuantificar cuánto de la dispersión entre modelos en la variabilidad y los eventos se debe a la variabilidad interna.
 \end{itemize}
@@ -962,7 +929,7 @@ La autocorrelación de la serie mensual reduce el tamaño de muestra efectivo y 
 
 En la Figura~\ref{fig:a_asimetria}, cada flecha une el Histórico y P2 de un mismo modelo.
 Las medianas casi no se mueven en Niño~3.4 (asimetría cercana a $-0.1$); en Niño~1+2 la asimetría pasa de 0.17 a 0.33 con SSP5-8.5, todavía muy lejos del 1.06 del ICEN observado.
-Los modelos no generan, ni hoy ni en el futuro, la cola de Niños costeros extraordinarios.
+En la mediana, los modelos no generan la cola de Niños costeros extraordinarios, ni en el Histórico ni en el futuro.
 
 \begin{figure}[htbp]
 \centering
@@ -1055,7 +1022,7 @@ En el ONI, la potencia en la banda de 2--7 años aumenta $+28$, $+62$ y $+40$\,\
 El RONI da $+38$, $+58$ y $+44$\,\%.
 Es el mismo resultado que el aumento de $\mathrm{Anom}_{3m}$ (Sección~\ref{sec:variabilidad}) visto desde otro ángulo, porque la potencia es una varianza: un $\mathrm{Anom}_{3m}$ un 25\,\% mayor equivale a cerca de un 55\,\% más de potencia.
 En el ICEN la potencia de la banda casi no cambia en la mediana ($+1$, $+12$ y $+3$\,\%) y los modelos no coinciden.
-La fracción de la variabilidad en la banda del ENOS se mantiene (0.63--0.65 en el ONI y 0.53--0.58 en el ICEN): el ENOS no pierde peso frente a otras oscilaciones.
+La fracción de la variabilidad en la banda del ENOS se mantiene en la mediana (0.63--0.65 en el ONI y 0.53--0.58 en el ICEN): el ENOS no pierde peso frente a otras oscilaciones.
 
 \begin{figure}[htbp]
 \centering
@@ -1073,7 +1040,7 @@ En las variables de cambio de los seis casos (tres escenarios por dos periodos),
 Con 40 hay más cambios significativos, porque con más modelos la prueba detecta cambios más pequeños.
 Por ejemplo, $\Delta\mathrm{Anom}_{3m}$ de Niño~3.4 con SSP5-8.5 en P2 es $+26$\,\% con 15 modelos y no es significativo, y $+9$\,\% con 40 y sí lo es.
 Eso no hace más confiable el resultado de 40: incluye 25 modelos que no pasaron el filtro de eventos y varias versiones de un mismo centro, que no son independientes (Sección~\ref{sec:limitaciones}).
-La selección del Entregable~2 no altera la señal proyectada; su valor está en descartar modelos que no representan bien los eventos actuales.
+La selección del Entregable~2 casi no altera la señal proyectada; su valor está en descartar modelos que no representan bien los eventos actuales.
 
 \begin{figure}[htbp]
 \centering
@@ -1081,6 +1048,12 @@ La selección del Entregable~2 no altera la señal proyectada; su valor está en
 \caption[Sensibilidad del cambio en P2 al conjunto de modelos.]{Mediana (punto) y percentiles 10--90 (barra) del cambio en P2 con el conjunto principal (15 modelos) y el de contraste (40), con SSP2-4.5 (amarillo) y SSP5-8.5 (rojo), los dos extremos del rango de escenarios. Marcador lleno: significativo con Wilcoxon y Holm.}
 \label{fig:a_sensibilidad}
 \end{figure}
+
+\noindent{Conjuntos de 11 y 7 modelos}: los dos conjuntos de sensibilidad definidos en la Sección~\ref{sec:periodos} llevan a la misma conclusión.
+El signo de la mediana coincide con el de 15 modelos en 81 de 84 comparaciones con 11 modelos y en 78 de 80 con 7 (sin contar las medianas iguales al valor neutro).
+El calentamiento de Niño~1+2 con SSP5-8.5 en P2 es de $+3.6$\,°C con 11 modelos y de $+3.2$\,°C con 7, y el aumento de $\mathrm{Anom}_{3m}$ en Niño~3.4 es de $+28$\,\% con ambos, frente a $+26$\,\% con 15.
+Quitar los modelos con el Niño costero más débil, o quedarse solo con los mejores, apenas cambia la señal.
+Como se explicó en la Sección~\ref{sec:periodos}, en estos conjuntos solo se compara la mediana: con 7 modelos ningún cambio puede salir significativo y con 11 casi ninguno.
 
 \subsection{Pruebas de cambio en cada modelo}
 \label{sec:a_pruebas_modelo}
@@ -1176,7 +1149,7 @@ Que un modelo ``no tenga cambio significativo'' no quiere decir que no cambie.
 \subsubsection{Resultados}
 
 El Cuadro~\ref{tab:a_pruebas} resume las tres pruebas: para cada índice, escenario y periodo, cuántos de los 15 modelos cambian su frecuencia (Poisson), su duración (Anderson-Darling) o la estacionalidad del pico (prueba $G$) respecto de su propio Histórico, tras Holm sobre las tres pruebas.
-Ningún modelo cambia su frecuencia en ningún caso; la duración cambia en 0 a 3 modelos y la estacionalidad en 0 a 2.
+En ningún caso un modelo muestra un cambio significativo de su frecuencia; en la duración lo muestran 0 a 3 modelos y en la estacionalidad 0 a 2.
 Es lo esperado con unos 9 eventos por periodo: un modelo solo no muestra un cambio salvo que sea muy grande (Sección~\ref{sec:a_potencia}).
 Por eso la conclusión sobre los eventos se saca del conjunto de modelos (Sección~\ref{sec:multimodelo}) y no contando modelos significativos.
 
@@ -1217,10 +1190,38 @@ Los cambios son leves y crecen hacia P2: con SSP5-8.5, la parte de los picos del
 \label{fig:a_pruebas}
 \end{figure}
 
-\noindent{Conjuntos de 11 y 7 modelos}: los dos conjuntos de sensibilidad definidos en la Sección~\ref{sec:periodos} llevan a la misma conclusión.
-El signo de la mediana coincide con el de 15 modelos en 83 de 86 comparaciones con 11 modelos y en 82 de 86 con 7.
-El calentamiento de Niño~1+2 con SSP5-8.5 en P2 es de $+3.6$\,°C con 11 modelos y de $+3.2$\,°C con 7, y el aumento de $\mathrm{Anom}_{3m}$ en Niño~3.4 es de $+28$\,\% con ambos, frente a $+26$\,\% con 15.
-Quitar los modelos con el Niño costero más débil, o quedarse solo con los mejores, no cambia la señal.
-Como se explicó en la Sección~\ref{sec:periodos}, en estos conjuntos solo se compara la mediana: con 7 modelos ningún cambio puede salir significativo y con 11 casi ninguno.
+\subsection{\emph{Pipeline} del Entregable 3}
+\label{sec:scripts}
+
+El código está en \archivo{scripts_e3/} del repositorio \archivo{smn_toe} y sigue los principios de los entregables anteriores: un punto de entrada, pasos numerados que se pueden repetir con el mismo resultado y salidas en \archivo{data/processed/e3/}.
+El cálculo se ejecuta con \archivo{./rune3.sh [desde] [hasta]} (pasos \texttt{q01}--\texttt{q11}, Cuadro~\ref{tab:scripts}).
+Cada figura sale de su propio script, \archivo{scripts_e3/plot<código>_<nombre>.py}, que solo lee esas salidas y guarda \archivo{figures/e3/e3_<código>_<nombre>.png}; se ejecutan todos con \archivo{bash rune3plot.sh}, que además copia las figuras a la carpeta del informe.
+El código es el número de la figura en este informe: \archivo{01}--\archivo{09} para el cuerpo y \archivo{A01}--\archivo{A11} para el Anexo.
+Por ejemplo, la Figura~\ref{fig:sigma} es \archivo{e3_05_cambio_sigma_por_modelo.png}, generada por \archivo{plot05_cambio_sigma_por_modelo.py}, y la Figura~\ref{fig:a_estacional} es \archivo{e3_A04_sigma_estacional.png}.
+La configuración, las cargas y las funciones de dibujo comunes están en \archivo{plot00_comun_e3.py}.
+
+\begin{table}[htbp]
+\caption{Pasos del cálculo del Entregable~3.}
+\label{tab:scripts}
+\centering
+\footnotesize
+\begin{tabular}{@{}lL{4.4cm}L{\dimexpr\textwidth-4.4cm-1.2cm-4\tabcolsep\relax}@{}}
+\toprule
+\textbf{Paso} & \textbf{Qué hace} & \textbf{Salida} \\
+\midrule
+q01 & Series mensuales de las cajas, 1850--2100 & \archivo{series_cajas_1850-2100.nc} \\
+q02 & Cambio del estado medio y serie anual & \archivo{estado_medio_ref1985-2014.csv} \\
+q03 & Mapas de cambio de la media y de $\sigma$ & \archivo{cambio_tsm_mapas_ref1985-2014.nc} \\
+q04 & Ciclo anual y su amplitud & \archivo{ciclo_anual_ref1985-2014.csv} \\
+q05 & Variabilidad: $\sigma$, $\mathrm{Anom}_{3m}$, asimetría, curtosis, ventanas móviles & \archivo{variabilidad_cajas_ref1985-2014.csv} \\
+q06 & Índices ONI, RONI, ICEN, ONIfija e ICENfija hasta 2100 & \archivo{indices_enso_<esc>_1850-2100.csv} \\
+q07 & Eventos cálidos y su tipo (costero, extendido, central) & \archivo{eventos_<esc>_1850-2100.csv} \\
+q08 & Métricas de eventos por periodo y pruebas por modelo & \archivo{cambio_eventos_ref1985-2014.csv} \\
+q09 & Espectro de Welch (por periodo y en tramos de 86 años) & \archivo{espectro_resumen_86a.csv} \\
+q10 & Síntesis multimodelo: mediana, acuerdo, Wilcoxon y Holm & \archivo{resumen_multimodelo_ref1985-2014.csv} \\
+q11 & Curvas y mapas multimodelo para las figuras & \archivo{ens_*.csv}, \archivo{ens_mapas_ref1985-2014.nc} \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \end{document}
