@@ -397,51 +397,11 @@ La escala relativa \citep{shin2022} usa $\sigma_{\mathrm{hist}}$ del índice del
 La fracción de meses sobre el umbral es $\tfrac{1}{N}\sum_t \mathbf{1}[I_t \ge u]$, sin la condición de duración.
 
 % ------------------------------------------------------------
-\subsection{Pruebas de cambio de los eventos en cada modelo}
-\label{sec:pruebas_modelo}
-
-Para ONI, RONI e ICEN se aplican, en cada modelo, las tres pruebas del filtro del Entregable~2 (Sección~3.7 de su informe), ahora entre el periodo futuro y el Histórico \emph{del mismo modelo}, en lugar de entre el modelo y ERSSTv5.
-Cada una mira una propiedad distinta del régimen de eventos:
-\begin{itemize}[nosep,leftmargin=*]
-\item \textbf{Frecuencia}: razón de verosimilitud de Poisson sobre el número de eventos de cada periodo.
-\item \textbf{Duración}: Anderson-Darling de dos muestras sobre las duraciones de los eventos.
-\item \textbf{Estacionalidad}: prueba $G$ sobre el mes del pico de los eventos.
-\end{itemize}
-En las dos últimas el valor $p$ se obtiene por permutación, porque con 6 a 15 eventos por periodo las aproximaciones para muestras grandes no son fiables.
-El detalle de cada prueba y sus resultados están en el Anexo (Sección~\ref{sec:a_pruebas_modelo}, Cuadro~\ref{tab:a_pruebas} y Figura~\ref{fig:a_pruebas}).
-
-\subsubsection{Corrección de Holm}
-\label{sec:holm}
-
-Si se hacen muchas pruebas, alguna saldrá ``significativa'' por pura suerte.
-Con 20 pruebas sin ningún cambio real se espera, en promedio, un falso positivo, porque $p < 0.05$ ocurre por azar una vez de cada 20.
-
-\noindent{Qué hace Holm}: ordena los valores $p$ de menor a mayor y exige más al primero (debe ser menor que $0.05$ dividido entre el número de pruebas), un poco menos al segundo, y así sucesivamente.
-De forma equivalente, multiplica cada $p$ por un factor y compara el resultado con 0.05.
-Así se mantiene en 5\,\% la probabilidad de declarar \emph{algún} cambio falso en todo el grupo de pruebas.
-
-Las tres pruebas de un modelo e índice (frecuencia, duración y estacionalidad) forman un grupo de 3.
-En M03, ICEN, P2, el menor $p$ es 0.090 (duración); multiplicado por 3 da 0.27, y no hay cambio significativo.
-
-Ordenados los $k$ valores $p$ de la familia, $p_{(1)} \le \dots \le p_{(k)}$,
-\begin{equation}
-\label{eq:holm}
-\tilde p_{(j)} = \max_{l \le j}\, \min\big\{1,\,(k-l+1)\,p_{(l)}\big\},
-\end{equation}
-y se rechaza $H_{0,(j)}$ si $\tilde p_{(j)} < \alpha$ \citep{holm1979}.
-Controla la tasa de error por familia (FWER) en $\alpha$ bajo cualquier dependencia entre pruebas y es uniformemente más potente que Bonferroni.
-Aquí la familia es de 3, y no de 6 como en el Entregable~2, porque cada índice se prueba por separado.
-
-\subsubsection{Potencia de las pruebas por modelo}
-
-Cada periodo de 30 años tiene unos 9 eventos, muy pocos para que un solo modelo muestre un cambio significativo.
-Por ejemplo, si un modelo pasara de 9 a 18 eventos, el doble, la prueba de Poisson daría $p = 0.08$: no significativo.
-Haría falta llegar a unos 20.
-Por eso que un modelo ``no tenga cambio significativo'' no quiere decir que no cambie, y la conclusión sobre los eventos no se saca contando modelos significativos, sino del conjunto de modelos (Sección~\ref{sec:multimodelo}).
-
-% ------------------------------------------------------------
 \subsection{Síntesis multimodelo}
 \label{sec:multimodelo}
+
+\noindent{Por qué se resume el conjunto y no cada modelo}: cada periodo de 30 años tiene unos 9 eventos, muy pocos para que un modelo solo muestre un cambio significativo, salvo que sea muy grande: pasar de 9 a 18 eventos, el doble, daría $p = 0.08$ en la prueba de Poisson.
+Por eso las conclusiones se sacan del conjunto de modelos, con la mediana, el acuerdo de signo y la prueba de Wilcoxon; las pruebas en cada modelo y sus resultados están en el Anexo (Sección~\ref{sec:a_pruebas_modelo}).
 
 \subsubsection{Mediana y percentiles}
 
@@ -500,6 +460,7 @@ Supone que los modelos son independientes; como modelos de un mismo centro compa
 No se calcula con menos de 5 modelos.
 
 \subsubsection{Corrección de Holm en la tabla multimodelo}
+\label{sec:holm}
 
 \noindent{Por qué}: en cada combinación de escenario y periodo se hacen 19 pruebas de Wilcoxon, una por variable.
 Cada una es independiente, pero se reportan juntas, y cada una tiene un 5\,\% de probabilidad de dar significativa por azar.
@@ -544,14 +505,20 @@ Por eso la familia se limita a lo que pide la actividad (c) del TdR (estado medi
 \item $\Delta$TSM y $\Delta\mathrm{Anom}_{3m}$ en Niño~3.4 y Niño~1+2 (4 pruebas);
 \item razón de frecuencias, magnitud media, número de eventos fuertes o más intensos, duración media y fracción de meses sobre el umbral, con ONI, RONI e ICEN (15 pruebas).
 \end{itemize}
-Quedan fuera ONIfija e ICENfija, porque su cambio es sobre todo el calentamiento medio, que ya prueba $\Delta$TSM (tampoco se prueban por modelo, Sección~\ref{sec:pruebas_modelo}).
+Quedan fuera ONIfija e ICENfija, porque su cambio es sobre todo el calentamiento medio, que ya prueba $\Delta$TSM (tampoco se prueban en cada modelo, Anexo, Sección~\ref{sec:a_pruebas_modelo}).
 También quedan fuera los análisis complementarios: cambio relativo al trópico, ciclo anual, asimetría, curtosis, extremos relativos, tipo de evento y fracción costera, y espectro.
 Se describen con la mediana y el acuerdo de signo, sin asterisco; su $p$ sin ajustar queda en \archivo{resumen\_multimodelo\_ref1985-2014.csv} como referencia.
 
 \noindent{En las figuras}: el asterisco de una columna es el resultado de la prueba de esa variable, en ese escenario y periodo.
 Las otras 18 pruebas no se lo dan ni se lo quitan: solo fijan qué tan exigente es su umbral.
 
-Ordenados los $k = 19$ valores $p$ de cada (conjunto, escenario, periodo), $p_{(1)} \le \dots \le p_{(k)}$, el valor $p$ ajustado es el de la ecuación~\eqref{eq:holm}, $\tilde p_{(j)} = \max_{l \le j} \min\{1, (k-l+1)\,p_{(l)}\}$, y hay asterisco si $\tilde p_{(j)} < 0.05$; es equivalente a los umbrales del Cuadro~\ref{tab:holm}.
+Ordenados los $k = 19$ valores $p$ de cada (conjunto, escenario, periodo), $p_{(1)} \le \dots \le p_{(k)}$, el valor $p$ ajustado es
+\begin{equation}
+\label{eq:holm}
+\tilde p_{(j)} = \max_{l \le j}\, \min\big\{1,\,(k-l+1)\,p_{(l)}\big\},
+\end{equation}
+y hay asterisco si $\tilde p_{(j)} < 0.05$, lo que equivale a los umbrales del Cuadro~\ref{tab:holm} \citep{holm1979}.
+Controla la tasa de error por familia (FWER) en $\alpha$ bajo cualquier dependencia entre pruebas y es uniformemente más potente que Bonferroni.
 El menor $p$ exacto de Wilcoxon con $n$ modelos es $2/2^n$; con $n = 15$ vale $6\times10^{-5}$ y $k \cdot 2/2^n = 0.001$, de modo que un cambio en que coinciden todos los modelos puede pasar la corrección.
 
 % ------------------------------------------------------------
@@ -762,7 +729,7 @@ La Figura~\ref{fig:frecuencia} compara la frecuencia de eventos de cada periodo 
 En el ONI y el RONI la mediana de la razón está por encima de 1 en todos los casos: en P2 los eventos del ONI aumentan entre 12 y 34\,\% y los del RONI entre 22 y 44\,\%. En el ICEN queda entre 0.91 y 1.11: su frecuencia casi no cambia.
 En valores absolutos, el ONI pasa de 8 eventos cada 30 años en el Histórico a 10--11 en P2, y el RONI de 9 a 11--13.
 Sin embargo, solo dos cambios son significativos, ambos del RONI en P2 ($+38$\,\% con SSP2-4.5 y $+44$\,\% con SSP5-8.5), y el acuerdo de signo no pasa de 0.87: entre 2 y 11 de los 15 modelos no proyectan aumento.
-Con unos 9 eventos por periodo, duplicar la frecuencia en un solo modelo apenas sería detectable (Sección~\ref{sec:pruebas_modelo}), así que esta falta de significancia indica una señal débil frente al azar, no ausencia de cambio.
+Con unos 9 eventos por periodo, duplicar la frecuencia en un solo modelo apenas sería detectable (Sección~\ref{sec:multimodelo}), así que esta falta de significancia indica una señal débil frente al azar, no ausencia de cambio.
 Como referencia, ERSSTv5 registra en 1900--2014 el equivalente a 8 (ONI), 9 (RONI) y 11 (ICEN) eventos cada 30 años.
 
 \begin{figure}[htbp]
@@ -843,7 +810,7 @@ Eventos fuertes+, ICEN (Hist.: 0) & 1 & 1 & 1 & 1 & 1 & 2 \\
 \item \textbf{Un miembro por modelo.} Cada modelo aporta una sola realización.
 En 30 años, la variabilidad interna de esa corrida puede producir o borrar diferencias de frecuencia y de $\sigma$ sin que cambie la física del modelo.
 Separar ese efecto es parte del Entregable~4.
-\item \textbf{Pocos eventos por periodo.} Con unos 9 eventos por periodo de 30 años, las pruebas por modelo detectan solo cambios muy grandes (Sección~\ref{sec:pruebas_modelo}), y la conclusión sobre eventos descansa en la mediana del conjunto, que en la frecuencia rara vez alcanza significancia.
+\item \textbf{Pocos eventos por periodo.} Con unos 9 eventos por periodo de 30 años, las pruebas en cada modelo detectan solo cambios muy grandes (Sección~\ref{sec:multimodelo}), y la conclusión sobre eventos descansa en la mediana del conjunto, que en la frecuencia rara vez alcanza significancia.
 Salvo el aumento de eventos fuertes, los cambios de eventos deben leerse como tendencias probables, no como hechos establecidos.
 \item \textbf{Modelos no independientes.} Modelos de un mismo centro comparten componentes (por ejemplo, CNRM-CM6-1, CNRM-CM6-1-HR y CNRM-ESM2-1), por lo que la prueba de Wilcoxon es optimista y el acuerdo de signo puede sobrestimar la robustez.
 \item \textbf{Sesgos que no se cancelan.} Comparar cada modelo consigo mismo cancela su error fijo, pero no los errores que dependen del estado del océano.
@@ -1118,7 +1085,9 @@ La selección del Entregable~2 no altera la señal proyectada; su valor está en
 \subsection{Pruebas de cambio en cada modelo}
 \label{sec:a_pruebas_modelo}
 
-Esta sección detalla las tres pruebas de la Sección~\ref{sec:pruebas_modelo} y el cálculo de sus valores $p$, y después muestra sus resultados.
+Para ONI, RONI e ICEN se aplican, en cada modelo, las tres pruebas del filtro del Entregable~2 (Sección~3.7 de su informe), ahora entre el periodo futuro y el Histórico \emph{del mismo modelo}, en lugar de entre el modelo y ERSSTv5.
+Cada una mira una propiedad distinta del régimen de eventos: la frecuencia, la duración y la estacionalidad.
+Las conclusiones del informe no salen de estas pruebas, sino del conjunto de modelos (Sección~\ref{sec:multimodelo}); aquí se documentan como diagnóstico.
 
 \subsubsection{Frecuencia: razón de verosimilitud de Poisson}
 
@@ -1191,11 +1160,24 @@ Su resolución es $1/2000 = 0.0005$, muy por debajo del menor umbral de Holm con
 El Entregable~2 usó 9999 con menos combinaciones de prueba; aquí son 40 modelos por 3 índices, 3 escenarios y 2 periodos.
 Las pruebas de duración y estacionalidad no se calculan si un periodo tiene menos de 2 eventos.
 
+\subsubsection{Corrección de Holm en cada modelo}
+
+Las tres pruebas de un modelo e índice (frecuencia, duración y estacionalidad) forman una familia de 3, y se corrigen con Holm (ecuación~\eqref{eq:holm}, Sección~\ref{sec:holm}).
+La familia es de 3, y no de 6 como en el Entregable~2, porque cada índice se prueba por separado.
+En M03, ICEN, P2, el menor $p$ es 0.090 (duración); multiplicado por 3 da 0.27, y no hay cambio significativo.
+
+\subsubsection{Potencia de las pruebas en cada modelo}
+\label{sec:a_potencia}
+
+Cada periodo de 30 años tiene unos 9 eventos, muy pocos para que un solo modelo muestre un cambio significativo.
+Si un modelo pasara de 9 a 18 eventos, el doble, la prueba de Poisson daría $p = 0.08$: no significativo; haría falta llegar a unos 20.
+Que un modelo ``no tenga cambio significativo'' no quiere decir que no cambie.
+
 \subsubsection{Resultados}
 
-El Cuadro~\ref{tab:a_pruebas} resume las pruebas de la Sección~\ref{sec:pruebas_modelo}: para cada índice, escenario y periodo, cuántos de los 15 modelos cambian su frecuencia (Poisson), su duración (Anderson-Darling) o la estacionalidad del pico (prueba $G$) respecto de su propio Histórico, tras Holm sobre las tres pruebas.
+El Cuadro~\ref{tab:a_pruebas} resume las tres pruebas: para cada índice, escenario y periodo, cuántos de los 15 modelos cambian su frecuencia (Poisson), su duración (Anderson-Darling) o la estacionalidad del pico (prueba $G$) respecto de su propio Histórico, tras Holm sobre las tres pruebas.
 Ningún modelo cambia su frecuencia en ningún caso; la duración cambia en 0 a 3 modelos y la estacionalidad en 0 a 2.
-Es lo esperado con unos 9 eventos por periodo: un modelo solo no muestra un cambio salvo que sea muy grande (Sección~\ref{sec:pruebas_modelo}).
+Es lo esperado con unos 9 eventos por periodo: un modelo solo no muestra un cambio salvo que sea muy grande (Sección~\ref{sec:a_potencia}).
 Por eso la conclusión sobre los eventos se saca del conjunto de modelos (Sección~\ref{sec:multimodelo}) y no contando modelos significativos.
 
 \begin{table}[htbp]
