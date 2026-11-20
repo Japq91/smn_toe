@@ -31,25 +31,20 @@ def main():
     fig, axs = plt.subplots(3, 1, figsize=(8, 8), layout="constrained", sharey=True)
     for j, ind in enumerate(INDICES):
         ax = axs[j]
-        tira(ax, ev, "razon_frec", cats, "indice", ind, neutro=1, log=True, ylabel="frecuencia P / frecuencia ref")
+        tira(ax, ev, "razon_frec", cats, "indice", ind, neutro=1, log=True, ylabel="frecuencia P / frecuencia Hist.")
         etiquetas = [f"{etiqueta_cat(esc, per)}\n{mediana_frec(ind, esc, per):.0f} ev/30 años" for esc, per in cats]
         ax.set_xticks(range(len(cats)), etiquetas, fontsize=8)
-        # mediana de ref (eventos por siglo) junto a razon = 1. Con bases moviles
-        # la ref depende un poco del escenario: si difiere, una por escenario
-        refs = {esc: mediana_frec(ind, esc, "ref") for esc in ESCS}
-        if len({round(v, 1) for v in refs.values()}) == 1:
-            ax.text(0.012, 1.04, f"ref: {next(iter(refs.values())):.0f} ev/30 años", transform=ax.get_yaxis_transform(),
-                    rotation=90, ha="left", va="bottom", fontsize=7.5, color=COL_PER["ref"])
-        else:
-            for k, (e, v) in enumerate(refs.items()):
-                ax.text(0.012 + 0.022 * k, 1.04, f"ref: {v:.0f}", transform=ax.get_yaxis_transform(), rotation=90,
-                        ha="left", va="bottom", fontsize=7.5, color=COL_ESC[e], fontweight="bold")
+        # mediana de ref (eventos por 30 años) junto a razon = 1; la ref es la
+        # misma en los tres escenarios (q06/q07), se lee la del primero
+        ax.text(0.012, 1.04, f"Hist.: {mediana_frec(ind, ESCS[0], 'ref'):.0f} ev/30 años",
+                transform=ax.get_yaxis_transform(), rotation=90, ha="left", va="bottom", fontsize=7.5,
+                color=COL_PER["ref"])
         p0.titulo_panel(ax, LETRAS[j], ind, pad=14)
     axs[0].set_yticks([0.25, 0.5, 1, 2, 4])
     axs[0].yaxis.set_major_formatter(plt.FuncFormatter(lambda v, _: f"{v:g}"))
     axs[0].yaxis.set_minor_formatter(plt.NullFormatter())
     leyenda_tira(fig)
-    fig.suptitle(f"Razón de frecuencias P / ref\nbajo cada categoría: mediana de eventos por 30 años de los "
+    fig.suptitle(f"Razón de frecuencias P / Histórico 1985-2014\nbajo cada categoría: mediana de eventos por 30 años de los "
                  f"{GRUPO} modelos en ese periodo", fontsize=10)
     guardar(fig, "08_razon_frecuencia")
 

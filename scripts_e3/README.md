@@ -56,6 +56,17 @@ se pueden cambiar en un solo lugar:
   - **ONIfija/ICENfija**: anomalía respecto de 1985–2014, sin quitar el
     calentamiento. Responden "¿cuánto tiempo se superan los umbrales de
     hoy?", que mezcla el cambio de la media con el del ENOS.
+  - **Referencia sin datos del escenario** (q06, q07): hasta 2014 los
+    índices se calculan con la serie cortada en 2014-12, de modo que
+    2001–2014 usa la última base completa, 1985–2014 (como E2 y como el
+    CPC en tiempo real), y no las bases centradas 1986–2015, 1991–2020
+    y 1996–2025, que tomarían años del SSP. Los eventos se detectan por
+    separado antes y después de 2014-12, sin cruzar ese límite. Así la
+    referencia es una sola, idéntica en los tres escenarios, y el tramo
+    histórico del ONI y del ICEN coincide con E2. Desde 2015 rige la base
+    centrada (en 2015 la base salta de 1985–2014 a 1996–2025). Las
+    figuras dibujan una sola columna "ref" (`cats_todo` en
+    `plot00_comun_e3.py`).
 - **Eventos**: umbrales y categorías de `scripts_e2/p07_eventos.py`
   (importados, no copiados). La categoría relativa (Shin et al. 2022)
   usa la σ del índice en la referencia y no la de toda la serie, para
@@ -110,7 +121,7 @@ código siga siendo el número de la figura. Comparten configuración,
 cargas y funciones de dibujo en `plot00_comun_e3.py`.
 
 ```
-bash rune3plot.sh            # todas (01..09 y A01..A10); copia las de 15 modelos a e3_informe/figuras/
+bash rune3plot.sh            # todas (01..09 y A01..A11); copia las de 15 modelos a e3_informe/figuras/
 bash rune3plot.sh 05         # solo la Figura 5
 bash rune3plot.sh 01 09      # las del cuerpo
 bash rune3plot.sh A          # las del anexo
@@ -137,4 +148,5 @@ E3_GRUPO=40 bash rune3plot.sh   # otro conjunto (15, 40, 11 o 7): sufijo _g40, n
 | A07 | A7 | Series de ONIfija e ICENfija | q06, q11 |
 | A08 | A8 | Eventos por tipo: costero, extendido y central | q08, q10 |
 | A09 | A9 | Espectro de Welch de los índices, histórico 1929–2014 frente a 2015–2100 (86 años cada uno) | q09, q11 |
-| A10 | A10 | Sensibilidad al conjunto de modelos | q10 |
+| A10 | A10 | Sensibilidad al conjunto de modelos: 15 frente a 40 (11 y 7 solo en el CSV de q10) | q10 |
+| A11 | A11 | Mes del pico de los eventos, ref frente a P1 y P2 (el conteo de pruebas por modelo va como cuadro en el Anexo; el script lo imprime en LaTeX) | q07, q08 |

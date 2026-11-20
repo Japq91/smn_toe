@@ -20,7 +20,7 @@ from plot00_comun_e3 import *  # noqa: F401,F403  (config, cargas y funciones de
 
 def main():
     metricas = [("dur_media", "dur. media [meses]"), ("mag_media", "mag. media-pico [°C]"),
-                ("n_fuerte_mas", "Ev fuertes o más (30 años)"), ("n_extremo_rel", "Ev ≥ 2σ$_{ref}$ (30 años)")]
+                ("n_fuerte_mas", "Ev fuertes o más (30 años)"), ("n_extremo_rel", "Ev ≥ 2σ$_{hist}$ (30 años)")]
     fig, axs = plt.subplots(len(metricas), 3, figsize=(10, 2 * len(metricas)), layout="constrained", sharey="row")
     for i, (m, lab) in enumerate(metricas):
         for j, ind in enumerate(INDICES):

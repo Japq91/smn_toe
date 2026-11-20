@@ -201,6 +201,10 @@ def anomalia_sin_tendencia(da):
 # calentamiento en "anomalia" (ICEN > 0.5 casi permanente). Aca se sigue
 # el mismo patron de quinquenios sin el tope, igual que hace el CPC con
 # el ONI.
+#
+# Hasta el fin de la referencia (2014) q06 usa estos indices calculados
+# sobre la serie cortada en 2014 (ultima base 1985-2014), para que la
+# referencia no dependa del escenario (ver q06_indices_futuros.py).
 
 def icen_base_period_sin_tope(year, data_start, data_end):
     b = 1946 + 5 * ((year - 1946) // 5)

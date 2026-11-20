@@ -21,12 +21,12 @@ Por (grupo, escenario, periodo, variable, caja o indice):
                 las pruebas por modelo de q08, que tienen poca potencia
   pholm_wilcoxon p_wilcoxon ajustado por Holm (1979). La familia es, en
                 cada tabla (grupo, escenario, periodo), el subconjunto
-                FAMILIA_HOLM (30 pruebas: las que pide el TdR mas
-                duracion, fraccion costera, RONI e indices fijos); fuera
+                FAMILIA_HOLM (19 pruebas: las que pide el TdR mas
+                duracion y RONI); fuera
                 de ella queda NaN. Controla la probabilidad de al menos
                 un falso positivo en la familia (FWER) en ALFA. Limite:
                 el p exacto minimo de Wilcoxon con n modelos es 2/2^n
-                (0.016 con 7, 0.001 con 11): por 30 da 0.47 y 0.03, asi
+                (0.016 con 7, 0.001 con 11): por 19 da 0.30 y 0.02, asi
                 que en el grupo 7 ninguna prueba puede ser significativa
                 y en el 11 solo las de p minimo
   signif        pholm_wilcoxon < ALFA (False fuera de FAMILIA_HOLM)
@@ -75,17 +75,21 @@ NEUTRO = {"delta": 0, "delta_relativo": 0, "delta_amplitud": 0, "delta_sigma_pct
 SIN_PRUEBA = {"amplitud"}
 # Familia de Holm: solo las pruebas que responden la actividad (c) del TdR
 # (estado medio, variabilidad, frecuencia, intensidad y ocurrencia de
-# eventos extremos en Nino 3.4 y Nino 1+2 con ONI e ICEN), mas duracion,
-# fraccion costera, RONI y los indices de base fija. El resto conserva
-# p_wilcoxon como referencia, pero sin Holm ni signif: se lee por mediana
-# y acuerdo_signo. Una familia mas chica hace la correccion menos severa.
-_INDICES = {"ONI", "RONI", "ICEN", "ONIfija", "ICENfija"}
+# eventos extremos en Nino 3.4 y Nino 1+2 con ONI e ICEN), mas duracion
+# y RONI. El resto conserva p_wilcoxon como referencia,
+# pero sin Holm ni signif: se lee por mediana y acuerdo_signo. Una familia
+# mas chica hace la correccion menos severa. ONIfija e ICENfija quedan
+# fuera, igual que en las pruebas por modelo de q08: su cambio es en buena
+# parte el calentamiento medio, que ya prueba 'delta'; se muestran como
+# contraste descriptivo (Figuras 7 y A7). La fraccion costera (tipo de
+# evento, Anexo) tampoco entra: no la pide el TdR y se lee por mediana
+# y acuerdo de signo, como los conteos por tipo.
+_INDICES = {"ONI", "RONI", "ICEN"}
 FAMILIA_HOLM = {
     "delta": {"nino34", "nino12"},
     "delta_sigma_3m_pct": {"nino34", "nino12"},
     **{v: _INDICES for v in ("razon_frec", "mag_media", "n_fuerte_mas", "dur_media",
                              "frac_meses_umbral")},
-    "frac_costero": {"ICEN"},
 }
 
 

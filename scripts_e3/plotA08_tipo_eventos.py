@@ -3,7 +3,8 @@
 
 (a) Eventos por 30 años según su tipo, media del grupo: costero (ICEN sin ONI),
 extendido (ICEN y ONI superpuestos) y central (ONI sin ICEN). (b) Fracción de
-eventos del ICEN que son costeros, por modelo.
+eventos del ICEN que son costeros, por modelo (fuera de la familia de Holm:
+sin asterisco).
 
 Entrada: cambio_eventos_ref<ref>.csv (q08), resumen_multimodelo_ref<ref>.csv (q10) (data/processed/e3/)
 Salida: figures/e3/e3_A08_tipo_eventos.png
@@ -36,11 +37,12 @@ def main():
         base += v
     ax.set_xticks(range(len(cats)), [etiqueta_cat(e, p) for e, p in cats], fontsize=8)
     ax.set_ylabel("eventos / 30 años\n(media del grupo)")
+    ax.set_ylim(0, base.max() * 1.2)   # espacio para la leyenda sobre las barras
     ax.legend(frameon=False, fontsize=8, ncol=3, loc="upper left")
     p0.titulo_panel(ax, "a", f"Eventos por tipo {GRUPO} modelos")
     tira(axs[1], ev, "frac_costero", cats, "indice", "ICEN", ylabel="fracción de eventos ICEN")
     p0.titulo_panel(axs[1], "b", "Fracción costera", pad=14)
-    leyenda_tira(fig, cambio=False)
+    leyenda_tira(fig, cambio=False, ncol=3, nota="sin prueba de significancia: se lee por la mediana")
     guardar(fig, "A08_tipo_eventos")
 
 

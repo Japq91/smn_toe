@@ -30,14 +30,14 @@ def main():
             for per, col in [("ref", COL_PER["ref"]), ("P2", COL_ESC[esc])]:
                 s = d.xs(per, level="periodo").loc[SEL]
                 ax.scatter(s.asimetria, s.curtosis, s=18, color=col, edgecolor="k", lw=0.3, zorder=3,
-                           label=f"{per} (cada modelo)")
+                           label=f"{NOM_HIST_CORTO if per == 'ref' else per} (cada modelo)")
                 ax.scatter(s.asimetria.median(), s.curtosis.median(), s=45, marker="D", color=col, edgecolor="k",
-                           zorder=4, label=f"{per} (mediana)")
+                           zorder=4, label=f"{NOM_HIST_CORTO if per == 'ref' else per} (mediana)")
             ax.axhline(0, color="0.5", lw=0.6)
             ax.axvline(0, color="0.5", lw=0.6)
             ax.set_xlabel("asimetría $g_1$")
             ax.set_ylabel("curtosis en exceso $g_2$")
-            p0.titulo_panel(ax, LETRAS[2 * i + j], f"{NOM_CAJA[caja]}, {NOM_ESC[esc]}: ref → P2")
+            p0.titulo_panel(ax, LETRAS[2 * i + j], f"{NOM_CAJA[caja]}, {NOM_ESC[esc]}: Hist. → P2")
             ax.legend(frameon=False, fontsize=7)
     guardar(fig, "A05_asimetria_curtosis")
 

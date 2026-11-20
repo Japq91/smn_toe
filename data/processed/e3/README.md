@@ -91,8 +91,10 @@ columnas `Mxx_ONI`, `Mxx_RONI`, `Mxx_ICEN`, `Mxx_ONIfija` y
 
 Diferencias con E2 en el tramo histórico:
 
-- ONI e ICEN coinciden hasta ~1985. Después difieren porque las bases
-  móviles ya no se truncan en 2014.
+- ONI e ICEN coinciden en todo el tramo histórico: hasta 2014 se
+  calculan con la serie cortada en 2014-12 (última base 1985–2014), sin
+  datos del escenario, y son iguales en los tres archivos. Desde 2015
+  rige la base centrada sobre la serie completa. 2014-12 queda sin valor.
 - El RONI difiere por un factor de escala constante.
 
 ## `eventos_<escenario>_1850-2100.csv` (q07)
@@ -104,7 +106,8 @@ Una fila por evento, con las columnas `indice`, `number`, `inicio`,
 - Umbrales de `scripts_e2/p07_eventos.py`.
 - `categoria_relativa` usa la σ del índice en 1985–2014.
 - `periodo` es el del pico; queda vacío si el pico cae fuera de ref, P1
-  y P2.
+  y P2. Los eventos no cruzan 2014-12/2015-01 (se detectan por separado
+  a cada lado), así la referencia es la misma en los tres escenarios.
 - `tipo`, solo para ONI e ICEN: costero (evento ICEN sin evento ONI
   superpuesto), extendido (ambos se superponen) o central (evento ONI
   sin ICEN).
@@ -155,8 +158,8 @@ histórico 1929–2014 frente a cada escenario 2015–2100 (`nperseg=256`,
 como E2: 7 segmentos de 21.3 años). Es lo que dibuja la Figura A9.
 
 - `fuente`: archivo de índices usado (`indices_enso_<fuente>_1850-2100.csv`);
-  el tramo histórico se calcula con los tres, porque la base móvil del
-  índice cerca de 2014 depende levemente del escenario.
+  el tramo histórico sale igual en los tres (hasta 2014 los índices no
+  usan datos del escenario, q06).
 - `tramo`: `historical` (1929–2014) o el escenario (2015–2100).
 - `espectro_indices_86a`: una fila por (fuente, tramo, indice, modelo,
   `frecuencia`), con `periodo_anios` y `potencia`.

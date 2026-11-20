@@ -50,7 +50,7 @@ def main():
                 ax.set_ylabel(f"TSM {NOM_CAJA[caja]} [°C]")
             p0.titulo_panel(ax, LETRAS[2 * i + j], f"{NOM_PER[per]}")
         margen_etiquetas(axs[i, 0])     # espacio para los numeros bajo las cajas (eje compartido en la fila)
-    leyenda_cajas(fig, series, extra="número bajo cada caja\nmediana del cambio respecto de ref [°C]")
+    leyenda_cajas(fig, series, extra="número bajo cada caja\nmediana del cambio respecto del Histórico [°C]")
     fig.suptitle(f"Ciclo anual de la TSM\ndistribución entre los {len(SEL)} modelos del grupo {GRUPO}")
     guardar(fig, "A02_ciclo_anual")
 

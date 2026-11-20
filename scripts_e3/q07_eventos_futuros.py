@@ -14,6 +14,10 @@ funciones y umbrales, no se copian):
     toda la serie ya incluye el cambio futuro; fijarla en la referencia
     hace que "extremo" signifique lo mismo en todos los periodos.
 
+Los eventos se detectan por separado hasta 2014-12 y desde 2015-01: un
+evento no cruza el fin de la referencia, que asi no depende del
+escenario (q06 ya calcula el indice hasta 2014 sin datos del SSP).
+
 Cada evento se asigna al periodo (ref, P1, P2) de su pico; los que
 caen fuera de los tres (ej. 2015-2035) quedan con periodo vacio pero se
 conservan, para las figuras de series completas.
@@ -68,7 +72,14 @@ def eventos_indice(df, indice):
         y0, y1 = c3.REF
         sigma_ref = float(serie.loc[f"{y0}":f"{y1}"].std(ddof=1))
         serie_det = serie.round(cfg["redondeo"]) if "redondeo" in cfg else serie
-        for ev in p07.detect_events(serie_det, cfg["inicio"], cfg["duracion_min"], cfg.get("estricto", False)):
+        # Deteccion por separado antes y despues del fin de la referencia:
+        # un evento no cruza 2014-12/2015-01, asi la duracion de los
+        # eventos de ref no suma meses del escenario (ver q06).
+        fin_hist = f"{y1}-12-31"
+        eventos = []
+        for tramo in (serie_det[serie_det.index <= fin_hist], serie_det[serie_det.index > fin_hist]):
+            eventos += p07.detect_events(tramo, cfg["inicio"], cfg["duracion_min"], cfg.get("estricto", False))
+        for ev in eventos:
             ev.update(indice=indice, number=number,
                       categoria_oficial=p07.categorize(ev["magnitud_pico"], cfg["categorias"],
                                                        cfg.get("redondeo", 1), cfg.get("intervalo", "cerrado")),

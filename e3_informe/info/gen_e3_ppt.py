@@ -77,11 +77,14 @@ r=rm[rm.grupo=='15']
 VARS=[("delta","nino34","ΔTSM Niño 3.4 [°C]"),("delta","nino12","ΔTSM Niño 1+2 [°C]"),
  ("delta_relativo","nino34","ΔTSM rel. Niño 3.4 [°C]"),("delta_relativo","nino12","ΔTSM rel. Niño 1+2 [°C]"),
  ("delta_sigma_3m_pct","nino34","ΔAnom<sub>3m</sub> Niño 3.4 [%]"),("delta_sigma_3m_pct","nino12","ΔAnom<sub>3m</sub> Niño 1+2 [%]"),
- ("razon_frec","ONI","Frecuencia P/ref ONI"),("razon_frec","RONI","Frecuencia P/ref RONI"),("razon_frec","ICEN","Frecuencia P/ref ICEN"),
- ("n_fuerte_mas","ONI","Eventos fuertes+ ONI (ref: 3)"),("n_fuerte_mas","RONI","Eventos fuertes+ RONI (ref: 3)"),("n_fuerte_mas","ICEN","Eventos fuertes+ ICEN (ref: 0)")]
+ ("razon_frec","ONI","Frecuencia P/Hist. ONI"),("razon_frec","RONI","Frecuencia P/Hist. RONI"),("razon_frec","ICEN","Frecuencia P/Hist. ICEN"),
+ ("n_fuerte_mas","ONI","Eventos fuertes+ ONI"),("n_fuerte_mas","RONI","Eventos fuertes+ RONI"),("n_fuerte_mas","ICEN","Eventos fuertes+ ICEN")]
 cats=[(e,p) for e in ['ssp245','ssp370','ssp585'] for p in ['P1','P2']]
 filas=[]
 for var,clave,lab in VARS:
+    if var=='n_fuerte_mas':   # su valor en el Histórico (el mismo en los tres escenarios), del CSV
+        h=r[(r.variable==var)&(r.caja_indice==clave)&(r.periodo=='ref')&(r.escenario=='ssp245')].mediana.iloc[0]
+        lab=f"{lab} (Hist.: {h:.0f})"
     tds=[]
     for e,p in cats:
         x=r[(r.variable==var)&(r.caja_indice==clave)&(r.escenario==e)&(r.periodo==p)].iloc[0]
@@ -115,10 +118,10 @@ slides.append('''<section class="slide " data-section="1">
     <div class="card"><strong>3. Eventos extremos (ONI, ICEN)</strong><div class="stat">3 → 5 a 9</div><div class="stat-label">Niños fuertes o más intensos cada 30 años (ONI y RONI), con emisiones altas y muy altas. <strong>Aumento significativo.</strong> En el ICEN, pocos y sin cambio claro.</div></div>
   </div>
   <ul style="margin-top:1em">
-    <li><strong>Cuántos Niños:</strong> la frecuencia total sube en la mediana (+11 a +44 %), pero con ~9 eventos por periodo no se distingue del azar.</li>
+    <li><strong>Cuántos Niños:</strong> la frecuencia del ONI y del RONI sube en la mediana (+10 a +44 %) y la del ICEN casi no cambia; solo es significativa en dos casos (RONI, P2): con ~9 eventos por periodo la señal apenas se distingue del azar.</li>
     <li><strong>Con el umbral de hoy:</strong> a fin de siglo Niño 1+2 estaría sobre el umbral de El Niño casi todo el tiempo. Es el calentamiento de fondo, no más Niños.</li>
   </ul>
-  <p class="nota-pie">Cada número es la mediana de los 15 modelos seleccionados en el Entregable 2, comparando 2071–2100 con 1985–2014 en cada modelo. Escenarios: SSP2-4.5 (intermedio), SSP3-7.0 (alto) y SSP5-8.5 (muy alto). <strong>Significativo</strong>: no se explica por azar (Wilcoxon con corrección de Holm).</p>
+  <p class="nota-pie">Cada número es la mediana de los 15 modelos seleccionados en el Entregable 2, comparando 2071–2100 con el Histórico 1985–2014 en cada modelo. Escenarios: SSP2-4.5 (intermedio), SSP3-7.0 (alto) y SSP5-8.5 (muy alto). <strong>Significativo</strong>: no se explica por azar (Wilcoxon con corrección de Holm).</p>
 </section>
 ''')
 slides.append('''<section class="slide " data-section="1">
@@ -127,16 +130,15 @@ slides.append('''<section class="slide " data-section="1">
   <div class="grid2">
     <div class="card"><ul>
       <li><strong>Modelos:</strong> los 15 seleccionados en el Entregable 2 (conjunto principal) y los 40 como contraste; un miembro por modelo</li>
-      <li><strong>Controles de sensibilidad:</strong> 40 (sin selección), 11 (sin los 4 de Niño costero más débil) y 7 (solo los mejores en ambas cajas): ¿el resultado depende de qué modelos se eligen?</li>
       <li><strong>Series:</strong> <span class="mono">historical</span> + escenario, 1850–2100</li>
       <li><strong>Escenarios:</strong> SSP2-4.5 (intermedio), SSP3-7.0 (alto) y SSP5-8.5 (muy alto)</li>
-      <li><strong>Periodos de 30 años:</strong> ref 1985–2014, P1 2036–2065, P2 2071–2100: conteos y σ con muestras del mismo largo</li>
+      <li><strong>Periodos de 30 años:</strong> Histórico 1985–2014 (Hist.), P1 2036–2065, P2 2071–2100: conteos y σ con muestras del mismo largo. El Histórico es el mismo en los tres escenarios</li>
     </ul></div>
     <div class="card"><ul>
-      <li><strong>Cada modelo contra sí mismo:</strong> cambio = P − ref del mismo modelo; su sesgo fijo se cancela</li>
+      <li><strong>Cada modelo contra sí mismo:</strong> cambio = P − Histórico del mismo modelo; su sesgo fijo se cancela</li>
       <li><strong>Mediana y percentiles 10–90</strong> entre modelos: un modelo extremo no arrastra el resultado</li>
       <li><strong>Acuerdo de signo ≥ 0.8:</strong> al menos 12 de 15 modelos coinciden en la dirección (criterio del IPCC) → robusto</li>
-      <li><strong>*</strong> significativo: Wilcoxon con corrección de Holm, p &lt; 0.05, en las 30 pruebas que responden al TdR</li>
+      <li><strong>*</strong> significativo: Wilcoxon con corrección de Holm, p &lt; 0.05, en las 19 pruebas que responden al TdR</li>
     </ul></div>
   </div>
   <p class="nota-pie">Cálculo en <span class="mono">scripts_e3/</span> (pasos q01–q11, <span class="mono">./rune3.sh</span>); figuras en <span class="mono">scripts_e3/plot&lt;código&gt;_*.py</span> (<span class="mono">bash rune3plot.sh</span>; el código es el número de la figura en el informe). El kicker de cada diapositiva indica el paso que produce el dato.</p>
@@ -155,7 +157,7 @@ slides.append('''<section class="slide " data-section="1">
     <div class="card"><strong>Eventos y variabilidad</strong><ul class="small-list">
       <li><strong>Evento cálido:</strong> ONI ≥ 0.5 °C en 5 trimestres seguidos; ICEN &gt; 0.5 °C en 3 meses seguidos. Los dos índices son promedios de 3 meses: el 5 y el 3 son cuánto debe durar</li>
       <li><strong>Fuerte o más:</strong> ONI ≥ 1.5 °C; ICEN &gt; 2.1 °C (ENFEN, 2024)</li>
-      <li><strong>Eventos por 30 años:</strong> el conteo de cada periodo (ref, P1 y P2 duran 30 años)</li>
+      <li><strong>Eventos por 30 años:</strong> el conteo de cada periodo (Histórico, P1 y P2 duran 30 años)</li>
       <li><strong>Anom<sub>3m</sub>:</strong> desviación estándar de la anomalía suavizada a 3 meses, la misma serie del ONI y del ICEN. Mide qué tan intensos son los Niños y las Niñas típicos; <strong>ΔAnom<sub>3m</sub></strong> es su cambio en %</li>
     </ul></div>
   </div>
@@ -168,9 +170,9 @@ slides.append('''<section class="slide " data-section="1">
   <div class="grid3">
     <div class="card"><strong>1. Mediana</strong><p class="small">El valor del medio de los 15 modelos. Un modelo extremo no la mueve.</p><p class="small"><em>Ej.:</em> Anom<sub>3m</sub> de Niño 3.4 va de −29 a +105 %; la mediana es +26 %.</p></div>
     <div class="card"><strong>2. Acuerdo de signo</strong><p class="small">Fracción de modelos que van en la dirección de la mediana. ≥ 0.8 (12 de 15) = robusto.</p><p class="small"><em>Ej.:</em> Niño 1+2 relativo al trópico: 15 de 15 → 1.00.</p></div>
-    <div class="card"><strong>3. Wilcoxon + Holm (*)</strong><p class="small">Wilcoxon: ¿los 15 cambios, por signo y tamaño, se separan de 0? Holm: exige más porque se hacen 30 pruebas a la vez.</p><p class="small"><em>Ej.:</em> eventos fuertes del ONI, SSP3-7.0, P2: p = 0.0014; es la 13.ª de 30 pruebas → ×18 = 0.025 &lt; 0.05 *</p></div>
+    <div class="card"><strong>3. Wilcoxon + Holm (*)</strong><p class="small">Wilcoxon: cada variable tiene su prueba, con un par (Histórico, P) por modelo. Holm: ordena los 19 p de menor a mayor y exige 0.05/19 al primero, 0.05/18 al segundo…; se detiene en el primero que falla.</p><p class="small"><em>Ej.:</em> eventos fuertes del ONI, SSP3-7.0, P2: p = 0.0013; es la 6.ª de 19 → umbral 0.05/14 = 0.0036 → *</p></div>
   </div>
-  <p class="nota-pie">Solo se prueban las 30 variables que pide el TdR (estado medio, variabilidad, frecuencia, intensidad, extremos, duración y fracción costera). El cambio relativo al trópico se lee por acuerdo de signo. “Significativo” no es lo mismo que “grande”.</p>
+  <p class="nota-pie">Solo se prueban las 19 variables que pide el TdR (estado medio, variabilidad, frecuencia, intensidad, extremos y duración, con ONI, RONI e ICEN). Los índices de base fija, la fracción costera y el cambio relativo al trópico se leen por mediana y acuerdo de signo. “Significativo” no es lo mismo que “grande”.</p>
 </section>
 ''')
 slides.append(larga(2,'Estado medio · q02','Hasta 2050 los escenarios casi no se distinguen; a 2100 deciden entre +2 y +4 °C','e3_01_trayectoria_tsm',[
@@ -191,22 +193,22 @@ slides.append(larga(3,'Variabilidad · q05','Niño 3.4: más variabilidad en la 
  'En ventanas móviles, el aumento de Niño 3.4 es gradual y llega a +21 a +31 % hacia 2067–2072 (Anexo)']))
 slides.append(larga(3,'Índices ENOS · q06–q08','Con la base actual, el umbral de El Niño se supera casi siempre','e3_07_tiempo_sobre_umbral',[
  'Fracción de meses con el índice sobre el umbral de inicio (0.5 °C), sin exigir duración',
- 'Base móvil (clima de su época): ONI 31 % → 35–41 %; ICEN 24 % → 29–36 % en P2',
- 'Base fija 1985–2014: ONIfija 31 % → 88–98 %; ICENfija 23 % → 99–100 %',
+ 'Base móvil (clima de su época), Histórico → P2: ONI 33 % → 35–41 %; ICEN 27 % → 29–36 %',
+ 'Base fija 1985–2014: ONIfija 31 % → 88–98 %; ICENfija 22 % → 99–100 %',
  'La diferencia es el calentamiento de fondo, no un ENOS más activo'],
  nota='<strong>Base móvil</strong> (ONI, ICEN): el “normal” se actualiza cada 5 años con los 30 años alrededor, como hacen NOAA y el ENFEN. <strong>RONI</strong>: el “normal” es el promedio del trópico en el mismo mes. <strong>Base fija</strong> (ONIfija, ICENfija): el “normal” es siempre 1985–2014.'))
 slides.append(larga(4,'Eventos cálidos · q07–q08','Más eventos en la mediana, casi ninguno significativo','e3_08_razon_frecuencia',[
- 'Frecuencia en P / frecuencia en ref de cada modelo; 1 = sin cambio; eje logarítmico',
- 'P2: ONI 1.25 con los tres escenarios; RONI 1.22–1.44; ICEN 1.11–1.20',
+ 'Frecuencia en P / frecuencia en el Histórico de cada modelo; 1 = sin cambio; eje logarítmico',
+ 'P2: ONI 1.12–1.34; RONI 1.22–1.44; ICEN 1.00–1.11 (casi sin cambio)',
  'En absoluto: ONI 8 → 10–11 eventos cada 30 años; RONI 9 → 11–13 (ERSSTv5 1900–2014: 8 y 9)',
  'Acuerdo ≤ 0.87: con ~9 eventos por periodo, la señal no se distingue del azar; no significa que no cambie',
- 'Única excepción: RONI con SSP2-4.5 en P2 (1.30 *)']))
+ 'Dos excepciones: RONI en P2 con SSP2-4.5 (1.38 *) y SSP5-8.5 (1.44 *)']))
 slides.append(larga(4,'Eventos cálidos · q08','Más eventos extremos, y algo más largos e intensos','e3_09_duracion_magnitud',[
  '<strong>Eventos fuertes o más (por 30 años):</strong> ONI 3 → 5–7 y RONI 3 → 5–9 con SSP3-7.0 y SSP5-8.5 * (ICEN: 0 → 1–2, no significativo)',
- 'ICEN: duración media de 8.0 a 10.1 y 11.0 meses (SSP5-8.5, P1 y P2) y a 9.2 (SSP3-7.0, P2) *',
- 'RONI: pico medio de 1.38 a 1.7–2.0 °C con SSP3-7.0 y SSP5-8.5 *',
- 'Eventos ≥ 2σ de la referencia (sin prueba): 1 → 5 en ONI y RONI; coherente con más variabilidad en Niño 3.4',
- 'Tipo de evento (Anexo): los extendidos suben de 8 a 10 cada 30 años; los costeros se mantienen en 1–2']))
+ 'ICEN: duración media de 7.4 a 10.1 y 11.0 meses (SSP5-8.5, P1 y P2) y a 9.2 (SSP3-7.0, P2) *',
+ 'RONI: pico medio de 1.38 a 1.7–2.0 °C con SSP3-7.0 y SSP5-8.5 *; con SSP5-8.5 también el pico del ONI en P2 (1.42 → 1.79 °C) y la duración del RONI en P1 (11.1 → 14.5 meses) *',
+ 'Eventos ≥ 2σ del Histórico (sin prueba), SSP5-8.5: ONI 2 → 5, RONI 1 → 5; coherente con más variabilidad en Niño 3.4',
+ 'Tipo de evento (Anexo): los extendidos suben de 8.5 a 9.6–9.9 cada 30 años; los costeros se mantienen en 1–2']))
 slides.append(f'''<section class="slide " data-section="5">
 <div class="kicker">Síntesis · q10</div>
   <h1>Qué es robusto y qué no</h1>
@@ -217,7 +219,7 @@ slides.append(f'''<section class="slide " data-section="5">
 {tabla}
     </tbody>
   </table>
-  <p class="nota-pie"><strong>Negrita</strong>: robusto (acuerdo de signo ≥ 0.8). <strong>*</strong>: significativo con Wilcoxon y Holm (p &lt; 0.05). Las razones de frecuencia se comparan con 1 (sin cambio); los eventos fuertes, con su número en ref; el resto, con 0. El cambio relativo no se prueba. Las medianas casi no cambian con 40, 11 o 7 modelos (Anexo).</p>
+  <p class="nota-pie"><strong>Negrita</strong>: robusto (acuerdo de signo ≥ 0.8). <strong>*</strong>: significativo con Wilcoxon y Holm (p &lt; 0.05). Las razones de frecuencia se comparan con 1 (sin cambio); los eventos fuertes, con su número en el Histórico; el resto, con 0. El cambio relativo no se prueba. Las medianas casi no cambian con los 40 modelos (Anexo).</p>
 </section>
 ''')
 slides.append('''<section class="slide " data-section="5">
@@ -254,7 +256,8 @@ slides.append(anexo('Anom<sub>3m</sub> en ventanas móviles de 30 años','e3_06_
 slides.append(anexo('Espectro de potencia, 86 años cada tramo: histórico 1929–2014 frente a 2015–2100','e3_A09_espectro'))
 slides.append(anexo('Eventos por tipo: costero, extendido y central','e3_A08_tipo_eventos'))
 slides.append(anexo('Asimetría y curtosis: los modelos no generan la cola de Niños costeros extraordinarios','e3_A05_asimetria_curtosis'))
-slides.append(anexo('Sensibilidad al conjunto de modelos (15, 40, 11 y 7) en P2','e3_A10_sensibilidad_conjuntos'))
+slides.append(anexo('Sensibilidad al conjunto de modelos: 15 seleccionados frente a los 40, en P2','e3_A10_sensibilidad_conjuntos'))
+slides.append(anexo('Mes del pico de los eventos: Histórico frente a P1 y P2 (en cada modelo casi nunca cambia de forma significativa)','e3_A11_pruebas_por_modelo'))
 
 n=len(slides)
 body=f'''<body>

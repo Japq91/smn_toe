@@ -62,7 +62,11 @@ NE = len(ESCS)
 PERS = list(c3.PERIODOS)               # ref, P1, P2
 FUTS = c3.PERIODOS_FUTUROS             # P1, P2
 NOM_ESC = {"historical": "Histórico", "ssp245": "2-4.5", "ssp370": "3-7.0", "ssp585": "5-8.5"}
-NOM_PER = {p: f"{p} {c3.etiqueta_periodo(p)}" for p in PERS}
+# El periodo 1985-2014 se llama "Histórico" en las figuras: es el periodo con el que se
+# comparan P1 y P2 (en los datos sigue siendo periodo = "ref"). "Hist." donde no cabe.
+NOM_HIST = f"Histórico {c3.etiqueta_periodo('ref')}"
+NOM_HIST_CORTO = "Hist."
+NOM_PER = {p: (NOM_HIST if p == "ref" else f"{p} {c3.etiqueta_periodo(p)}") for p in PERS}
 NOM_CAJA = {"nino34": "Niño 3.4", "nino12": "Niño 1+2", "tropical": "Trópico 20°S-20°N"}
 CAJAS = ["nino34", "nino12"]
 INDICES = ["ONI", "RONI", "ICEN"]
@@ -162,7 +166,7 @@ def fila_resumen(variable, clave, esc, per, grupo=None):
 
 
 def etiqueta_cat(esc, per):
-    return f"{per}\n{NOM_ESC[esc]}"
+    return NOM_HIST_CORTO if per == "ref" else f"{per}\n{NOM_ESC[esc]}"   # Hist. = 1985-2014 (en la leyenda)
 
 
 def cats_fut(escs=ESCS):
@@ -170,7 +174,11 @@ def cats_fut(escs=ESCS):
 
 
 def cats_todo(escs=ESCS):
-    return [(e, p) for e in escs for p in PERS]
+    """Una sola columna ref (1985-2014) y después P1 y P2 de cada escenario.
+    La ref es la misma en los tres escenarios (q06 calcula los índices hasta
+    2014 sin datos del SSP y q07 corta los eventos en 2014-12): se lee la del
+    primero."""
+    return [(escs[0], "ref")] + cats_fut(escs)
 
 
 def tira(ax, df, valor, cats, clave_col=None, clave=None, variable_res=None, neutro=None, log=False,
@@ -201,6 +209,8 @@ def tira(ax, df, valor, cats, clave_col=None, clave=None, variable_res=None, neu
                 ax.text(i, 1.0, txt, transform=ax.get_xaxis_transform(), ha="center", va="bottom", fontsize=8)
     if neutro is not None:
         ax.axhline(neutro, color="0.4", lw=0.8, ls="--", zorder=1)
+    if len(cats) > 1 and cats[0][1] == "ref":
+        ax.axvline(0.5, color="0.75", lw=0.8, zorder=1)   # ref | futuros
     if log:
         ax.set_yscale("log")
     ax.set_xticks(range(len(cats)), [etiqueta_cat(e, p) for e, p in cats], fontsize=8)
@@ -209,15 +219,17 @@ def tira(ax, df, valor, cats, clave_col=None, clave=None, variable_res=None, neu
         ax.set_ylabel(ylabel)
 
 
-def leyenda_tira(fig, cambio=True, escs=ESCS, **kw):
+def leyenda_tira(fig, cambio=True, escs=ESCS, ncol=None, nota=None, **kw):
     h = ([Line2D([], [], ls="", marker="o", mfc="none", mec="0.65", label="40 modelos")] +
+         ([] if cambio else [Line2D([], [], ls="", marker="o", color=COL_PER["ref"], mec="k",
+                                    label=f"{GRUPO} modelos, {NOM_HIST}")]) +
          [Line2D([], [], ls="", marker="o", color=COL_ESC[e], mec="k", label=f"{GRUPO} modelos, {NOM_ESC[e]}")
           for e in escs] +
          [Line2D([], [], color="k", lw=2.2, label=f"mediana de los {GRUPO}")])
-    nota = "número: acuerdo de signo · * significativo (Wilcoxon + Holm, p < 0.05)" if cambio else \
-           "* P distinto de ref (Wilcoxon pareado + Holm, p < 0.05)"
+    nota = nota or ("número: acuerdo de signo · * significativo (Wilcoxon + Holm, p < 0.05)" if cambio else
+                    "* P distinto del Histórico (Wilcoxon pareado + Holm, p < 0.05)")
     h.append(Line2D([], [], ls="", label=nota))
-    fig.legend(handles=h, loc="lower center", ncol=len(h) / 2, frameon=False, fontsize=8,
+    fig.legend(handles=h, loc="lower center", ncol=ncol or int(np.ceil(len(h) / 2)), frameon=False, fontsize=8,
                bbox_to_anchor=(0.5, -0.1), **kw)
 
 
@@ -277,10 +289,10 @@ def separadores(ax, n):
 
 def leyenda_cajas(fig, series, extra=None):
     h = [Patch(facecolor="0.8" if e == "historical" else COL_ESC[e], edgecolor=COL_ESC[e]) for e, _ in series]
-    l = [f"{NOM_ESC[e]} {REF}" if e == "historical" else NOM_ESC[e] for e, _ in series]
+    l = [NOM_HIST if e == "historical" else NOM_ESC[e] for e, _ in series]
     if extra:
         h.append(Line2D([], [], ls="")); l.append(extra)
-    fig.legend(h, l, loc="outside lower center", ncol=len(h) / 2, frameon=False)
+    fig.legend(h, l, loc="outside lower center", ncol=int(np.ceil(len(h) / 2)), frameon=False)
 
 
 # --- series de indices (Figuras A6 y A7) --------------------------------

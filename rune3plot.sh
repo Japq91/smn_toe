@@ -4,10 +4,10 @@
 # dejo en data/processed/e3/. El codigo es el numero de la figura en el
 # informe (e3_informe/informe_e3.tex):
 #   cuerpo  01..09   plot05_cambio_sigma_por_modelo.py -> figures/e3/e3_05_cambio_sigma_por_modelo.png (Figura 5)
-#   anexo   A01..A10 plotA09_espectro.py               -> figures/e3/e3_A09_espectro.png (Figura A9)
+#   anexo   A01..A11 plotA09_espectro.py               -> figures/e3/e3_A09_espectro.png (Figura A9)
 #
 # Uso: bash rune3plot.sh [DESDE] [HASTA]
-#   - Sin args: todas las figuras (01 ... A10).
+#   - Sin args: todas las figuras (01 ... A11).
 #   - Con args: rango por codigo de figura, inclusive:
 #       bash rune3plot.sh 05          -> solo la Figura 5
 #       bash rune3plot.sh 01 09       -> las del cuerpo
@@ -64,7 +64,7 @@ for script in scripts_e3/plot[0-9A][0-9]*_*.py; do
     base=$(basename "$script" .py)
     code=$(echo "$base" | sed -E 's/^plot(A?[0-9]{2})_.*/\1/')
     [ "$code" = "00" ] && continue   # plot00_comun_e3.py: helpers, no es una figura
-    # code >= DESDE y (code <= HASTA o code empieza con HASTA: "A" abarca A01..A10)
+    # code >= DESDE y (code <= HASTA o code empieza con HASTA: "A" abarca A01..A11)
     [[ "$code" < "$DESDE" ]] && continue
     [[ "$code" > "$HASTA" && "$code" != "$HASTA"* ]] && continue
     echo "== $(basename "$script") ==" | tee -a "$LOG_FILE"

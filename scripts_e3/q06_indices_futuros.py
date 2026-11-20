@@ -21,11 +21,23 @@ responden "¿cuantos meses superan los umbrales de hoy?", que incluye
 el calentamiento medio. Comparar ambas es la forma de no confundir un
 cambio del estado medio con un cambio en la ocurrencia de eventos.
 
+Tramo historico (1850-2014) sin datos del escenario: cada indice se
+calcula dos veces, con la serie completa (historical + SSP, hasta 2100)
+y con la serie cortada en el fin de la referencia (2014-12), y hasta
+2014 se usa la version cortada. Asi la referencia 1985-2014 es UNA sola,
+identica en los tres escenarios. Sin ese corte, las bases centradas del
+ONI y del ICEN para 2001-2005 (1986-2015), 2006-2010 (1991-2020) y
+2011-2014 (1996-2025) incluirian anios del escenario, y la media movil
+de 2014-12 usaria 2015-01. Con el corte, 2001-2014 usa la ultima base
+completa, 1985-2014, como en E2 y como el CPC en tiempo real (la ultima
+base de 30 anios disponible). Desde 2015 rige la base centrada sobre la
+serie completa (en 2015 hay un salto de base: de 1985-2014 a 1996-2025).
+2014-12 queda sin valor (la media movil centrada no tiene 2015-01),
+igual que en E2.
+
 Lee series_cajas_1850-2100.nc (q01). Frente a indices_enso_1900-2014.csv
-de E2: el ONI y el ICEN coinciden hasta ~1985; despues difieren porque
-las bases moviles cercanas a 2014 ya no se truncan en 2014 sino que
-usan datos del escenario. El RONI difiere en toda la serie por un
-factor de escala constante (calculado en la base, ver
+de E2: el ONI y el ICEN coinciden en todo el tramo historico. El RONI
+difiere por un factor de escala constante (calculado en la base, ver
 common_e3.roni_index).
 
 Salida: data/processed/e3/indices_enso_<escenario>_1850-2100.csv, uno
@@ -45,7 +57,7 @@ import common_e3 as c3
 INDICES = ["ONI", "RONI", "ICEN", "ONIfija", "ICENfija"]
 
 
-def indices_modelo(tos):
+def indices_serie(tos):
     """tos: DataArray (caja, time) de un modelo y escenario."""
     n34, n12, trop = (tos.sel(caja=k).drop_vars("caja") for k in ("nino34", "nino12", "tropical"))
     # Las bases moviles se ajustan al rango con datos: CAMS-CSM1-0 e
@@ -60,6 +72,22 @@ def indices_modelo(tos):
     }
 
 
+def indices_modelo(tos):
+    """Indices de la serie completa, con el tramo hasta el fin de la
+    referencia reemplazado por el calculado sin datos del escenario."""
+    fin_hist = f"{c3.REF[1]}-12-31"
+    completa = indices_serie(tos)
+    historica = indices_serie(tos.sel(time=slice(None, fin_hist)))
+    out = {}
+    for k, da in completa.items():
+        s = da.to_pandas()
+        h = historica[k].to_pandas().reindex(s.index)
+        es_hist = s.index <= fin_hist
+        s[es_hist] = h[es_hist]
+        out[k] = s
+    return out
+
+
 def main():
     ds = c3.series_cajas()
     for esc in c3.ESCENARIOS:
@@ -68,7 +96,7 @@ def main():
         for number in ds.number.values:
             tos = ds.tos.sel(number=number, escenario=esc).load()
             for k, da in indices_modelo(tos).items():
-                cols[f"{number}_{k}"] = da.to_pandas()
+                cols[f"{number}_{k}"] = da
         df = pd.DataFrame(cols)
         df.index.name = "time"
         df = df.sort_index().dropna(how="all")

@@ -29,10 +29,11 @@ Con 86 anios se usa el segmento de E2, 256 meses (21.3 anios): 7
 segmentos con 50 % de solapamiento cubren 1024 de los 1032 meses (~14
 grados de libertad por frecuencia) y la resolucion es 12/256 ciclos/anio
 (periodos de 7.1, 5.3, 4.3, 3.6, 3.0, 2.7, 2.4 y 2.1 anios en la banda
-del ENOS). Los indices usan base movil de 30 anios, asi que cerca de 2014
-el tramo historico depende un poco del escenario con que se extendio la
-serie: se calcula con los tres archivos (columna fuente) y las figuras
-usan el de SSP2-4.5.
+del ENOS). Hasta 2014 los indices se calculan sin datos del escenario
+(q06), asi que el tramo historico es el mismo en los tres archivos
+(columna fuente); las figuras usan el de SSP2-4.5. 2014-12 no tiene
+valor (media movil centrada sin 2015-01): el tramo historico tiene 1031
+meses.
 
 Lee indices_enso_<escenario>_1850-2100.csv (q06).
 
