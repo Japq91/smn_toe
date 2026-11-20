@@ -51,16 +51,16 @@
 \setlength{\parskip}{0.4em}
 
 % Índices compactos: menos espacio entre entradas y antes de cada título
-\setlength{\cftbeforesecskip}{3pt}
+\setlength{\cftbeforesecskip}{1pt}
 \setlength{\cftbeforesubsecskip}{0pt}
 \setlength{\cftbeforefigskip}{1pt}
 \setlength{\cftbeforetabskip}{1pt}
 \setlength{\cftbeforetoctitleskip}{0pt}
-\setlength{\cftbeforeloftitleskip}{1em}
-\setlength{\cftbeforelottitleskip}{1em}
-\setlength{\cftaftertoctitleskip}{0.6em}
-\setlength{\cftafterloftitleskip}{0.6em}
-\setlength{\cftafterlottitleskip}{0.6em}
+\setlength{\cftbeforeloftitleskip}{0.6em}
+\setlength{\cftbeforelottitleskip}{0.6em}
+\setlength{\cftaftertoctitleskip}{0.4em}
+\setlength{\cftafterloftitleskip}{0.4em}
+\setlength{\cftafterlottitleskip}{0.4em}
 \setlength{\parindent}{1.2em}
 
 \begin{document}
@@ -794,12 +794,13 @@ Las proyecciones de eventos intensos en Niño~1+2 heredan esa limitación (Anexo
 En cumplimiento de la actividad~(c) del TdR, con los 15 modelos seleccionados en el Entregable~2:
 
 \begin{enumerate}[label=(\roman*)]
-\item \textbf{Estado medio.} El calentamiento es el resultado más robusto: los 15 modelos lo proyectan en todos los escenarios.
-En 2071--2100, la mediana proyecta en Niño~1+2 $+2.3$, $+2.8$ y $+3.6$\,°C con SSP2-4.5, SSP3-7.0 y SSP5-8.5, y 0.4--0.7\,°C más que el trópico.
-Hasta mediados de siglo los escenarios casi no se distinguen.
-\item \textbf{Variabilidad.} La de Niño~3.4 tiende a aumentar ($+11$ a $+26$\,\% en P2), sin acuerdo suficiente entre modelos; en Niño~1+2 no cambia de forma clara.
-\item \textbf{Eventos extremos.} Los eventos fuertes o más intensos del ONI y del RONI aumentan en la mediana de 3 a 5--9 por cada 30 años con SSP3-7.0 y SSP5-8.5, de forma significativa.
-La frecuencia del ONI y del RONI sube 10--44\,\% en la mediana, y la del ICEN casi no cambia; solo es significativa en el RONI en P2 con SSP2-4.5 y SSP5-8.5.
+\item \textbf{Estado medio.} El calentamiento es el resultado más robusto: los 15 modelos lo proyectan, con cambio significativo en todos los casos.
+En 2071--2100, la mediana proyecta $+2.3$, $+2.8$ y $+3.6$\,°C en Niño~1+2 y $+1.9$, $+2.6$ y $+3.4$\,°C en Niño~3.4 (SSP2-4.5, SSP3-7.0 y SSP5-8.5); hasta 2050 los escenarios casi no se distinguen.
+Niño~1+2 se calienta 0.4--0.7\,°C más que el trópico, con acuerdo de los 15 modelos: un patrón ``tipo El Niño'' del estado medio que llega a la costa del Perú.
+\item \textbf{Variabilidad.} La de Niño~3.4 tiende a aumentar ($+11$ a $+26$\,\% en P2), pero los modelos van de $-29$ a $+105$\,\% y solo es significativa en P1 con SSP3-7.0 y SSP5-8.5; el ritmo dominante del ENOS se mantiene en unos 3.6 años.
+En Niño~1+2 no cambia de forma clara, y los modelos siguen sin reproducir los Niños costeros extraordinarios.
+\item \textbf{Eventos extremos.} Los eventos fuertes o más intensos son el cambio más claro: en la mediana pasan de 3 a 5--7 (ONI) y a 5--9 (RONI) por cada 30 años, de forma significativa con SSP3-7.0 y SSP5-8.5; además, los picos del RONI son más altos y los eventos del ICEN más largos.
+La frecuencia total sube menos (el ONI de 8 a 10--11 eventos cada 30 años) y solo es significativa en el RONI en P2 con SSP2-4.5 y SSP5-8.5; la del ICEN casi no cambia.
 \item \textbf{Umbrales actuales.} Si la anomalía se midiera siempre respecto de 1985--2014 (base fija, ICENfija), a fin de siglo Niño~1+2 estaría sobre el umbral de inicio de El Niño (0.5\,°C) en el 99--100\,\% de los meses, frente al 22\,\% del Histórico (mediana de los 15 modelos). Con la base móvil que usa el ENFEN, la fracción apenas sube (27\,\% a 29--36\,\%): la diferencia es el calentamiento de fondo, no un ENOS más activo.
 \end{enumerate}
 
@@ -815,8 +816,13 @@ La frecuencia del ONI y del RONI sube 10--44\,\% en la mediana, y la del ICEN ca
 \end{itemize}
 
 % ============================================================
+\clearpage
+\begingroup
+\setlength{\parskip}{0pt}
+\setlength{\bibsep}{2pt} % referencias compactas
 \bibliographystyle{plainnat}
 \bibliography{references}
+\endgroup
 
 % ============================================================
 \clearpage

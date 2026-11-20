@@ -227,9 +227,9 @@ slides.append('''<section class="slide " data-section="5">
   <h1>Conclusiones y limitaciones</h1>
   <div class="grid2">
     <div class="card"><strong>Conclusiones</strong><ul class="small-list">
-      <li><strong>Estado medio:</strong> calentamiento robusto en los 15 modelos; la mediana proyecta +2.3 a +3.6 °C en Niño 1+2 a fin de siglo, y más que el trópico</li>
-      <li><strong>Variabilidad:</strong> tiende a subir en Niño 3.4, sin acuerdo entre modelos; Niño 1+2 sin cambio claro</li>
-      <li><strong>Eventos extremos:</strong> los Niños fuertes o más intensos (ONI, RONI) suben de 3 a 5–9 cada 30 años, de forma significativa; la frecuencia total, no</li>
+      <li><strong>Estado medio:</strong> calentamiento robusto en los 15 modelos: +2.3 a +3.6 °C en Niño 1+2 a fin de siglo, 0.4–0.7 °C más que el trópico (patrón “tipo El Niño”); hasta 2050 los escenarios casi no se separan</li>
+      <li><strong>Variabilidad:</strong> en Niño 3.4 tiende a subir (+11 a +26 % en P2), con modelos de −29 a +105 %; el ritmo del ENOS (~3.6 años) se mantiene. Niño 1+2 sin cambio claro</li>
+      <li><strong>Eventos extremos:</strong> Niños fuertes o más intensos de 3 a 5–7 (ONI) y 5–9 (RONI) cada 30 años, significativo con SSP3-7.0 y SSP5-8.5; la frecuencia total sube menos y casi nunca de forma significativa</li>
       <li><strong>Base fija 1985–2014:</strong> el umbral se superaría casi siempre (99–100 % de los meses); es el fondo, no el ENOS</li>
       <li><strong>Recomendación:</strong> comunicar por separado el calentamiento de fondo y el cambio del ENOS</li>
     </ul></div>
