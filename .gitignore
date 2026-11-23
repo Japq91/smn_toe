@@ -82,18 +82,19 @@ e2_informe/informe_e2.blg
 e2_informe/informe_e2.pdf
 e2_informe/informe_e2.fdb_latexmk
 e2_informe/informe_e2.fls
-# Artefactos de compilar e3_informe/informe_e3.tex (mismo criterio; el PDF
-# del informe E3 si se versiona, como entregable).
-e3_informe/informe_e3.aux
-e3_informe/informe_e3.log
-e3_informe/informe_e3.toc
-e3_informe/informe_e3.lof
-e3_informe/informe_e3.lot
-e3_informe/informe_e3.out
-e3_informe/informe_e3.bbl
-e3_informe/informe_e3.blg
-e3_informe/informe_e3.fdb_latexmk
-e3_informe/informe_e3.fls
+# Artefactos de compilar e3_informe/informe_e3.tex, incluido el PDF (como
+# en E1 y E2, el PDF no se versiona) y las versiones con -jobname (ej. _vf).
+e3_informe/informe_e3*.pdf
+e3_informe/informe_e3*.aux
+e3_informe/informe_e3*.log
+e3_informe/informe_e3*.toc
+e3_informe/informe_e3*.lof
+e3_informe/informe_e3*.lot
+e3_informe/informe_e3*.out
+e3_informe/informe_e3*.bbl
+e3_informe/informe_e3*.blg
+e3_informe/informe_e3*.fdb_latexmk
+e3_informe/informe_e3*.fls
 # Material de consulta local, no se versiona: papers de referencia (con
 # derechos de autor) y su conversion a Markdown (convertir_pdfs.sh), y el
 # TdR en otros formatos (mismo criterio que /*.pdf).
