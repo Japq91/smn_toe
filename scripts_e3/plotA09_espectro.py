@@ -5,7 +5,7 @@ Espectro de potencia (Welch, segmentos de 256 meses) de ONI, RONI e ICEN en
 tramos de igual largo, 86 años cada uno: histórico 1929-2014 frente a cada
 escenario 2015-2100 (SSP2-4.5, SSP3-7.0 y SSP5-8.5). Línea: mediana del grupo;
 barras: percentiles 10-90, desplazadas en el eje x para que no se tapen;
-sombra gris: banda del ENOS, 2-7 años. El histórico es el de los índices
+sombra gris: banda interanual, 2-7 años. El histórico es el de los índices
 extendidos con SSP2-4.5 (con los otros escenarios es prácticamente igual).
 
 Entrada: ens_espectro_86a.csv (q11) (data/processed/e3/)
@@ -58,7 +58,7 @@ def main():
     axs[0].legend(frameon=False, fontsize=8.5, loc="upper right", title="86 años cada tramo",
                   title_fontsize=8.5)
     fig.suptitle(f"Espectro de Welch (segmentos de 21 años): histórico 1929-2014 frente a cada escenario 2015-2100\n"
-                 f"línea: mediana; barras: percentiles 10-90 de {GRUPO} modelos; sombra: banda del ENOS (2-7 años)")
+                 f"línea: mediana; barras: percentiles 10-90 de {GRUPO} modelos; sombra: banda interanual (2-7 años)")
     guardar(fig, "A09_espectro")
 
 

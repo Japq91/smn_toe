@@ -18,7 +18,7 @@ from plot00_comun_e3 import *  # noqa: F401,F403  (config, cargas y funciones de
 
 
 def main():
-    fig = figura_indices(INDICES, "Índices ENOS 1950-2100 (bases móviles y RONI)")
+    fig = figura_indices(INDICES, "Índices ONI, RONI e ICEN 1950-2100")
     guardar(fig, "A06_indices_envolvente")
 
 
